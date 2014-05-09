@@ -22,8 +22,7 @@
     [self loadDraggableCustomView:places[1]];
     [self loadDraggableCustomView:places[2]];
     [self loadDraggableCustomView:places[3]];
-    
-    
+
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
