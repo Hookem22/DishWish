@@ -21,6 +21,17 @@
 		BEA9CF11191D82300087C645 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF3191D82300087C645 /* UIKit.framework */; };
 		BEA9CF19191D82300087C645 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF17191D82300087C645 /* InfoPlist.strings */; };
 		BEA9CF1B191D82300087C645 /* DishWishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF1A191D82300087C645 /* DishWishTests.m */; };
+		BEA9CF36191D830E0087C645 /* DWDraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF25191D830E0087C645 /* DWDraggableView.m */; };
+		BEA9CF37191D830E0087C645 /* DWMap.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF27191D830E0087C645 /* DWMap.m */; };
+		BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF29191D830E0087C645 /* DWMenu.m */; };
+		BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF2B191D830E0087C645 /* DWOverlayView.m */; };
+		BEA9CF3A191D830E0087C645 /* DWView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF2D191D830E0087C645 /* DWView.m */; };
+		BEA9CF3B191D830E0087C645 /* map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF2F191D830E0087C645 /* map@2x.png */; };
+		BEA9CF3C191D830E0087C645 /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF30191D830E0087C645 /* menu@2x.png */; };
+		BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF31191D830E0087C645 /* thumbs_down@2x.png */; };
+		BEA9CF3E191D830E0087C645 /* thumbs_up_300x300@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF32191D830E0087C645 /* thumbs_up_300x300@2x.png */; };
+		BEA9CF3F191D830E0087C645 /* trollface_300x200@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF33191D830E0087C645 /* trollface_300x200@2x.png */; };
+		BEA9CF40191D830E0087C645 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF35191D830E0087C645 /* Place.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +64,23 @@
 		BEA9CF16191D82300087C645 /* DishWishTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DishWishTests-Info.plist"; sourceTree = "<group>"; };
 		BEA9CF18191D82300087C645 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BEA9CF1A191D82300087C645 /* DishWishTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DishWishTests.m; sourceTree = "<group>"; };
+		BEA9CF24191D830E0087C645 /* DWDraggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWDraggableView.h; sourceTree = "<group>"; };
+		BEA9CF25191D830E0087C645 /* DWDraggableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWDraggableView.m; sourceTree = "<group>"; };
+		BEA9CF26191D830E0087C645 /* DWMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWMap.h; sourceTree = "<group>"; };
+		BEA9CF27191D830E0087C645 /* DWMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWMap.m; sourceTree = "<group>"; };
+		BEA9CF28191D830E0087C645 /* DWMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWMenu.h; sourceTree = "<group>"; };
+		BEA9CF29191D830E0087C645 /* DWMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWMenu.m; sourceTree = "<group>"; };
+		BEA9CF2A191D830E0087C645 /* DWOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWOverlayView.h; sourceTree = "<group>"; };
+		BEA9CF2B191D830E0087C645 /* DWOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWOverlayView.m; sourceTree = "<group>"; };
+		BEA9CF2C191D830E0087C645 /* DWView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWView.h; sourceTree = "<group>"; };
+		BEA9CF2D191D830E0087C645 /* DWView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWView.m; sourceTree = "<group>"; };
+		BEA9CF2F191D830E0087C645 /* map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map@2x.png"; sourceTree = "<group>"; };
+		BEA9CF30191D830E0087C645 /* menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@2x.png"; sourceTree = "<group>"; };
+		BEA9CF31191D830E0087C645 /* thumbs_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbs_down@2x.png"; sourceTree = "<group>"; };
+		BEA9CF32191D830E0087C645 /* thumbs_up_300x300@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbs_up_300x300@2x.png"; sourceTree = "<group>"; };
+		BEA9CF33191D830E0087C645 /* trollface_300x200@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trollface_300x200@2x.png"; sourceTree = "<group>"; };
+		BEA9CF34191D830E0087C645 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
+		BEA9CF35191D830E0087C645 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,11 +140,23 @@
 		BEA9CEF5191D82300087C645 /* DishWish */ = {
 			isa = PBXGroup;
 			children = (
+				BEA9CF41191D83250087C645 /* Models */,
 				BEA9CEFE191D82300087C645 /* AppDelegate.h */,
 				BEA9CEFF191D82300087C645 /* AppDelegate.m */,
-				BEA9CF01191D82300087C645 /* Main.storyboard */,
 				BEA9CF04191D82300087C645 /* ViewController.h */,
 				BEA9CF05191D82300087C645 /* ViewController.m */,
+				BEA9CF01191D82300087C645 /* Main.storyboard */,
+				BEA9CF2C191D830E0087C645 /* DWView.h */,
+				BEA9CF2D191D830E0087C645 /* DWView.m */,
+				BEA9CF24191D830E0087C645 /* DWDraggableView.h */,
+				BEA9CF25191D830E0087C645 /* DWDraggableView.m */,
+				BEA9CF2A191D830E0087C645 /* DWOverlayView.h */,
+				BEA9CF2B191D830E0087C645 /* DWOverlayView.m */,
+				BEA9CF26191D830E0087C645 /* DWMap.h */,
+				BEA9CF27191D830E0087C645 /* DWMap.m */,
+				BEA9CF28191D830E0087C645 /* DWMenu.h */,
+				BEA9CF29191D830E0087C645 /* DWMenu.m */,
+				BEA9CF2E191D830E0087C645 /* images */,
 				BEA9CF07191D82300087C645 /* Images.xcassets */,
 				BEA9CEF6191D82300087C645 /* Supporting Files */,
 			);
@@ -150,6 +190,27 @@
 				BEA9CF17191D82300087C645 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BEA9CF2E191D830E0087C645 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				BEA9CF2F191D830E0087C645 /* map@2x.png */,
+				BEA9CF30191D830E0087C645 /* menu@2x.png */,
+				BEA9CF31191D830E0087C645 /* thumbs_down@2x.png */,
+				BEA9CF32191D830E0087C645 /* thumbs_up_300x300@2x.png */,
+				BEA9CF33191D830E0087C645 /* trollface_300x200@2x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		BEA9CF41191D83250087C645 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BEA9CF34191D830E0087C645 /* Place.h */,
+				BEA9CF35191D830E0087C645 /* Place.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,8 +290,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEA9CF08191D82300087C645 /* Images.xcassets in Resources */,
+				BEA9CF3E191D830E0087C645 /* thumbs_up_300x300@2x.png in Resources */,
+				BEA9CF3B191D830E0087C645 /* map@2x.png in Resources */,
+				BEA9CF3C191D830E0087C645 /* menu@2x.png in Resources */,
 				BEA9CEFA191D82300087C645 /* InfoPlist.strings in Resources */,
+				BEA9CF3F191D830E0087C645 /* trollface_300x200@2x.png in Resources */,
 				BEA9CF03191D82300087C645 /* Main.storyboard in Resources */,
+				BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,8 +316,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEA9CF06191D82300087C645 /* ViewController.m in Sources */,
+				BEA9CF3A191D830E0087C645 /* DWView.m in Sources */,
+				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,
+				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,
+				BEA9CF37191D830E0087C645 /* DWMap.m in Sources */,
+				BEA9CF40191D830E0087C645 /* Place.m in Sources */,
 				BEA9CEFC191D82300087C645 /* main.m in Sources */,
+				BEA9CF36191D830E0087C645 /* DWDraggableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

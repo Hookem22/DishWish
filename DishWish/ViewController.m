@@ -7,12 +7,24 @@
 //
 
 #import "ViewController.h"
+#import "DWView.h"
 
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
+
+- (void)loadView {
+    
+    self.view = [[DWView alloc] init];
+    
+    //UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+    //navbar.topItem.title = @"DW";
+    
+    //[self.view addSubview:navbar];
+    
+}
 
 - (void)viewDidLoad
 {
