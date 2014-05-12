@@ -32,6 +32,8 @@
 		BEA9CF3E191D830E0087C645 /* thumbs_up_300x300@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF32191D830E0087C645 /* thumbs_up_300x300@2x.png */; };
 		BEA9CF3F191D830E0087C645 /* trollface_300x200@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEA9CF33191D830E0087C645 /* trollface_300x200@2x.png */; };
 		BEA9CF40191D830E0087C645 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF35191D830E0087C645 /* Place.m */; };
+		BEA9CF43192123870087C645 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */; };
+		BEA9CF47192124480087C645 /* QSAzureService.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF46192124480087C645 /* QSAzureService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +83,9 @@
 		BEA9CF33191D830E0087C645 /* trollface_300x200@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trollface_300x200@2x.png"; sourceTree = "<group>"; };
 		BEA9CF34191D830E0087C645 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		BEA9CF35191D830E0087C645 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
+		BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
+		BEA9CF45192124480087C645 /* QSAzureService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSAzureService.h; sourceTree = "<group>"; };
+		BEA9CF46192124480087C645 /* QSAzureService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSAzureService.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +95,7 @@
 			files = (
 				BEA9CEF2191D82300087C645 /* CoreGraphics.framework in Frameworks */,
 				BEA9CEF4191D82300087C645 /* UIKit.framework in Frameworks */,
+				BEA9CF43192123870087C645 /* WindowsAzureMobileServices.framework in Frameworks */,
 				BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,6 +135,7 @@
 		BEA9CEEE191D82300087C645 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */,
 				BEA9CEEF191D82300087C645 /* Foundation.framework */,
 				BEA9CEF1191D82300087C645 /* CoreGraphics.framework */,
 				BEA9CEF3191D82300087C645 /* UIKit.framework */,
@@ -140,6 +147,7 @@
 		BEA9CEF5191D82300087C645 /* DishWish */ = {
 			isa = PBXGroup;
 			children = (
+				BEA9CF44192124320087C645 /* Services */,
 				BEA9CF41191D83250087C645 /* Models */,
 				BEA9CEFE191D82300087C645 /* AppDelegate.h */,
 				BEA9CEFF191D82300087C645 /* AppDelegate.m */,
@@ -211,6 +219,15 @@
 				BEA9CF35191D830E0087C645 /* Place.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		BEA9CF44192124320087C645 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BEA9CF45192124480087C645 /* QSAzureService.h */,
+				BEA9CF46192124480087C645 /* QSAzureService.m */,
+			);
+			name = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -320,6 +337,7 @@
 				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,
 				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,
+				BEA9CF47192124480087C645 /* QSAzureService.m in Sources */,
 				BEA9CF37191D830E0087C645 /* DWMap.m in Sources */,
 				BEA9CF40191D830E0087C645 /* Place.m in Sources */,
 				BEA9CEFC191D82300087C645 /* main.m in Sources */,
@@ -448,6 +466,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DishWish/DishWish-Prefix.pch";
 				INFOPLIST_FILE = "DishWish/DishWish-Info.plist";
@@ -461,6 +483,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DishWish/DishWish-Prefix.pch";
 				INFOPLIST_FILE = "DishWish/DishWish-Info.plist";
@@ -528,6 +554,7 @@
 				BEA9CF20191D82300087C645 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BEA9CF21191D82300087C645 /* Build configuration list for PBXNativeTarget "DishWishTests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +563,7 @@
 				BEA9CF23191D82300087C645 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

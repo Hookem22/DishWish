@@ -16,13 +16,22 @@
     
     self.backgroundColor = [UIColor whiteColor];
     
-    NSArray *places = [NSArray arrayWithArray:[Place initialPlaces]];
+    //NSArray *places = [Place initialPlaces];
+    //[places[1] savePlace];
+    //[places[0] savePlace];
     
-    [self loadDraggableCustomView:places[0]];
-    [self loadDraggableCustomView:places[1]];
-    [self loadDraggableCustomView:places[2]];
-    [self loadDraggableCustomView:places[3]];
-
+    //TODO Get from db
+    [Place get:^(NSArray *places) {
+        
+        [self loadDraggableCustomView:places[0]];
+        [self loadDraggableCustomView:places[1]];
+    }];
+    
+    [Place get:@"2" completion:^(Place *place) {
+        
+        [self loadDraggableCustomView:place];
+    }];
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     

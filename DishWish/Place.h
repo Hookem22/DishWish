@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
+#import "QSAzureService.h"
 
 @interface Place : NSObject
+
+@property (strong, nonatomic)   QSAzureService   *azureService;
 
 @property (nonatomic, assign) NSUInteger placeId;
 @property (nonatomic, copy) NSString *name;
@@ -16,6 +20,8 @@
 
 + (NSArray *)initialPlaces;
 + (Place *)nextPlace;
-
+-(void)savePlace;
++(void)get:id completion:(QSCompletionBlock)completion;
++(void)get:(QSCompletionBlock)completion;
 
 @end

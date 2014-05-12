@@ -25,7 +25,7 @@
     [self addSubview:naviBarObj];
     
     
-    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonSystemItemCancel target:self action:@selector(exitMap)];
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(exitMap)];
     
     UINavigationItem *navigItem = [[UINavigationItem alloc] initWithTitle:place.name];
     navigItem.leftBarButtonItem = cancelItem;

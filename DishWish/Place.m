@@ -8,11 +8,13 @@
 
 #import "Place.h"
 
+
 @implementation Place
 
 @synthesize placeId = _placeId;
 @synthesize name = _name;
 @synthesize images = images;
+@synthesize azureService = _azureService;
 
 + (id)placeWithId:(NSUInteger)placeId name:(NSString *)placeName {
 	return [[[self class] alloc] initWithId:placeId name:placeName];
@@ -23,8 +25,56 @@
 	if (self) {
 		self.placeId = placeId;
 		self.name = placeName;
-	}
+        
+        self.azureService = [QSAzureService defaultService:@"Place"];
+    }
 	return self;
+}
+
+-(void)savePlace
+{
+    NSDictionary *thisPlace = @{@"id" : [NSString stringWithFormat: @"%lu", (unsigned long)self.placeId], @"Name" : self.name };
+    [self.azureService addItem:thisPlace completion:^(NSUInteger index)
+     {
+         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+
+     }];
+}
+
+
++(void)get:(id)placeId completion:(QSCompletionBlock)completion
+{
+
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    
+    [service get:placeId completion:^(NSDictionary *item) {
+        
+
+        long placeId = [item valueForKey:@"id"];
+        NSString *name = [item valueForKey:@"Name"];
+        Place * place = [[Place alloc] initWithId:placeId name:name];
+
+        completion(place);
+    }];
+    
+}
+
++ (void)get:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    [service get:^(NSArray *results) {
+        
+        NSMutableArray *places = [[NSMutableArray alloc] init];
+        for(id place in results) {
+            //Place *place = (Place *)thisPlace;
+            long placeId = [place valueForKey:@"id"];
+            NSString *name = [place valueForKey:@"Name"];
+            [places addObject:[[Place alloc] initWithId:placeId name:name]];
+        }
+        
+        completion(places);
+    }];
+
 }
 
 + (NSArray *)initialPlaces {
@@ -43,6 +93,9 @@
     [places addObject:place2];
     [places addObject:place3];
     [places addObject:place4];
+    
+  
+    
     return places;
 }
 
