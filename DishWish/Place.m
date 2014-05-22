@@ -87,7 +87,7 @@
     Place *place3 = [Place placeWithId:3 name:@"Vino Vino"];
     place3.images = [NSArray arrayWithObjects: @"http://goodtastereport.files.wordpress.com/2007/06/vinovino1.jpg", nil];
     Place *place4 = [Place placeWithId:4 name:@"Clark's"];
-    place4.images = [NSArray arrayWithObjects: @"http://www.remodelista.com/files/styles/733_0s/public/img/sub/uimg/01-2013/700_clarks-oyster-bar-michael-muller-9.JPG", @"http://www.bonappetit.com/wp-content/uploads/2013/02/clarks-oysters-459.jpg", @"http://2.bp.blogspot.com/-P-eMsNdtNAs/UeXBRD1F3SI/AAAAAAAAEWQ/S1KZP7ei69Y/s640/522786_542229305803321_1737954152_n.jpg", @"http://images.huffingtonpost.com/2014-02-11-AUSTINCLARKSBARbar129451.jpg", nil];
+    place4.images = [NSArray arrayWithObjects: @"http://dishwishes.blob.core.windows.net/places/olive", @"http://www.bonappetit.com/wp-content/uploads/2013/02/clarks-oysters-459.jpg", @"http://2.bp.blogspot.com/-P-eMsNdtNAs/UeXBRD1F3SI/AAAAAAAAEWQ/S1KZP7ei69Y/s640/522786_542229305803321_1737954152_n.jpg", @"http://images.huffingtonpost.com/2014-02-11-AUSTINCLARKSBARbar129451.jpg", nil];
     
     [places addObject:place1];
     [places addObject:place2];
@@ -102,7 +102,7 @@
 +(Place *)nextPlace
 {
     Place *place = [Place placeWithId:5 name:@"Uchi"];
-    place.images = [NSArray arrayWithObjects:@"http://img1.southernliving.timeinc.net/sites/default/files/image/2013/09/100-places-to-eat-now/uchi-austin-texas-l.jpg",@"http://www.nomomnom.com/wp/wp-content/uploads/2010/06/IMG_8672.jpg", @"http://si.wsj.net/public/resources/images/PT-AM790_Austin_F_20091016170801.jpg", @"http://roomfu.com/wp-content/uploads/2012/09/uchi-austin-interior3.jpg", nil];
+    place.images = [NSArray arrayWithObjects:@"http://img1.southernliving.timeinc.net/sites/default/files/image/2013/09/100-places-to-eat-now/uchi-austin-texas-l.jpg",@"http://dishwishes.blob.core.windows.net/places/rudys", @"http://si.wsj.net/public/resources/images/PT-AM790_Austin_F_20091016170801.jpg", @"http://roomfu.com/wp-content/uploads/2012/09/uchi-austin-interior3.jpg", nil];
     return place;
 }
 

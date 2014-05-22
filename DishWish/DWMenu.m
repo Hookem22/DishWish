@@ -56,7 +56,7 @@
 - (void)loadWebSite:(Place *)place {
     UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
     
-    NSString *urlAddress = @"http://www.chavez-austin.com/menus/CHAVEZ_Menu.pdf";
+    NSString *urlAddress = @"http://dishwishes.blob.core.windows.net/places/food";
     NSURL *url = [[NSURL alloc] initWithString:urlAddress];
     NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
     
