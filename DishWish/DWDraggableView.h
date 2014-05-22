@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "DWOverlayView.h"
 #import "Place.h"
+#import "Session.h"
 #import "DWMenu.h"
 #import "DWMap.h"
 
@@ -22,6 +23,5 @@
 //- (id)initWithPlace:(Place *)place;
 - (id)initWithFrame:(CGRect)frame place:(Place *)place;
 -(void) animateImage:(DWDraggableView *)card isYes:(BOOL)isYes;
--(void)nextPlace:(Place *)place;
 
 @end

@@ -262,11 +262,7 @@
                  self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
              }
              completion:^(BOOL finished) {
-                 [self.superview sendSubviewToBack:self];
-                 self.center = self.originalPoint;
-                 self.transform = CGAffineTransformMakeRotation(0);
-                 self.overlayView.alpha = 0.0;
-                 [self nextPlace:[Place nextPlace]];
+                 [self animateImageComplete:self isYes:isYes];
              }
      ];
     
@@ -293,30 +289,53 @@
                               card.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
                           }
                           completion:^(BOOL finished) {
-                              [card.superview sendSubviewToBack:card];
-                              [card.menuScreen removeFromSuperview];
-                              card.center = card.originalPoint;
-                              card.transform = CGAffineTransformMakeRotation(0);
-                              card.overlayView.alpha = 0.0;
-                              [card nextPlace:[Place nextPlace]];
+                              [self animateImageComplete:card isYes:isYes];
                           }
                   ];
              }
      ];
 }
 
+-(void)animateImageComplete:(DWDraggableView *)card isYes:(BOOL)isYes
+{
+    [card.superview sendSubviewToBack:card];
+    [card.menuScreen removeFromSuperview];
+    card.center = card.originalPoint;
+    card.transform = CGAffineTransformMakeRotation(0);
+    card.overlayView.alpha = 0.0;
+    [card.menuScreen exitMenu];
+    [card.mapScreen exitMap];
+    
+    NSString *key = isYes ? @"yesPlaces" : @"noPlaces";
+    
+    NSMutableArray *prevPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][key]];
+
+    [prevPlaces addObject:card.place.placeId];
+    [[Session sessionVariables] setObject:prevPlaces forKey:key];
+
+        
+    [card nextPlace];
+}
+
 -(void) returnImage
 {
     [UIView animateWithDuration:.2
-             animations:^{
-                 self.center = self.originalPoint;
-                 self.overlayView.alpha = 0;
-                 self.transform = CGAffineTransformMakeRotation(0);
-             }
+         animations:^{
+             self.center = self.originalPoint;
+             self.overlayView.alpha = 0;
+             self.transform = CGAffineTransformMakeRotation(0);
+         }
      ];
 }
 
--(void)nextPlace:(Place *)place;
+-(void)nextPlace
+{
+    [Place getNextPlace:^(Place *place) {
+        [self populateNextPlace:place];
+    }];
+}
+
+-(void)populateNextPlace:(Place *)place
 {
     self.place = place;
     self.nameLabel.text = [NSString stringWithFormat:@"     %@", place.name];
@@ -332,6 +351,8 @@
     
     [self.mainImage setImage:myIcon forState:UIControlStateNormal];
 }
+
+
 
 -(void)changeMainImage
 {

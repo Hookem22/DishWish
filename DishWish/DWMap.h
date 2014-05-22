@@ -9,5 +9,6 @@
 
 
 - (id)initWithFrame:(CGRect)frame place:(Place *)place;
+-(void)exitMap;
 
 @end

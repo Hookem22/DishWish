@@ -34,6 +34,7 @@
 		BEA9CF40191D830E0087C645 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF35191D830E0087C645 /* Place.m */; };
 		BEA9CF43192123870087C645 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */; };
 		BEA9CF47192124480087C645 /* QSAzureService.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF46192124480087C645 /* QSAzureService.m */; };
+		BEF82449192E8F1D00BE0CC2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF82448192E8F1D00BE0CC2 /* Session.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,8 @@
 		BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
 		BEA9CF45192124480087C645 /* QSAzureService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSAzureService.h; sourceTree = "<group>"; };
 		BEA9CF46192124480087C645 /* QSAzureService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSAzureService.m; sourceTree = "<group>"; };
+		BEF82447192E8F1D00BE0CC2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		BEF82448192E8F1D00BE0CC2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +220,8 @@
 			children = (
 				BEA9CF34191D830E0087C645 /* Place.h */,
 				BEA9CF35191D830E0087C645 /* Place.m */,
+				BEF82447192E8F1D00BE0CC2 /* Session.h */,
+				BEF82448192E8F1D00BE0CC2 /* Session.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -339,6 +344,7 @@
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,
 				BEA9CF47192124480087C645 /* QSAzureService.m in Sources */,
 				BEA9CF37191D830E0087C645 /* DWMap.m in Sources */,
+				BEF82449192E8F1D00BE0CC2 /* Session.m in Sources */,
 				BEA9CF40191D830E0087C645 /* Place.m in Sources */,
 				BEA9CEFC191D82300087C645 /* main.m in Sources */,
 				BEA9CF36191D830E0087C645 /* DWDraggableView.m in Sources */,

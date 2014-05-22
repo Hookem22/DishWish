@@ -35,7 +35,7 @@
 -(void)loadMap:(Place *)place
 {
     MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.bounds];
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.241675,-97.758916);
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(place.latitude, place.longitude);
     
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(coord, 1000, 1000);
     MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];

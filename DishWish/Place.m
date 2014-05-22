@@ -14,22 +14,68 @@
 @synthesize placeId = _placeId;
 @synthesize name = _name;
 @synthesize images = images;
+@synthesize imageCount = _imageCount;
+@synthesize latitude = _latitude;
+@synthesize longitude = _longitude;
+@synthesize googleId = _googleId;
+@synthesize googleReferenceId = _googleReferenceId;
+
 @synthesize azureService = _azureService;
 
-+ (id)placeWithId:(NSUInteger)placeId name:(NSString *)placeName {
-	return [[[self class] alloc] initWithId:placeId name:placeName];
-}
 
-- (id)initWithId:(NSUInteger)placeId name:(NSString *)placeName {
+- (id)init:(NSDictionary *)place {
 	self = [super init];
 	if (self) {
-		self.placeId = placeId;
-		self.name = placeName;
+		self.placeId = [place valueForKey:@"id"];
+		self.name = [place valueForKey:@"Name"];
+        self.imageCount = [[place objectForKey:@"imagecount"] intValue];
+        self.latitude = [[place objectForKey:@"latitude"] doubleValue];
+        self.longitude = [[place objectForKey:@"longitude"] doubleValue];
+        self.googleId = [place valueForKey:@"googleid"];
+        self.googleReferenceId = [place valueForKey:@"googlereferenceid"];
+        
+        NSString *container = @"http://dishwishes.blob.core.windows.net/places/";
+        NSMutableArray *imgArray = [[NSMutableArray alloc] initWithCapacity:self.imageCount];
+        for(int i = 0; i < self.imageCount; i++)
+        {
+            [imgArray addObject:[NSString stringWithFormat:@"%@%@_%d", container, self.placeId, i]];
+        }
+        self.images = imgArray;
         
         self.azureService = [QSAzureService defaultService:@"Place"];
     }
 	return self;
 }
+
+
+
+//- (id)init:(NSString *)placeId name:(NSString *)name imageCount:(NSUInteger)imageCount latitude:(double)latitude longitude:(double)longitude googleId:(NSString *)googleId googleReferenceId:(NSString *)googleReferenceId {
+//	self = [super init];
+//	if (self) {
+//		self.placeId = placeId;
+//		self.name = name;
+//        self.imageCount = imageCount;
+//        self.latitude = latitude;
+//        self.longitude = longitude;
+//        self.googleId = googleId;
+//        self.googleReferenceId = googleReferenceId;
+//        
+//        self.azureService = [QSAzureService defaultService:@"Place"];
+//    }
+//	return self;
+//}
+
+//-(id)constructor:(NSDictionary *)place {
+//    NSString *placeId = [place valueForKey:@"id"];
+//    NSString *name = [place valueForKey:@"Name"];
+//    NSUInteger imageCount = [place valueForKey:@"imagecount"];
+//    double latitude = [place valueForKey:@"Name"];
+//    double longitude = [place valueForKey:@"Name"];
+//    NSString *googleId = [place valueForKey:@"Name"];
+//    NSString *
+//    
+//    Place * place = [[Place alloc] init:placeId name:name];
+//}
 
 -(void)savePlace
 {
@@ -49,14 +95,33 @@
     
     [service get:placeId completion:^(NSDictionary *item) {
         
-
-        long placeId = [item valueForKey:@"id"];
-        NSString *name = [item valueForKey:@"Name"];
-        Place * place = [[Place alloc] initWithId:placeId name:name];
-
+        Place *place = [[Place alloc] init:item];
         completion(place);
     }];
+}
+
++(void)getNextPlace:(QSCompletionBlock)completion
+{
     
+     QSAzureService *service = [QSAzureService defaultService:@"Place"];
+     NSMutableArray *allPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+     [allPlaces addObjectsFromArray:[NSMutableArray arrayWithArray:[Session sessionVariables][@"noPlaces"]]];
+     
+     NSString *placeIds = @"";
+     for(id placeId in allPlaces) {
+         placeIds = [NSString stringWithFormat:@"%@'%@',", placeIds, placeId];
+     }
+     placeIds = [placeIds substringToIndex:placeIds.length - 1];
+    
+    NSDictionary *idsDict = @{ @"placeids": placeIds};
+    
+    [service getNextPlace:idsDict completion:^(NSArray *results) {
+        
+        Place *place = [[Place alloc] init:results.lastObject];
+        completion(place);
+        
+    }];
+
 }
 
 + (void)get:(QSCompletionBlock)completion
@@ -65,11 +130,8 @@
     [service get:^(NSArray *results) {
         
         NSMutableArray *places = [[NSMutableArray alloc] init];
-        for(id place in results) {
-            //Place *place = (Place *)thisPlace;
-            long placeId = [place valueForKey:@"id"];
-            NSString *name = [place valueForKey:@"Name"];
-            [places addObject:[[Place alloc] initWithId:placeId name:name]];
+        for(id item in results) {
+            [places addObject:[[Place alloc] init:item]];
         }
         
         completion(places);
@@ -77,33 +139,21 @@
 
 }
 
-+ (NSArray *)initialPlaces {
-	NSMutableArray *places = [[NSMutableArray alloc] init];
-
-    Place *place1 = [Place placeWithId:1 name:@"Perla's"];
-    place1.images = [NSArray arrayWithObjects: @"http://starrhardin.files.wordpress.com/2013/02/perlas-7.jpg", @"http://www.examiner.com/images/blog/EXID13641/images/AB_perlas1.jpg", @"http://tideandbloom.files.wordpress.com/2013/10/perlas-oysters-1a.jpg", nil];
-    Place *place2 = [Place placeWithId:2 name:@"Docs"];
-    place2.images = [NSArray arrayWithObjects: @"http://www.videocityguide.com/austin/PCWUploads/Doc's%20Motorworks%20Bar%20and%20Grill/docsmotorwirk-austin-image2.jpg", nil];
-    Place *place3 = [Place placeWithId:3 name:@"Vino Vino"];
-    place3.images = [NSArray arrayWithObjects: @"http://goodtastereport.files.wordpress.com/2007/06/vinovino1.jpg", nil];
-    Place *place4 = [Place placeWithId:4 name:@"Clark's"];
-    place4.images = [NSArray arrayWithObjects: @"http://dishwishes.blob.core.windows.net/places/olive", @"http://www.bonappetit.com/wp-content/uploads/2013/02/clarks-oysters-459.jpg", @"http://2.bp.blogspot.com/-P-eMsNdtNAs/UeXBRD1F3SI/AAAAAAAAEWQ/S1KZP7ei69Y/s640/522786_542229305803321_1737954152_n.jpg", @"http://images.huffingtonpost.com/2014-02-11-AUSTINCLARKSBARbar129451.jpg", nil];
-    
-    [places addObject:place1];
-    [places addObject:place2];
-    [places addObject:place3];
-    [places addObject:place4];
-    
-  
-    
-    return places;
-}
-
-+(Place *)nextPlace
++(void)getFivePlaces:(QSCompletionBlock)completion
 {
-    Place *place = [Place placeWithId:5 name:@"Uchi"];
-    place.images = [NSArray arrayWithObjects:@"http://img1.southernliving.timeinc.net/sites/default/files/image/2013/09/100-places-to-eat-now/uchi-austin-texas-l.jpg",@"http://dishwishes.blob.core.windows.net/places/rudys", @"http://si.wsj.net/public/resources/images/PT-AM790_Austin_F_20091016170801.jpg", @"http://roomfu.com/wp-content/uploads/2012/09/uchi-austin-interior3.jpg", nil];
-    return place;
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    
+    [service getTopFive:^(NSArray *results)  {
+        NSMutableArray *places = [[NSMutableArray alloc] init];
+        for(id item in results) {
+            [places addObject:[[Place alloc] init:item]];
+        }
+        
+        completion(places);
+        
+    }];
 }
+
+
 
 @end

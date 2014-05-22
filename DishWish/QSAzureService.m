@@ -98,6 +98,31 @@
      }];
 }
 
+- (void)getTopFive:(QSCompletionBlock)completion
+{
+    [self.client invokeAPI:@"gettopfiveplaces" body:nil HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                       
+                       items = [results mutableCopy];
+
+                       completion(items);
+                   }];
+}
+
+- (void)getNextPlace:(NSDictionary *)placeIds completion:(QSCompletionBlock)completion
+{
+    [self.client invokeAPI:@"getnextplace" body:placeIds HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                       NSLog([NSString stringWithFormat:@"%@", results]);
+                       items = [results mutableCopy];
+                       
+                       completion(items);
+                   }];
+}
+
+/*
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion
 {
     // Create a predicate that finds items where complete is false
@@ -115,6 +140,7 @@
     }];
     
 }
+*/
 
 -(void)addItem:(NSDictionary *)item completion:(QSCompletionWithIndexBlock)completion
 {

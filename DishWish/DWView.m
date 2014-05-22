@@ -16,25 +16,14 @@
     
     self.backgroundColor = [UIColor whiteColor];
     
-    NSArray *places = [Place initialPlaces];
-    //[places[3] savePlace];
-    //[places[0] savePlace];
+    [Place getFivePlaces:^(NSArray *places) {
+        [self loadDraggableCustomView:places[3]];
+        [self loadDraggableCustomView:places[2]];
+        [self loadDraggableCustomView:places[1]];
+        [self loadDraggableCustomView:places[0]];
+    }];
     
-    //TODO Get from db
-    //[Place get:^(NSArray *places) {
         
-    //    [self loadDraggableCustomView:places[0]];
-    //   [self loadDraggableCustomView:places[1]];
-    //}];
-    
-    [self loadDraggableCustomView:places[2]];
-    [self loadDraggableCustomView:places[3]];
-    
-    /*[Place get:@"2" completion:^(Place *place) {
-        
-        [self loadDraggableCustomView:place];
-    }];*/
-    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
@@ -105,19 +94,19 @@
         }
     }
     
-    DWDraggableView *drag = (DWDraggableView *)drags[3];
+    DWDraggableView *drag = (DWDraggableView *)drags[[drags count] - 1];
     if(drag.center.x == drag.originalPoint.x) {
         return drag;
     }
-    drag = (DWDraggableView *)drags[2];
+    drag = (DWDraggableView *)drags[[drags count] - 2];
     if(drag.center.x == drag.originalPoint.x) {
         return drag;
     }
-    drag = (DWDraggableView *)drags[1];
+    drag = (DWDraggableView *)drags[[drags count] - 3];
     if(drag.center.x == drag.originalPoint.x) {
         return drag;
     }
-    drag = (DWDraggableView *)drags[0];
+    drag = (DWDraggableView *)drags[[drags count] - 4];
     return drag;
 
 }

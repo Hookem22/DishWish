@@ -41,6 +41,10 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 
 -(void)get:(QSCompletionBlock)completion;
 
+- (void)getTopFive:(QSCompletionBlock)completion;
+
+- (void)getNextPlace:(NSDictionary *)placeIds completion:(QSCompletionBlock)completion;
+
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion;
 
 - (void)addItem:(NSDictionary *)item
