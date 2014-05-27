@@ -38,7 +38,7 @@
         NSMutableArray *imgArray = [[NSMutableArray alloc] initWithCapacity:self.imageCount];
         for(int i = 0; i < self.imageCount; i++)
         {
-            [imgArray addObject:[NSString stringWithFormat:@"%@%@_%d", container, self.placeId, i]];
+            [imgArray addObject:[NSString stringWithFormat:@"%@%@_%d.png", container, self.placeId, i]];
         }
         self.images = imgArray;
         
@@ -103,25 +103,29 @@
 +(void)getNextPlace:(QSCompletionBlock)completion
 {
     
-     QSAzureService *service = [QSAzureService defaultService:@"Place"];
-     NSMutableArray *allPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
-     [allPlaces addObjectsFromArray:[NSMutableArray arrayWithArray:[Session sessionVariables][@"noPlaces"]]];
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    NSMutableArray *allPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+    [allPlaces addObjectsFromArray:[NSMutableArray arrayWithArray:[Session sessionVariables][@"noPlaces"]]];
      
-     NSString *placeIds = @"";
-     for(id placeId in allPlaces) {
+    NSString *placeIds = @"";
+    for(id placeId in allPlaces) {
          placeIds = [NSString stringWithFormat:@"%@'%@',", placeIds, placeId];
-     }
-     placeIds = [placeIds substringToIndex:placeIds.length - 1];
+    }
+    placeIds = [placeIds substringToIndex:placeIds.length - 1];
     
-    NSDictionary *idsDict = @{ @"placeids": placeIds};
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setValue:placeIds forKey:@"placeids"];
+    [params setValue:@"30.261862" forKey:@"latitude"]; //TODO Get device location
+    [params setValue:@"-97.758768" forKey:@"longitude"];
+
     
-    [service getNextPlace:idsDict completion:^(NSArray *results) {
+    [service getNextPlace:params completion:^(NSArray *results) {
         
         Place *place = [[Place alloc] init:results.lastObject];
         completion(place);
         
     }];
-
+    
 }
 
 + (void)get:(QSCompletionBlock)completion
