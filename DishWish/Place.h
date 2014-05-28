@@ -23,6 +23,14 @@
 @property (nonatomic, assign) double longitude;
 @property (nonatomic, copy) NSString *googleId;
 @property (nonatomic, copy) NSString *googleReferenceId;
+@property (nonatomic, copy) NSString *yelpId;
+@property (nonatomic, copy) NSString *website;
+@property (nonatomic, copy) NSString *menu;
+@property (nonatomic, copy) NSString *lunchMenu;
+@property (nonatomic, copy) NSString *brunchMenu;
+@property (nonatomic, copy) NSString *drinkMenu;
+@property (nonatomic, copy) NSString *happyHourMenu;
+
 
 + (NSArray *)initialPlaces;
 -(void)savePlace;

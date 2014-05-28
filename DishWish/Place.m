@@ -19,6 +19,13 @@
 @synthesize longitude = _longitude;
 @synthesize googleId = _googleId;
 @synthesize googleReferenceId = _googleReferenceId;
+@synthesize yelpId = _yelpId;
+@synthesize website = _website;
+@synthesize menu = _menu;
+@synthesize lunchMenu = _lunchMenu;
+@synthesize brunchMenu = _brunchMenu;
+@synthesize drinkMenu = _drinkMenu;
+@synthesize happyHourMenu = _happyHourMenu;
 
 @synthesize azureService = _azureService;
 
@@ -33,6 +40,13 @@
         self.longitude = [[place objectForKey:@"longitude"] doubleValue];
         self.googleId = [place valueForKey:@"googleid"];
         self.googleReferenceId = [place valueForKey:@"googlereferenceid"];
+        self.yelpId = [place valueForKey:@"yelpid"];
+        self.website = [place valueForKey:@"website"];
+        self.menu = [place valueForKey:@"menu"];
+        self.lunchMenu = [place valueForKey:@"lunchMenu"];
+        self.brunchMenu = [place valueForKey:@"brunchMenu"];
+        self.drinkMenu = [place valueForKey:@"drinkMenu"];
+        self.happyHourMenu = [place valueForKey:@"happyHourMenu"];        
         
         NSString *container = @"http://dishwishes.blob.core.windows.net/places/";
         NSMutableArray *imgArray = [[NSMutableArray alloc] initWithCapacity:self.imageCount];
@@ -48,34 +62,6 @@
 }
 
 
-
-//- (id)init:(NSString *)placeId name:(NSString *)name imageCount:(NSUInteger)imageCount latitude:(double)latitude longitude:(double)longitude googleId:(NSString *)googleId googleReferenceId:(NSString *)googleReferenceId {
-//	self = [super init];
-//	if (self) {
-//		self.placeId = placeId;
-//		self.name = name;
-//        self.imageCount = imageCount;
-//        self.latitude = latitude;
-//        self.longitude = longitude;
-//        self.googleId = googleId;
-//        self.googleReferenceId = googleReferenceId;
-//        
-//        self.azureService = [QSAzureService defaultService:@"Place"];
-//    }
-//	return self;
-//}
-
-//-(id)constructor:(NSDictionary *)place {
-//    NSString *placeId = [place valueForKey:@"id"];
-//    NSString *name = [place valueForKey:@"Name"];
-//    NSUInteger imageCount = [place valueForKey:@"imagecount"];
-//    double latitude = [place valueForKey:@"Name"];
-//    double longitude = [place valueForKey:@"Name"];
-//    NSString *googleId = [place valueForKey:@"Name"];
-//    NSString *
-//    
-//    Place * place = [[Place alloc] init:placeId name:name];
-//}
 
 -(void)savePlace
 {
