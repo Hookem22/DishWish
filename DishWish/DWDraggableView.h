@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *mainImage;
 @property (nonatomic, weak) IBOutlet UILabel *nameLabel;
 @property (nonatomic, weak) IBOutlet UIButton *menuButton;
+@property (nonatomic, weak) IBOutlet UIButton *drinkButton;
 @property (nonatomic, weak) IBOutlet UIButton *mapButton;
 
 //- (id)initWithPlace:(Place *)place;

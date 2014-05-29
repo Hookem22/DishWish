@@ -1,17 +1,27 @@
 #import "DWMenu.h"
 
 @interface DWMenu ()
-@property (nonatomic, strong) UIImageView *imageView;
+//@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end
 
 @implementation DWMenu
 
-- (id)initWithFrame:(CGRect)frame place:(Place *)place
+- (id)initWithFrame:(CGRect)frame place:(Place *)place menuType:(NSUInteger)menuType;
 {
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    [self loadWebSite:place];
+    NSString *menu = place.menu;
+    if(menuType == 1)
+        menu = place.drinkMenu;
+    
+    if ([menu rangeOfString:@".pdf"].location == NSNotFound) {
+        [self loadImage:menu];
+    }
+    else {
+        [self loadWebSite:menu];
+    }
     
     [self addNavBar:place];
     
@@ -53,10 +63,14 @@
              }];
 }
 
-- (void)loadWebSite:(Place *)place {
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
+- (void)loadWebSite:(NSString *)menu {
+
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    NSString *urlAddress = place.menu;
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0,40,wd,ht - 80)];
+    
+    NSString *urlAddress = menu;
     NSURL *url = [[NSURL alloc] initWithString:urlAddress];
     NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
     
@@ -66,12 +80,50 @@
     [self addSubview:webView];
 }
 
+- (void)loadImage:(NSString *)menu
+{
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0,40,wd,ht - 80)];
+    
+    NSURL *url = [NSURL URLWithString:menu];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    UIImage *img = [[UIImage alloc] initWithData:data];
+    double ratio = wd / img.size.width;
+    
+    NSUInteger height = img.size.height * ratio;
+    
+    UIImage *image = [self imageWithImage:img scaledToSize:CGSizeMake(wd, height)];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    
+    [view addSubview:imageView];
+    [view setContentSize:imageView.frame.size];
+    
+    self.scrollView = view;
+    self.scrollView.delegate = self;
+    
+    [self addSubview: view];
+    
+}
+
+-(UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+    // Pass 1.0 to force exact pixel size.
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.size.height) {
+    if (scrollView.contentOffset.y - 60 >= scrollView.contentSize.height - scrollView.frame.size.height) {
         [self exitMenu];
         //NSLog([NSString stringWithFormat:@"%f", scrollView.contentOffset.y]);
     }

@@ -16,6 +16,7 @@
 @synthesize nameLabel = _nameLabel;
 @synthesize mainImage = _mainImage;
 @synthesize menuButton = _menuButton;
+@synthesize drinkButton = _drinkButton;
 @synthesize mapButton = _mapButton;
 @synthesize menuScreen = _menuScreen;
 @synthesize mapScreen = _mapScreen;
@@ -78,15 +79,29 @@
     self.nameLabel = nameLabel;
     [self addSubview:self.nameLabel];
     
-    UIButton *mapButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 50, ht - 100, 40, 40)];
-    [mapButton setImage:[UIImage imageNamed:@"Map"] forState:UIControlStateNormal];
+    UIButton *mapButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 50, ht - 95, 40, 40)];
+    [mapButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
     [mapButton addTarget:self action:@selector(loadMap) forControlEvents:UIControlEventTouchUpInside];
     self.mapButton = mapButton;
     [self addSubview:self.mapButton];
     
-    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100, ht - 100, 40, 40)];
-    [menuButton setImage:[UIImage imageNamed:@"Menu"] forState:UIControlStateNormal];
-    [menuButton addTarget:self action:@selector(loadMenu) forControlEvents:UIControlEventTouchUpInside];
+    NSUInteger drinks = 0;
+    if([self.place.drinkMenu length] > 0)
+    {
+        UIButton *drinkButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100, ht - 95, 40, 40)];
+        [drinkButton setImage:[UIImage imageNamed:@"wine"] forState:UIControlStateNormal];
+        [drinkButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
+        drinkButton.tag = 1;
+        self.drinkButton = drinkButton;
+        [self addSubview:self.drinkButton];
+    
+        drinks = 50;
+    }
+    
+    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - drinks, ht - 95, 40, 40)];
+    [menuButton setImage:[UIImage imageNamed:@"fork"] forState:UIControlStateNormal];
+    [menuButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
+    menuButton.tag = 0;
     self.menuButton = menuButton;
     [self addSubview:self.menuButton];
     
@@ -125,14 +140,16 @@
     */
 }
 
--(void)loadMenu
+-(void)loadMenu:(id)sender
 {
+    UIButton *button = (UIButton *) sender;
+    
     //[self removeGestureRecognizer:self.panGestureRecognizer];
     [self returnImage];
     [self.superview bringSubviewToFront:self];
     
     CGRect bounds = CGRectMake(self.bounds.origin.x, (-1) * self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
-    self.menuScreen = [[DWMenu alloc] initWithFrame:bounds place:self.place];
+    self.menuScreen = [[DWMenu alloc] initWithFrame:bounds place:self.place menuType:button.tag];
     [self addSubview:self.menuScreen];
     
     [UIView animateWithDuration:0.3
@@ -235,7 +252,7 @@
 - (void)resetViewPositionAndTransformations:(CGFloat)x y:(CGFloat)y
 {
     if(x < 70 && x > -70 && y > 70) {
-        [self loadMenu];
+        [self loadMenu:self];
     }
     else if(x < 70 && x > -70 && y < -70) {
         [self loadMap];

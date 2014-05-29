@@ -43,10 +43,10 @@
         self.yelpId = [place valueForKey:@"yelpid"];
         self.website = [place valueForKey:@"website"];
         self.menu = [place valueForKey:@"menu"];
-        self.lunchMenu = [place valueForKey:@"lunchMenu"];
-        self.brunchMenu = [place valueForKey:@"brunchMenu"];
-        self.drinkMenu = [place valueForKey:@"drinkMenu"];
-        self.happyHourMenu = [place valueForKey:@"happyHourMenu"];        
+        self.lunchMenu = [place valueForKey:@"lunchmenu"];
+        self.brunchMenu = [place valueForKey:@"brunchmenu"];
+        self.drinkMenu = [place valueForKey:@"drinkmenu"];
+        self.happyHourMenu = [place valueForKey:@"happyhourmenu"];        
         
         NSString *container = @"http://dishwishes.blob.core.windows.net/places/";
         NSMutableArray *imgArray = [[NSMutableArray alloc] initWithCapacity:self.imageCount];
