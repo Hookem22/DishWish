@@ -13,7 +13,22 @@
     if (!self) return nil;
     
     NSString *menu = place.menu;
-    if(menuType == 1)
+    if(menuType == 0) {
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *comps = [gregorian components:(NSHourCalendarUnit | NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+        int hour = [comps hour];
+        int weekday = [comps weekday];
+        
+        if([place.brunchMenu length] > 0 && (weekday == 1 || weekday == 7) && hour < 15)
+        {
+            menu = place.brunchMenu;
+        }
+        else if([place.lunchMenu length] > 0 && hour < 15)
+        {
+            menu = place.lunchMenu;
+        }
+    }
+    else if(menuType == 1)
         menu = place.drinkMenu;
     
     if ([menu rangeOfString:@".pdf"].location == NSNotFound) {
