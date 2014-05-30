@@ -85,20 +85,32 @@
     self.mapButton = mapButton;
     [self addSubview:self.mapButton];
     
-    NSUInteger drinks = 0;
-    if([self.place.drinkMenu length] > 0)
+    NSUInteger moreButtons = 0;
+    if([self.place.happyHourMenu length] > 0)
     {
         UIButton *drinkButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100, ht - 95, 40, 40)];
+        [drinkButton setImage:[UIImage imageNamed:@"cocktail"] forState:UIControlStateNormal];
+        [drinkButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
+        drinkButton.tag = 2;
+        self.drinkButton = drinkButton;
+        [self addSubview:self.drinkButton];
+        
+        moreButtons = 50;
+    }
+    
+    if([self.place.drinkMenu length] > 0)
+    {
+        UIButton *drinkButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - moreButtons, ht - 95, 40, 40)];
         [drinkButton setImage:[UIImage imageNamed:@"wine"] forState:UIControlStateNormal];
         [drinkButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
         drinkButton.tag = 1;
         self.drinkButton = drinkButton;
         [self addSubview:self.drinkButton];
     
-        drinks = 50;
+        moreButtons += 50;
     }
     
-    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - drinks, ht - 95, 40, 40)];
+    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - moreButtons, ht - 95, 40, 40)];
     [menuButton setImage:[UIImage imageNamed:@"fork"] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
     menuButton.tag = 0;

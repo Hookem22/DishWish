@@ -30,6 +30,8 @@
     }
     else if(menuType == 1)
         menu = place.drinkMenu;
+    else if(menuType == 2)
+        menu = place.happyHourMenu;
     
     if ([menu rangeOfString:@".png"].location == NSNotFound) {
         [self loadWebSite:menu];
