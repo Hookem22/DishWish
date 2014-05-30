@@ -31,11 +31,11 @@
     else if(menuType == 1)
         menu = place.drinkMenu;
     
-    if ([menu rangeOfString:@".pdf"].location == NSNotFound) {
-        [self loadImage:menu];
+    if ([menu rangeOfString:@".png"].location == NSNotFound) {
+        [self loadWebSite:menu];
     }
     else {
-        [self loadWebSite:menu];
+        [self loadImage:menu];
     }
     
     [self addNavBar:place];

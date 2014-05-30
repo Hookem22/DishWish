@@ -3,10 +3,6 @@
 #import "DWOverlayView.h"
 #import "Place.h"
 
-@interface DWView ()
-@property(nonatomic, strong) DWDraggableView *draggableView;
-@end
-
 @implementation DWView
 
 - (id)init
@@ -71,9 +67,9 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    self.draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place];
+    DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place];
     
-    [self addSubview:self.draggableView];
+    [self addSubview:draggableView];
 }
 
 -(void) voteButtonClick:(id)sender

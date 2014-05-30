@@ -197,11 +197,11 @@
     CGPoint point = [gestureRecognizer locationInView:gestureRecognizer.view];
     UIView *viewTouched = [gestureRecognizer.view hitTest:point withEvent:nil];
     if (!([viewTouched isKindOfClass:[DWDraggableView class]] || [viewTouched isKindOfClass:[DWOverlayView class]] || [viewTouched isKindOfClass:[UIButton class]] )) {
-        NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
+        //NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
         return;
     }
         else {
-        NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
+        //NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
     }
     
     
@@ -354,19 +354,30 @@
 
 -(void)populateNextPlace:(Place *)place
 {
-    self.place = place;
-    self.nameLabel.text = [NSString stringWithFormat:@"     %@", place.name];
-    self.currentImage = 0;
-    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    NSURL *url = [NSURL URLWithString:self.place.images[self.currentImage]];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    UIImage *img = [[UIImage alloc] initWithData:data];
-    UIImage *myIcon = [self imageWithImage:img scaledToSize:CGSizeMake(wd, ht - 100)];
+    DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place];
     
-    [self.mainImage setImage:myIcon forState:UIControlStateNormal];
+    [self.superview addSubview:draggableView];
+    [self.superview sendSubviewToBack:draggableView];
+    
+    [self removeFromSuperview];
+    
+//    self.place = place;
+//    self.nameLabel.text = [NSString stringWithFormat:@"     %@", place.name];
+//    self.currentImage = 0;
+//    
+//    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+//    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+//    
+//    NSURL *url = [NSURL URLWithString:self.place.images[self.currentImage]];
+//    NSData *data = [NSData dataWithContentsOfURL:url];
+//    UIImage *img = [[UIImage alloc] initWithData:data];
+//    UIImage *myIcon = [self imageWithImage:img scaledToSize:CGSizeMake(wd, ht - 100)];
+//    
+//    [self.mainImage setImage:myIcon forState:UIControlStateNormal];
+
 }
 
 
