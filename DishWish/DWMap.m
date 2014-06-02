@@ -21,7 +21,9 @@
 
 -(void)addNavBar:(Place *)place
 {
-    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    
+    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, wd, 60)];
     [self addSubview:naviBarObj];
     
     

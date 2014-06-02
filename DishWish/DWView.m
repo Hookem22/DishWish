@@ -10,18 +10,36 @@
     self = [super init];
     if (!self) return nil;
     
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
     self.backgroundColor = [UIColor whiteColor];
     
-    [Place getFivePlaces:^(NSArray *places) {
+    [Place getAllPlaces:^(NSArray *places) {
+        [[Session sessionVariables] setObject:places forKey:@"Places"];
+        NSUInteger currentId = 4;
+        [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
+        
         [self loadDraggableCustomView:places[3]];
         [self loadDraggableCustomView:places[2]];
         [self loadDraggableCustomView:places[1]];
         [self loadDraggableCustomView:places[0]];
+        [self addNavBar:wd];
+        
     }];
     
+    /*
+    [Place getAllPlaceIds:^(NSMutableArray *ids) {
         
-    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
-    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+        [ids removeObject:ids[3]];
+        [ids removeObject:ids[2]];
+        [ids removeObject:ids[1]];
+        [ids removeObject:ids[0]];
+        
+        [[Session sessionVariables] setObject:ids forKey:@"PlaceIds"];
+        
+    }];
+    */
     
     UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(0, ht-40, wd/2, 40)];
     noButton.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
@@ -35,14 +53,12 @@
     [yesButton addTarget:self action:@selector(voteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:yesButton];
     
-    [self addNavBar:wd];
-    
     return self;
 }
 
 -(void)addNavBar:(NSUInteger)width
 {
-    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
+    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, width, 60)];
     [self addSubview:naviBarObj];
     
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)];

@@ -38,6 +38,7 @@
 +(void)get:(QSCompletionBlock)completion;
 +(void)getFivePlaces:(QSCompletionBlock)completion;
 +(void)getNextPlace:(QSCompletionBlock)completion;
++(void)getAllPlaces:(QSCompletionBlock)completion;
 
 @end
 

@@ -122,6 +122,18 @@
                    }];
 }
 
+- (void)getAllPlaces:(NSDictionary *)params completion:(QSCompletionBlock)completion
+{
+    [self.client invokeAPI:@"getallplaces" body:params HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                       //NSLog([NSString stringWithFormat:@"%@", results]);
+                       items = [results mutableCopy];
+                       
+                       completion(items);
+                   }];
+}
+
 /*
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion
 {

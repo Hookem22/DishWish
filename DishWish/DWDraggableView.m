@@ -14,7 +14,6 @@
 @synthesize overlayView = _overlayView;
 @synthesize place = _place;
 @synthesize nameLabel = _nameLabel;
-@synthesize mainImage = _mainImage;
 @synthesize menuButton = _menuButton;
 @synthesize drinkButton = _drinkButton;
 @synthesize mapButton = _mapButton;
@@ -69,9 +68,7 @@
     
     UIButton *img = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
     [img addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
-    self.mainImage = img;
-    [self changeMainImage];
-    [self addSubview:self.mainImage];
+    [self downLoadImages];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ht - 100, wd, 40)];
     nameLabel.text = [NSString stringWithFormat:@"     %@", self.place.name];
@@ -132,7 +129,7 @@
     else
         self.currentImage++;
     
-    [self changeMainImage];
+    [self changeMainImage:sender];
     
     /*zoom into card funtionality
     [self.superview bringSubviewToFront:self];
@@ -156,40 +153,54 @@
 {
     UIButton *button = (UIButton *) sender;
     
-    //[self removeGestureRecognizer:self.panGestureRecognizer];
-    [self returnImage];
-    [self.superview bringSubviewToFront:self];
-    
-    CGRect bounds = CGRectMake(self.bounds.origin.x, (-1) * self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
-    self.menuScreen = [[DWMenu alloc] initWithFrame:bounds place:self.place menuType:button.tag];
-    [self addSubview:self.menuScreen];
-    
-    [UIView animateWithDuration:0.3
-             animations:^{
-                 self.menuScreen.frame = self.bounds;
-             }
-             completion:^(BOOL finished){
-                 
-             }];
+    [UIView animateWithDuration:.2
+         animations:^{
+             self.center = self.originalPoint;
+             self.overlayView.alpha = 0;
+             self.transform = CGAffineTransformMakeRotation(0);
+         }
+         completion:^(BOOL finished) {
+             [self.superview bringSubviewToFront:self];
+             
+             CGRect bounds = CGRectMake(self.bounds.origin.x, (-1) * self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
+             self.menuScreen = [[DWMenu alloc] initWithFrame:bounds place:self.place menuType:button.tag];
+             [self addSubview:self.menuScreen];
+             
+             [UIView animateWithDuration:0.3
+                      animations:^{
+                          self.menuScreen.frame = self.bounds;
+                      }
+                      completion:^(BOOL finished){
+                          
+                      }];
+         }
+     ];
+
     
 }
 
 -(void)loadMap
 {
-    [self returnImage];
-    
-    
-    CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
-    self.mapScreen = [[DWMap alloc] initWithFrame:bounds place:self.place];
-    [self addSubview:self.mapScreen];
-    
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:.2
              animations:^{
-                 self.mapScreen.frame = self.bounds;
+                 self.center = self.originalPoint;
+                 self.overlayView.alpha = 0;
+                 self.transform = CGAffineTransformMakeRotation(0);
              }
-             completion:^(BOOL finished){
-                 [self.superview bringSubviewToFront:self];
-             }];
+             completion:^(BOOL finished) {
+                 CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
+                 self.mapScreen = [[DWMap alloc] initWithFrame:bounds place:self.place];
+                 [self addSubview:self.mapScreen];
+                 
+                 [UIView animateWithDuration:0.3
+                          animations:^{
+                              self.mapScreen.frame = self.bounds;
+                          }
+                          completion:^(BOOL finished){
+                              [self.superview bringSubviewToFront:self];
+                          }];
+             }
+     ];
     
 }
 
@@ -359,9 +370,33 @@
 
 -(void)nextPlace
 {
-    [Place getNextPlace:^(Place *place) {
+    NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"Places"]];
+    NSUInteger currentId = [[[Session sessionVariables] objectForKey:@"CurrentId"] intValue];
+    
+    //[self populateNextPlace:places[currentId]];
+    
+    currentId++;
+    [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
+    
+    dispatch_queue_t imageQueue = dispatch_queue_create("Image Queue",NULL);
+    
+    dispatch_async(imageQueue, ^{
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Update the UI
+            [self populateNextPlace:places[currentId]];
+        });
+        
+    });
+    
+    
+    /*
+    [Place get:placeId completion:^(Place *place) {
         [self populateNextPlace:place];
     }];
+    */
+
 }
 
 -(void)populateNextPlace:(Place *)place
@@ -392,19 +427,72 @@
 
 }
 
-
-
--(void)changeMainImage
+-(void)downLoadImages
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
+    dispatch_queue_t queue = dispatch_queue_create("Download Image Queue",NULL);
+    for (NSUInteger i = self.place.imageCount; i > 0; i--) {
+        dispatch_async(queue, ^{
+            UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+            
+            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+            [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+            
+            NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+            NSData *data = [NSData dataWithContentsOfURL:url];
+            UIImage *img = [[UIImage alloc] initWithData:data];
+            
+            [button setImage:img forState:UIControlStateNormal];
+            [uiView addSubview:button];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // Update the UI
+                [self addSubview:uiView];
+            });
+        });
+    }
+}
+
+-(void)changeMainImage:(id)sender
+{
+    UIButton *send = (UIButton *)sender;
+    int tag = send.tag;
+    
+    NSArray *views = self.subviews;
+    NSMutableArray *buttons = [[NSMutableArray alloc] init];
+    for(id subview in views)
+    {
+        if([subview isMemberOfClass:[UIView class]])
+        {
+            [buttons addObject:subview];
+            
+        }
+    }
+
+    
+    [self sendSubviewToBack:buttons.lastObject];
+
+    
+    /*
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    CFTimeInterval startTime = CFAbsoluteTimeGetCurrent();
+    
     NSURL *url = [NSURL URLWithString:self.place.images[self.currentImage]];
     NSData *data = [NSData dataWithContentsOfURL:url];
     UIImage *img = [[UIImage alloc] initWithData:data];
-    UIImage *myIcon = [self imageWithImage:img scaledToSize:CGSizeMake(wd, ht - 100)];
     
-    [self.mainImage setImage:myIcon forState:UIControlStateNormal];
+    CFTimeInterval difference = CFAbsoluteTimeGetCurrent() - startTime;
+    NSLog([NSString stringWithFormat:@"%f\n", difference]);
+    
+    //UIImage *myIcon = [self imageWithImage:img scaledToSize:CGSizeMake(wd, ht - 100)];
+    
+    [self.mainImage setImage:img forState:UIControlStateNormal];
+    */
+
 }
 
 - (void)dealloc

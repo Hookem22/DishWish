@@ -15,7 +15,6 @@
 @property(nonatomic) Place *place;
 @property(nonatomic) DWMenu *menuScreen;
 @property(nonatomic) DWMap *mapScreen;
-@property (nonatomic, weak) IBOutlet UIButton *mainImage;
 @property (nonatomic, weak) IBOutlet UILabel *nameLabel;
 @property (nonatomic, weak) IBOutlet UIButton *menuButton;
 @property (nonatomic, weak) IBOutlet UIButton *drinkButton;

@@ -144,6 +144,24 @@
     }];
 }
 
++(void)getAllPlaces:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
 
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+
+    [params setValue:@"30.261862" forKey:@"latitude"]; //TODO Get device location
+    [params setValue:@"-97.758768" forKey:@"longitude"];
+    
+    
+    [service getAllPlaces:params completion:^(NSArray *results) {
+        NSMutableArray *places = [[NSMutableArray alloc] init];
+        for(id item in results) {
+            [places addObject:[[Place alloc] init:item]];
+        }
+        
+        completion(places);
+    }];
+}
 
 @end

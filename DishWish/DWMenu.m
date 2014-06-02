@@ -47,7 +47,9 @@
 
 -(void)addNavBar:(Place *)place
 {
-    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    
+    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, wd, 60)];
     [self addSubview:naviBarObj];
     
     
@@ -85,7 +87,8 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0,40,wd,ht - 80)];
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
+    [webView setScalesPageToFit:YES];
     
     NSString *urlAddress = menu;
     NSURL *url = [[NSURL alloc] initWithString:urlAddress];
@@ -102,7 +105,7 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0,40,wd,ht - 80)];
+    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
     
     NSURL *url = [NSURL URLWithString:menu];
     NSData *data = [NSData dataWithContentsOfURL:url];
