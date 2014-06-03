@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>7F62AC1D-08B1-4967-8F24-CE915D32E54E</string>
+	<string>28DA32CF-E654-42B1-905E-1DCC945E3936</string>
 	<key>IDESourceControlProjectName</key>
 	<string>DishWish</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>4CFF69F0-254A-49CB-A21B-64D2A0BC4790</key>
-		<string>https://github.com/Hookem22/TinderLikeAnimations.git</string>
+		<key>7E16EC9E-90BF-4E6C-8D71-F84C5E681178</key>
+		<string>https://github.com/Hookem22/DishWish.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>DishWish.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>4CFF69F0-254A-49CB-A21B-64D2A0BC4790</key>
+		<key>7E16EC9E-90BF-4E6C-8D71-F84C5E681178</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/Hookem22/TinderLikeAnimations.git</string>
+	<string>https://github.com/Hookem22/DishWish.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>4CFF69F0-254A-49CB-A21B-64D2A0BC4790</string>
+	<string>7E16EC9E-90BF-4E6C-8D71-F84C5E681178</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>4CFF69F0-254A-49CB-A21B-64D2A0BC4790</string>
+			<string>7E16EC9E-90BF-4E6C-8D71-F84C5E681178</string>
 			<key>IDESourceControlWCCName</key>
 			<string>DishWish</string>
 		</dict>
