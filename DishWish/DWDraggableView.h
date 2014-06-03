@@ -21,7 +21,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *mapButton;
 
 //- (id)initWithPlace:(Place *)place;
-- (id)initWithFrame:(CGRect)frame place:(Place *)place;
+- (id)initWithFrame:(CGRect)frame place:(Place *)place async:(BOOL)async;
 -(void) animateImage:(DWDraggableView *)card isYes:(BOOL)isYes;
 
 @end

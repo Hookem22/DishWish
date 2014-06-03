@@ -17,13 +17,17 @@
     
     [Place getAllPlaces:^(NSArray *places) {
         [[Session sessionVariables] setObject:places forKey:@"Places"];
-        NSUInteger currentId = 4;
+        NSUInteger currentId = 10;
         [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
         
+        [self loadDraggableCustomView:places];
+        /*
         [self loadDraggableCustomView:places[3]];
         [self loadDraggableCustomView:places[2]];
         [self loadDraggableCustomView:places[1]];
         [self loadDraggableCustomView:places[0]];
+        */
+        
         [self addNavBar:wd];
         
     }];
@@ -78,14 +82,22 @@
 {
 }
 
-- (void)loadDraggableCustomView:(Place *)place
+- (void)loadDraggableCustomView:(NSArray *)places
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place];
+    DWDraggableView *prevDraggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[0] async:NO];
+    [self addSubview:prevDraggableView];
     
-    [self addSubview:draggableView];
+    for(int i = 1; i < 10; i++)
+    {
+        BOOL async = i > 3;
+        DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[i] async:async];
+
+        [self insertSubview:draggableView belowSubview:prevDraggableView];
+        prevDraggableView = draggableView;
+    }
 }
 
 -(void) voteButtonClick:(id)sender

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		481981FA193D767C003EE160 /* loading@2x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 481981F9193D767C003EE160 /* loading@2x.gif */; };
 		BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEEF191D82300087C645 /* Foundation.framework */; };
 		BEA9CEF2191D82300087C645 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF1191D82300087C645 /* CoreGraphics.framework */; };
 		BEA9CEF4191D82300087C645 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF3191D82300087C645 /* UIKit.framework */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		481981F9193D767C003EE160 /* loading@2x.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading@2x.gif"; sourceTree = "<group>"; };
 		BEA9CEEC191D82300087C645 /* DishWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DishWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA9CEEF191D82300087C645 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BEA9CEF1191D82300087C645 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -212,6 +214,7 @@
 		BEA9CF2E191D830E0087C645 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				481981F9193D767C003EE160 /* loading@2x.gif */,
 				BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */,
 				BEF8244B1937D97F00BE0CC2 /* fork@2x.png */,
 				BEF8244C1937D97F00BE0CC2 /* wine@2x.png */,
@@ -329,6 +332,7 @@
 				BEA9CF3F191D830E0087C645 /* trollface_300x200@2x.png in Resources */,
 				BEF8244E1937D97F00BE0CC2 /* fork@2x.png in Resources */,
 				BEF8244D1937D97F00BE0CC2 /* cocktail@2x.png in Resources */,
+				481981FA193D767C003EE160 /* loading@2x.gif in Resources */,
 				BEA9CF03191D82300087C645 /* Main.storyboard in Resources */,
 				BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */,
 			);

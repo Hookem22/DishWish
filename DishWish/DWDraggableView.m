@@ -40,7 +40,7 @@
     return self;
 }*/
 
-- (id)initWithFrame:(CGRect)frame place:(Place *)place
+- (id)initWithFrame:(CGRect)frame place:(Place *)place async:(BOOL)async
 {
     self = [super initWithFrame:frame];
     if (!self) return nil;
@@ -51,7 +51,7 @@
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragged:)];
     [self addGestureRecognizer:self.panGestureRecognizer];
 
-    [self loadView];
+    [self loadView:async];
 
     self.overlayView = [[DWOverlayView alloc] initWithFrame:self.bounds];
     self.overlayView.alpha = 0;
@@ -61,14 +61,17 @@
     return self;
 }
 
-- (void)loadView
+- (void)loadView:(BOOL)async
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     UIButton *img = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
     [img addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self downLoadImages];
+    if(async)
+        [self downLoadImagesAsync];
+    else
+        [self downLoadImages];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ht - 100, wd, 40)];
     nameLabel.text = [NSString stringWithFormat:@"     %@", self.place.name];
@@ -378,6 +381,9 @@
     currentId++;
     [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
     
+    [self populateNextPlace:places[currentId]];
+    
+    /*
     dispatch_queue_t imageQueue = dispatch_queue_create("Image Queue",NULL);
     
     dispatch_async(imageQueue, ^{
@@ -391,7 +397,7 @@
     });
     
     
-    /*
+    
     [Place get:placeId completion:^(Place *place) {
         [self populateNextPlace:place];
     }];
@@ -404,7 +410,7 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place];
+    DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place async:true];
     
     [self.superview addSubview:draggableView];
     [self.superview sendSubviewToBack:draggableView];
@@ -431,25 +437,57 @@
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+  
+    /*
+    UIImageView *uiImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+    
+    UIImage *loading = [UIImage imageNamed:@"loading@2x.gif"];
+    [uiImageView setImage:loading];
+    [self insertSubview:uiImageView atIndex:0];
+     */
+    
+    for (NSUInteger i = self.place.imageCount; i > 0; i--) {
+
+        UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+            
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        UIImage *img = [[UIImage alloc] initWithData:data];
+        
+        [button setImage:img forState:UIControlStateNormal];
+        [uiView addSubview:button];
+
+        [self insertSubview:uiView atIndex:i + 10];
+                
+    }
+}
+-(void)downLoadImagesAsync
+{
+    
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     dispatch_queue_t queue = dispatch_queue_create("Download Image Queue",NULL);
-    for (NSUInteger i = self.place.imageCount; i > 0; i--) {
+    for (NSUInteger i = 0, ii = self.place.imageCount; i < ii; i++) {
         dispatch_async(queue, ^{
             UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
             
             UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
             [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
             
-            NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+            NSURL *url = [NSURL URLWithString:self.place.images[i]];
             NSData *data = [NSData dataWithContentsOfURL:url];
             UIImage *img = [[UIImage alloc] initWithData:data];
             
-            [button setImage:img forState:UIControlStateNormal];
-            [uiView addSubview:button];
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 // Update the UI
-                [self addSubview:uiView];
+                [button setImage:img forState:UIControlStateNormal];
+                [uiView addSubview:button];
+                
+                [self insertSubview:uiView atIndex:self.subviews.count - i];
             });
         });
     }
@@ -457,8 +495,6 @@
 
 -(void)changeMainImage:(id)sender
 {
-    UIButton *send = (UIButton *)sender;
-    int tag = send.tag;
     
     NSArray *views = self.subviews;
     NSMutableArray *buttons = [[NSMutableArray alloc] init];
