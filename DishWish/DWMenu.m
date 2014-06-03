@@ -36,15 +36,27 @@
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
 }
 
--(void)addMenu:(NSUInteger)menuType
+-(void)addMenu:(NSUInteger)menuType async:(BOOL)async
 {
     NSString *menu = [self getMenu:menuType];    
     
-    if ([menu rangeOfString:@".png"].location == NSNotFound) {
-        [self loadWebSite:menu menuType:menuType];
+    if(async)
+    {
+        if ([menu rangeOfString:@".png"].location == NSNotFound) {
+            [self loadWebSiteAsync:menu menuType:menuType];
+        }
+        else {
+            [self loadImageAsync:menu menuType:menuType];
+        }
     }
-    else {
-        [self loadImage:menu menuType:menuType];
+    else
+    {
+        if ([menu rangeOfString:@".png"].location == NSNotFound) {
+            [self loadWebSite:menu menuType:menuType];
+        }
+        else {
+            [self loadImage:menu menuType:menuType];
+        }
     }
 }
 
@@ -96,6 +108,32 @@
              }];
 }
 
+- (void)loadWebSiteAsync:(NSString *)menu menuType:(NSUInteger)menuType {
+    
+    dispatch_queue_t queue = dispatch_queue_create("Menu Queue",NULL);
+    dispatch_async(queue, ^{
+        NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+        NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+        
+        NSString *urlAddress = menu;
+        NSURL *url = [[NSURL alloc] initWithString:urlAddress];
+        NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Update the UI
+            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
+            [webView setScalesPageToFit:YES];
+            
+            [webView loadRequest:requestObj];
+            webView.scrollView.delegate = self;
+            webView.tag = menuType;
+            
+            [self addSubview:webView];
+        });
+    });
+}
+
+
 - (void)loadWebSite:(NSString *)menu menuType:(NSUInteger)menuType {
 
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
@@ -113,6 +151,40 @@
     webView.tag = menuType;
     
     [self addSubview:webView];
+}
+
+- (void)loadImageAsync:(NSString *)menu menuType:(NSUInteger)menuType
+{
+    dispatch_queue_t queue = dispatch_queue_create("Menu Queue",NULL);
+    dispatch_async(queue, ^{
+        NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+        NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+        
+        UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
+        
+        NSURL *url = [NSURL URLWithString:menu];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        UIImage *img = [[UIImage alloc] initWithData:data];
+        double ratio = wd / img.size.width;
+        
+        NSUInteger height = img.size.height * ratio;
+        
+        UIImage *image = [self imageWithImage:img scaledToSize:CGSizeMake(wd, height)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Update the UI
+            [view addSubview:imageView];
+            [view setContentSize:imageView.frame.size];
+            
+            self.scrollView = view;
+            self.scrollView.delegate = self;
+            view.tag = menuType;
+            
+            [self addSubview: view];
+        });
+    });
+    
 }
 
 - (void)loadImage:(NSString *)menu menuType:(NSUInteger)menuType

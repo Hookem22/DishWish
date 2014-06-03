@@ -4,6 +4,7 @@
 #import "Session.h"
 #import "DWMenu.h"
 #import "DWMap.h"
+#import "DWLeftSideBar.h"
 
 @class DWOverlayView;
 

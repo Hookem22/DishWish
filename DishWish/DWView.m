@@ -2,6 +2,7 @@
 #import "DWDraggableView.h"
 #import "DWOverlayView.h"
 #import "Place.h"
+#import "DWLeftSideBar.h"
 
 @implementation DWView
 
@@ -32,19 +33,6 @@
         
     }];
     
-    /*
-    [Place getAllPlaceIds:^(NSMutableArray *ids) {
-        
-        [ids removeObject:ids[3]];
-        [ids removeObject:ids[2]];
-        [ids removeObject:ids[1]];
-        [ids removeObject:ids[0]];
-        
-        [[Session sessionVariables] setObject:ids forKey:@"PlaceIds"];
-        
-    }];
-    */
-    
     UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(0, ht-40, wd/2, 40)];
     noButton.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
     noButton.tag = 0;
@@ -56,6 +44,10 @@
     yesButton.tag = 1;
     [yesButton addTarget:self action:@selector(voteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:yesButton];
+    
+    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht)];
+    [self addSubview:left];
+    
     
     return self;
 }
@@ -77,6 +69,28 @@
 
 -(void)menuButtonPressed
 {
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    NSArray *views = self.subviews;
+    for(id subview in views) {
+        if([subview isMemberOfClass:[DWLeftSideBar class]]) {
+            [self bringSubviewToFront:subview];
+            DWLeftSideBar *left = (DWLeftSideBar *)subview;
+            BOOL isOpen = left.bounds.size.width > 0;
+            
+            [UIView animateWithDuration:0.2
+                 animations:^{
+                     if(isOpen)
+                         left.frame = CGRectMake(0, 60, 0, ht - 60);
+                     else
+                         left.frame = CGRectMake(0, 60, (wd * 3) /4, ht - 60);
+                 }
+                 completion:^(BOOL finished){
+                     
+                 }];
+        }
+    }
 }
 -(void)userButtonPressed
 {
@@ -92,7 +106,7 @@
     
     for(int i = 1; i < 10; i++)
     {
-        BOOL async = i > 2;
+        BOOL async = i > 1;
         DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[i] async:async];
 
         [self insertSubview:draggableView belowSubview:prevDraggableView];

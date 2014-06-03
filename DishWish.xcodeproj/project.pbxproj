@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		481981FA193D767C003EE160 /* loading@2x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 481981F9193D767C003EE160 /* loading@2x.gif */; };
+		BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */; };
 		BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEEF191D82300087C645 /* Foundation.framework */; };
 		BEA9CEF2191D82300087C645 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF1191D82300087C645 /* CoreGraphics.framework */; };
 		BEA9CEF4191D82300087C645 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF3191D82300087C645 /* UIKit.framework */; };
@@ -53,6 +54,8 @@
 
 /* Begin PBXFileReference section */
 		481981F9193D767C003EE160 /* loading@2x.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading@2x.gif"; sourceTree = "<group>"; };
+		BE3B5C07193E76DC002AE5FF /* DWLeftSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWLeftSideBar.h; sourceTree = "<group>"; };
+		BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWLeftSideBar.m; sourceTree = "<group>"; };
 		BEA9CEEC191D82300087C645 /* DishWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DishWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA9CEEF191D82300087C645 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BEA9CEF1191D82300087C645 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -167,6 +170,8 @@
 				BEA9CF01191D82300087C645 /* Main.storyboard */,
 				BEA9CF2C191D830E0087C645 /* DWView.h */,
 				BEA9CF2D191D830E0087C645 /* DWView.m */,
+				BE3B5C07193E76DC002AE5FF /* DWLeftSideBar.h */,
+				BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */,
 				BEA9CF24191D830E0087C645 /* DWDraggableView.h */,
 				BEA9CF25191D830E0087C645 /* DWDraggableView.m */,
 				BEA9CF2A191D830E0087C645 /* DWOverlayView.h */,
@@ -355,6 +360,7 @@
 			files = (
 				BEA9CF06191D82300087C645 /* ViewController.m in Sources */,
 				BEA9CF3A191D830E0087C645 /* DWView.m in Sources */,
+				BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */,
 				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,
 				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,

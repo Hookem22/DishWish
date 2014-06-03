@@ -6,7 +6,7 @@
 @property(nonatomic) Place *place;
 
 - (id)initWithFrame:(CGRect)frame place:(Place *)place;
--(void)addMenu:(NSUInteger)menuType;
+-(void)addMenu:(NSUInteger)menuType async:(BOOL)async;
 -(void)exitMenu;
 
 

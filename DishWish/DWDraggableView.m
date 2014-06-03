@@ -99,14 +99,14 @@
     [self addSubview:menuButton];
     
     //Load Menus
-    [self loadMenu:0];
+    [self loadMenu:0 async:async];
     if([self.place.drinkMenu length] > 0)
     {
-        [self loadMenu:1];
+        [self loadMenu:1 async:async];
     }
     if([self.place.happyHourMenu length] > 0)
     {
-        [self loadMenu:2];
+        [self loadMenu:2 async:async];
     }
     
     self.backgroundColor = [UIColor whiteColor];
@@ -127,7 +127,7 @@
     
 }
 
--(void)loadMenu:(NSUInteger)menuType {
+-(void)loadMenu:(NSUInteger)menuType async:(BOOL)async {
    
     if(self.menuScreen == nil) {
         CGRect bounds = CGRectMake(self.bounds.origin.x, (-1) * self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
@@ -138,7 +138,7 @@
     
 
     
-    [self.menuScreen addMenu:menuType];
+    [self.menuScreen addMenu:menuType async:async];
     
 }
 
@@ -363,11 +363,22 @@
     
     NSMutableArray *prevPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][key]];
 
-    [prevPlaces addObject:card.place.placeId];
+    [prevPlaces addObject:card.place];
     [[Session sessionVariables] setObject:prevPlaces forKey:key];
-
+    [self updateLeftSideBar:prevPlaces];
         
     [card nextPlace];
+}
+
+-(void)updateLeftSideBar:(NSMutableArray *)places
+{
+    NSArray *views = self.superview.subviews;
+    for(id subview in views) {
+        if([subview isMemberOfClass:[DWLeftSideBar class]]) {
+            DWLeftSideBar *left = (DWLeftSideBar *)subview;
+            [left updateLeftSideBar];
+        }
+    }
 }
 
 -(void) returnImage
