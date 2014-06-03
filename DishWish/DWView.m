@@ -92,7 +92,7 @@
     
     for(int i = 1; i < 10; i++)
     {
-        BOOL async = i > 3;
+        BOOL async = i > 2;
         DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[i] async:async];
 
         [self insertSubview:draggableView belowSubview:prevDraggableView];

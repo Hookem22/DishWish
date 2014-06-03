@@ -90,7 +90,7 @@
     {
         UIButton *drinkButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100, ht - 95, 40, 40)];
         [drinkButton setImage:[UIImage imageNamed:@"cocktail"] forState:UIControlStateNormal];
-        [drinkButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
+        [drinkButton addTarget:self action:@selector(openMenu:) forControlEvents:UIControlEventTouchUpInside];
         drinkButton.tag = 2;
         self.drinkButton = drinkButton;
         [self addSubview:self.drinkButton];
@@ -102,7 +102,7 @@
     {
         UIButton *drinkButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - moreButtons, ht - 95, 40, 40)];
         [drinkButton setImage:[UIImage imageNamed:@"wine"] forState:UIControlStateNormal];
-        [drinkButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
+        [drinkButton addTarget:self action:@selector(openMenu:) forControlEvents:UIControlEventTouchUpInside];
         drinkButton.tag = 1;
         self.drinkButton = drinkButton;
         [self addSubview:self.drinkButton];
@@ -112,11 +112,21 @@
     
     UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - moreButtons, ht - 95, 40, 40)];
     [menuButton setImage:[UIImage imageNamed:@"fork"] forState:UIControlStateNormal];
-    [menuButton addTarget:self action:@selector(loadMenu:) forControlEvents:UIControlEventTouchUpInside];
+    [menuButton addTarget:self action:@selector(openMenu:) forControlEvents:UIControlEventTouchUpInside];
     menuButton.tag = 0;
-    self.menuButton = menuButton;
-    [self addSubview:self.menuButton];
+    //self.menuButton = menuButton;
+    [self addSubview:menuButton];
     
+    //Load Menus
+    [self loadMenu:0];
+    if([self.place.drinkMenu length] > 0)
+    {
+        [self loadMenu:1];
+    }
+    if([self.place.happyHourMenu length] > 0)
+    {
+        [self loadMenu:2];
+    }
     
     self.backgroundColor = [UIColor whiteColor];
     self.originalPoint = self.center;
@@ -151,7 +161,7 @@
              }];
     */
 }
-
+/*
 -(void)loadMenu:(id)sender
 {
     UIButton *button = (UIButton *) sender;
@@ -181,6 +191,65 @@
 
     
 }
+*/
+
+-(void)loadMenu:(NSUInteger)menuType {
+   
+    if(self.menuScreen == nil) {
+        CGRect bounds = CGRectMake(self.bounds.origin.x, (-1) * self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
+        self.menuScreen = [[DWMenu alloc] initWithFrame:bounds place:self.place];
+        self.menuScreen.alpha = 0;
+        [self addSubview:self.menuScreen];
+    }
+    
+
+    
+    [self.menuScreen addMenu:menuType];
+    
+}
+
+-(void)openMenu:(id)sender {
+    UIButton *button = (UIButton *) sender;
+    NSUInteger menuType = button.tag;
+    
+    NSArray *views = self.menuScreen.subviews;
+    for(id subview in views)
+    {
+        if([subview isMemberOfClass:[UIWebView class]]) {
+            UIWebView *webView = (UIWebView *)subview;
+            if(menuType == webView.tag) {
+                webView.alpha = 1;
+                [webView.scrollView setContentOffset:CGPointZero];
+                continue;
+            }
+            webView.alpha = 0;
+        }
+        else if([subview isMemberOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)subview;
+            if(menuType == scrollView.tag) {
+                scrollView.alpha = 1;
+                [scrollView setContentOffset:CGPointZero];
+                continue;
+            }
+            scrollView.alpha = 0;	
+        }
+    }
+    
+    [self.superview bringSubviewToFront:self];
+    self.menuScreen.alpha = 1;
+    [self bringSubviewToFront:self.menuScreen];
+    
+    [UIView animateWithDuration:0.3
+          animations:^{
+              self.menuScreen.frame = self.bounds;
+          }
+          completion:^(BOOL finished){
+              
+          }];
+}
+
+
+
 
 -(void)loadMap
 {
@@ -278,7 +347,17 @@
 - (void)resetViewPositionAndTransformations:(CGFloat)x y:(CGFloat)y
 {
     if(x < 70 && x > -70 && y > 70) {
-        [self loadMenu:self];
+        [UIView animateWithDuration:.2
+             animations:^{
+                 self.center = self.originalPoint;
+                 self.overlayView.alpha = 0;
+                 self.transform = CGAffineTransformMakeRotation(0);
+             }
+             completion:^(BOOL finished){
+                 [self openMenu:self];
+             }
+         ];
+        
     }
     else if(x < 70 && x > -70 && y < -70) {
         [self loadMap];

@@ -7,11 +7,15 @@
 
 @implementation DWMenu
 
-- (id)initWithFrame:(CGRect)frame place:(Place *)place menuType:(NSUInteger)menuType;
+@synthesize place = _place;
+
+- (id)initWithFrame:(CGRect)frame place:(Place *)place
 {
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
+    self.place = place;
+    /*
     NSString *menu = place.menu;
     if(menuType == 0) {
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -33,15 +37,16 @@
     else if(menuType == 2)
         menu = place.happyHourMenu;
     
+    
     if ([menu rangeOfString:@".png"].location == NSNotFound) {
         [self loadWebSite:menu];
     }
     else {
         [self loadImage:menu];
     }
-    
+     */
     [self addNavBar:place];
-    
+   
     return self;
 }
 
@@ -58,6 +63,38 @@
     UINavigationItem *navigItem = [[UINavigationItem alloc] initWithTitle:place.name];
     navigItem.leftBarButtonItem = cancelItem;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
+}
+
+-(void)addMenu:(NSUInteger)menuType
+{
+    NSString *menu = self.place.menu;
+    if(menuType == 0) {
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *comps = [gregorian components:(NSHourCalendarUnit | NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+        NSUInteger hour = [comps hour];
+        NSUInteger weekday = [comps weekday];
+        
+        if([self.place.brunchMenu length] > 0 && (weekday == 1 || weekday == 7) && hour < 15)
+        {
+            menu = self.place.brunchMenu;
+        }
+        else if([self.place.lunchMenu length] > 0 && hour < 15)
+        {
+            menu = self.place.lunchMenu;
+        }
+    }
+    else if(menuType == 1)
+        menu = self.place.drinkMenu;
+    else if(menuType == 2)
+        menu = self.place.happyHourMenu;
+    
+    
+    if ([menu rangeOfString:@".png"].location == NSNotFound) {
+        [self loadWebSite:menu menuType:menuType];
+    }
+    else {
+        [self loadImage:menu menuType:menuType];
+    }
 }
 
 -(void)exitMenu
@@ -77,12 +114,12 @@
                  self.frame = frame;
              }
              completion:^(BOOL finished){
-                 [self removeFromSuperview];
+                 self.alpha = 0;
                  [topView bringSubviewToFront:navView];
              }];
 }
 
-- (void)loadWebSite:(NSString *)menu {
+- (void)loadWebSite:(NSString *)menu menuType:(NSUInteger)menuType {
 
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
@@ -96,11 +133,12 @@
     
     [webView loadRequest:requestObj];
     webView.scrollView.delegate = self;
+    webView.tag = menuType;
     
     [self addSubview:webView];
 }
 
-- (void)loadImage:(NSString *)menu
+- (void)loadImage:(NSString *)menu menuType:(NSUInteger)menuType
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
@@ -122,6 +160,7 @@
     
     self.scrollView = view;
     self.scrollView.delegate = self;
+    view.tag = menuType;
     
     [self addSubview: view];
     
