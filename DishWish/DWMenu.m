@@ -15,36 +15,7 @@
     if (!self) return nil;
     
     self.place = place;
-    /*
-    NSString *menu = place.menu;
-    if(menuType == 0) {
-        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-        NSDateComponents *comps = [gregorian components:(NSHourCalendarUnit | NSWeekdayCalendarUnit) fromDate:[NSDate date]];
-        int hour = [comps hour];
-        int weekday = [comps weekday];
-        
-        if([place.brunchMenu length] > 0 && (weekday == 1 || weekday == 7) && hour < 15)
-        {
-            menu = place.brunchMenu;
-        }
-        else if([place.lunchMenu length] > 0 && hour < 15)
-        {
-            menu = place.lunchMenu;
-        }
-    }
-    else if(menuType == 1)
-        menu = place.drinkMenu;
-    else if(menuType == 2)
-        menu = place.happyHourMenu;
-    
-    
-    if ([menu rangeOfString:@".png"].location == NSNotFound) {
-        [self loadWebSite:menu];
-    }
-    else {
-        [self loadImage:menu];
-    }
-     */
+
     [self addNavBar:place];
    
     return self;
@@ -67,6 +38,18 @@
 
 -(void)addMenu:(NSUInteger)menuType
 {
+    NSString *menu = [self getMenu:menuType];    
+    
+    if ([menu rangeOfString:@".png"].location == NSNotFound) {
+        [self loadWebSite:menu menuType:menuType];
+    }
+    else {
+        [self loadImage:menu menuType:menuType];
+    }
+}
+
+-(NSString *)getMenu:(NSUInteger)menuType
+{
     NSString *menu = self.place.menu;
     if(menuType == 0) {
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -88,13 +71,7 @@
     else if(menuType == 2)
         menu = self.place.happyHourMenu;
     
-    
-    if ([menu rangeOfString:@".png"].location == NSNotFound) {
-        [self loadWebSite:menu menuType:menuType];
-    }
-    else {
-        [self loadImage:menu menuType:menuType];
-    }
+    return menu;
 }
 
 -(void)exitMenu
