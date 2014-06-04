@@ -1,8 +1,4 @@
 #import "DWView.h"
-#import "DWDraggableView.h"
-#import "DWOverlayView.h"
-#import "Place.h"
-#import "DWLeftSideBar.h"
 
 @implementation DWView
 
@@ -119,7 +115,7 @@
     BOOL isYes = (((UIButton*)sender).tag == 1);
     
     DWDraggableView *card = [self getCurrentCard];
-    [card animateImage:[self getCurrentCard] isYes:isYes];
+    [card animateImageToBack:isYes];
 }
 
 -(DWDraggableView *)getCurrentCard

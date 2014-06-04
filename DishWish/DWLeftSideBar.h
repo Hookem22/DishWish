@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Session.h"
 #import "Place.h"
+#import "DWDraggableView.h"
 
 @interface DWLeftSideBar : UIScrollView
 

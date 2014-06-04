@@ -1,7 +1,8 @@
 #import <Foundation/Foundation.h>
-
-@class GGDraggableView;
-
+#import "DWDraggableView.h"
+#import "DWOverlayView.h"
+#import "Place.h"
+#import "DWLeftSideBar.h"
 
 @interface DWView : UIView
 @end

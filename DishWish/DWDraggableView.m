@@ -315,59 +315,101 @@
                  self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
              }
              completion:^(BOOL finished) {
-                 [self animateImageComplete:self isYes:isYes];
+                 [self animateImageComplete:isYes];
              }
      ];
     
 }
 
--(void) animateImage:(DWDraggableView *)card isYes:(BOOL)isYes
+-(void) animateImageToBack:(BOOL)isYes
 {
     float xOffset1 = (isYes) ? 80 : -80;
     float degrees = (isYes) ? 20 : -20;
     float xOffset2 = (isYes) ? 1300 : -1300;
     
-    card.overlayView.mode = (isYes) ? DWOverlayViewModeRight : DWOverlayViewModeLeft;
-    card.overlayView.alpha = 0.4;
+    self.overlayView.mode = (isYes) ? DWOverlayViewModeRight : DWOverlayViewModeLeft;
+    self.overlayView.alpha = 0.4;
     
     [UIView animateWithDuration:0.2
              animations:^{
-                 card.center = CGPointMake(card.originalPoint.x + xOffset1, card.originalPoint.y - 80);
-                 card.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
+                 self.center = CGPointMake(self.originalPoint.x + xOffset1, self.originalPoint.y - 80);
+                 self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
              }
              completion:^(BOOL finished) {
                  [UIView animateWithDuration:1.0
                           animations:^{
-                              card.center = CGPointMake(card.originalPoint.x + xOffset2, card.originalPoint.y + 600);
-                              card.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
+                              self.center = CGPointMake(self.originalPoint.x + xOffset2, self.originalPoint.y + 600);
+                              self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
                           }
                           completion:^(BOOL finished) {
-                              [self animateImageComplete:card isYes:isYes];
+                              [self animateImageComplete:isYes];
                           }
                   ];
              }
      ];
 }
 
--(void)animateImageComplete:(DWDraggableView *)card isYes:(BOOL)isYes
+-(void)animateImageComplete:(BOOL)isYes
 {
-    [card.superview sendSubviewToBack:card];
-    [card.menuScreen removeFromSuperview];
-    card.center = card.originalPoint;
-    card.transform = CGAffineTransformMakeRotation(0);
-    card.overlayView.alpha = 0.0;
-    [card.menuScreen exitMenu];
-    [card.mapScreen exitMap];
+    [self.superview sendSubviewToBack:self];
+    self.center = self.originalPoint;
+    self.transform = CGAffineTransformMakeRotation(0);
+    self.overlayView.alpha = 0.0;
+    [self.menuScreen exitMenu];
+    [self.mapScreen exitMap];
     
     NSString *key = isYes ? @"yesPlaces" : @"noPlaces";
-    
     NSMutableArray *prevPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][key]];
 
-    [prevPlaces addObject:card.place];
-    [[Session sessionVariables] setObject:prevPlaces forKey:key];
-    [self updateLeftSideBar:prevPlaces];
-        
-    [card nextPlace];
+    if(![prevPlaces containsObject:self.place])
+    {
+        [prevPlaces addObject:self.place];
+        [[Session sessionVariables] setObject:prevPlaces forKey:key];
+        [self updateLeftSideBar:prevPlaces];
+    }
+    
+    [self nextPlace];
+    
+    if(!isYes)
+        [self removeFromSuperview];
+    else
+        self.alpha = 0;
+}
+
+-(void) animateImageToFront:(BOOL)isYes
+{
+    float xOffset1 = (isYes) ? 80 : -80;
+    float degrees = (isYes) ? 20 : -20;
+    float xOffset2 = (isYes) ? 1300 : -1300;
+    
+    self.center = CGPointMake(self.originalPoint.x + xOffset2, self.originalPoint.y + 600);
+    self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
+    self.alpha = 1;
+    [self.superview bringSubviewToFront:self];
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         self.center = CGPointMake(self.originalPoint.x + xOffset1, self.originalPoint.y - 80);
+                         self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
+                     }
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.2
+                                          animations:^{
+                                              self.center = self.originalPoint;
+                                              self.transform = CGAffineTransformMakeRotation(0);
+                                          }
+                                          completion:^(BOOL finished) {
+                                              NSArray *views = self.superview.subviews;
+                                              for(id subview in views) {
+                                                  if([subview isMemberOfClass:[UINavigationBar class]]) {
+                                                      UINavigationBar *nav = (UINavigationBar *)subview;
+                                                      [self.superview bringSubviewToFront:nav];
+                                                  }
+                                              }
+                                          }
+                          ];
+                     }
+     ];
 }
 
 -(void)updateLeftSideBar:(NSMutableArray *)places
@@ -413,8 +455,6 @@
     
     [self.superview addSubview:draggableView];
     [self.superview sendSubviewToBack:draggableView];
-    
-    [self removeFromSuperview];
     
 }
 

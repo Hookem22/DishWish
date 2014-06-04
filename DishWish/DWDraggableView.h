@@ -23,6 +23,7 @@
 
 //- (id)initWithPlace:(Place *)place;
 - (id)initWithFrame:(CGRect)frame place:(Place *)place async:(BOOL)async;
--(void) animateImage:(DWDraggableView *)card isYes:(BOOL)isYes;
+-(void) animateImageToBack:(BOOL)isYes;
+-(void)animateImageToFront:(BOOL)isYes;
 
 @end
