@@ -22,6 +22,8 @@
 
 -(void)updateLeftSideBar
 {
+    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
@@ -58,14 +60,35 @@
         i++;
     }
     
+    UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [mapButton addTarget:self action:@selector(mapClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [mapButton setTitle:@"Map All" forState:UIControlStateNormal];
+    mapButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+    [self addSubview:mapButton];
+    i++;
     
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [saveButton addTarget:self action:@selector(saveClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    saveButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+    [self addSubview:saveButton];
+    i++;
+    
+    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [shareButton addTarget:self action:@selector(shareClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [shareButton setTitle:@"Share" forState:UIControlStateNormal];
+    shareButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+    [self addSubview:shareButton];
+    i++;
+    
+    self.contentSize = CGSizeMake(wd, (i * 40) + 20);
     
 }
 
--(void)placeClicked:(id)selector
+-(void)placeClicked:(id)sender
 {
-    UIButton *button = (UIButton *)selector;
-    
+    UIButton *button = (UIButton *)sender;
+
     NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
     
     Place *place = (Place *)places[button.tag];
@@ -80,7 +103,11 @@
     [UIView animateWithDuration:0.2
          animations:^{
              self.frame = CGRectMake(0, 60, 0, ht - 60);
-         }];
+         }
+         completion:^(BOOL finished) {
+             //[self setContentOffset:CGPointZero];
+         }
+     ];
 
 }
 
@@ -101,6 +128,43 @@
             }
         }
     }
+}
+
+-(void)mapClicked:(id)sender
+{
+    [self close];
+    
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    
+    NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+    DWMap *map = [[DWMap alloc] initWithFrame:CGRectMake(0, 0, wd, ht) places:places];
+    
+    [self.superview addSubview:map];
+    
+    /*
+     [UIView animateWithDuration:0.3
+          animations:^{
+              self.mapScreen.frame = self.bounds;
+              
+              CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
+              self.mapScreen = [[DWMap alloc] initWithFrame:bounds places:places];
+              [self addSubview:self.mapScreen];
+          }
+          completion:^(BOOL finished){
+              [self.superview bringSubviewToFront:self];
+          }];
+    */
+
+}
+
+-(void)saveClicked:(id)sender
+{
+    
+}
+
+-(void)shareClicked:(id)sender
+{
     
 }
 

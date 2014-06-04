@@ -8,7 +8,7 @@
 @interface DWMap : UIView
 
 
-- (id)initWithFrame:(CGRect)frame place:(Place *)place;
+- (id)initWithFrame:(CGRect)frame places:(NSArray *)places;
 -(void)exitMap;
 
 @end

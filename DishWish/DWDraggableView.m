@@ -192,7 +192,8 @@
              }
              completion:^(BOOL finished) {
                  CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
-                 self.mapScreen = [[DWMap alloc] initWithFrame:bounds place:self.place];
+                 NSArray *places = [[NSArray alloc] initWithObjects:self.place, nil];
+                 self.mapScreen = [[DWMap alloc] initWithFrame:bounds places:places];
                  [self addSubview:self.mapScreen];
                  
                  [UIView animateWithDuration:0.3
@@ -358,15 +359,33 @@
     [self.menuScreen exitMenu];
     [self.mapScreen exitMap];
     
-    NSString *key = isYes ? @"yesPlaces" : @"noPlaces";
-    NSMutableArray *prevPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][key]];
-
-    if(![prevPlaces containsObject:self.place])
-    {
-        [prevPlaces addObject:self.place];
-        [[Session sessionVariables] setObject:prevPlaces forKey:key];
-        [self updateLeftSideBar:prevPlaces];
+    NSMutableArray *yesPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+    NSMutableArray *noPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"noPlaces"]];
+    
+    if([yesPlaces containsObject:self.place] && !isYes) {
+        [yesPlaces removeObject:self.place];
+        [[Session sessionVariables] setObject:yesPlaces forKey:@"yesPlaces"];
     }
+    else if([noPlaces containsObject:self.place] && isYes) {
+        [noPlaces removeObject:self.place];
+        [[Session sessionVariables] setObject:yesPlaces forKey:@"noPlaces"];
+    }
+    
+    if(![yesPlaces containsObject:self.place] && ![noPlaces containsObject:self.place])
+    {
+        if(isYes)
+        {
+            [yesPlaces addObject:self.place];
+            [[Session sessionVariables] setObject:yesPlaces forKey:@"yesPlaces"];
+        }
+        else
+        {
+            [noPlaces addObject:self.place];
+            [[Session sessionVariables] setObject:yesPlaces forKey:@"noPlaces"];
+        }
+    }
+
+    [self updateLeftSideBar:yesPlaces];
     
     [self nextPlace];
     

@@ -10,6 +10,7 @@
 #import "Session.h"
 #import "Place.h"
 #import "DWDraggableView.h"
+#import "DWMap.h"
 
 @interface DWLeftSideBar : UIScrollView
 

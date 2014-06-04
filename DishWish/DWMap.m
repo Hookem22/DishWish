@@ -1,25 +1,32 @@
 #import "DWMap.h"
 
 @interface DWMap ()
-@property (nonatomic, strong) UIImageView *imageView;
 @end
 
 @implementation DWMap
 
-- (id)initWithFrame:(CGRect)frame place:(Place *)place
+- (id)initWithFrame:(CGRect)frame places:(NSArray *)places
 {
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    
-    [self loadMap:place];
-    
-    [self addNavBar:place];
+    if(places.count == 1) {
+        Place *place = (Place *)places[0];
+        [self loadMap:place];
+        
+        [self addNavBar:place.name];
+    }
+    else {
+        [self loadMaps:places];
+        
+        [self addNavBar:@""];
+    }
+
     
     return self;
 }
 
--(void)addNavBar:(Place *)place
+-(void)addNavBar:(NSString *)titleText
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     
@@ -29,7 +36,7 @@
     
     UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(exitMap)];
     
-    UINavigationItem *navigItem = [[UINavigationItem alloc] initWithTitle:place.name];
+    UINavigationItem *navigItem = [[UINavigationItem alloc] initWithTitle:titleText];
     navigItem.leftBarButtonItem = cancelItem;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
 }
@@ -52,24 +59,90 @@
     
     [mapView addAnnotation:point];
     
-    
-    /*
-    DWAnnotation *annotation = [[DWAnnotation alloc] initWithCoordinate:coord];
-    [mapView addAnnotation:annotation];
-    
-    MKMapPoint point = MKMapPointForCoordinate(coord);
-    [mapView addAnnotation:point];
-    
-    
-    MKAnnotation *ann = [[MKAnnotation alloc] in]
-    MKAnnotationView *an = [[MKAnnotationView alloc] init]
-    
-    AddressAnnotation *addAnnotation = [[AddressAnnotation alloc] initWithCoordinate:coord];
-    [mapView addAnnotation:addAnnotation];
-    */
     [self addSubview:mapView];
     
 }
+
+-(void)loadMaps:(NSArray *)places
+{
+    MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.bounds];
+    CLLocationCoordinate2D coord = [self centerCoord:places];
+    
+    CLLocationDistance distance = [self mapDistance:places];
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(coord, distance, distance);
+    MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+    [mapView setRegion:adjustedRegion animated:YES];
+    
+    [mapView setCenterCoordinate:coord];
+    
+    for(Place *place in places)
+    {
+        MKPointAnnotation *point = [[MKPointAnnotation alloc] init];
+        point.coordinate = CLLocationCoordinate2DMake(place.latitude, place.longitude);
+        point.title = place.name;
+        
+        [mapView addAnnotation:point];
+    }
+
+    
+    [self addSubview:mapView];
+    
+}
+
+-(CLLocationCoordinate2D)centerCoord:(NSArray *)places
+{
+    double lat = 0;
+    double lng = 0;
+    for(Place *place in places)
+    {
+        lat += place.latitude;
+        lng += place.longitude;
+    }
+    
+    lat = lat / places.count;
+    lng = lng / places.count;
+    
+    return CLLocationCoordinate2DMake(lat, lng);
+}
+
+- (CLLocationDistance) mapDistance:(NSArray *)places{
+    double topLat = -1000;
+    double topLng = -1000;
+    double bottomLat = 1000;
+    double bottomLng = 1000;
+    for(Place *place in places)
+    {
+        if(place.latitude > topLat)
+            topLat = place.latitude;
+        if(place.longitude > topLng)
+            topLng = place.longitude;
+        if(place.latitude < bottomLat)
+            bottomLat = place.latitude;
+        if(place.longitude < bottomLng)
+            bottomLng = place.longitude;
+    }
+    
+    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:topLat longitude:topLng];
+    CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:bottomLat longitude:bottomLng];
+
+    return [loc1 distanceFromLocation:loc2];
+}
+
+/*
+- (MKMapRect) mapRectThatFitsBoundsSW:(CLLocationCoordinate2D)sw
+                                   NE:(CLLocationCoordinate2D)ne
+{
+    MKMapPoint pSW = MKMapPointForCoordinate(sw);
+    MKMapPoint pNE = MKMapPointForCoordinate(ne);
+    
+    double antimeridianOveflow =
+    (ne.longitude > sw.longitude) ? 0 : MKMapSizeWorld.width;
+    
+    return MKMapRectMake(pSW.x, pNE.y,
+                         (pNE.x - pSW.x) + antimeridianOveflow,
+                         (pSW.y - pNE.y));
+}
+*/
 
 -(void)exitMap
 {

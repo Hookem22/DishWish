@@ -41,7 +41,7 @@
     [yesButton addTarget:self action:@selector(voteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:yesButton];
     
-    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht)];
+    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
     [self addSubview:left];
     
     
@@ -74,6 +74,8 @@
             [self bringSubviewToFront:subview];
             DWLeftSideBar *left = (DWLeftSideBar *)subview;
             BOOL isOpen = left.bounds.size.width > 0;
+            if(!isOpen)
+                [left setContentOffset:CGPointZero];
             
             [UIView animateWithDuration:0.2
                  animations:^{
