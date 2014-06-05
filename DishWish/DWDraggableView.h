@@ -15,7 +15,6 @@
 @property(nonatomic, strong) DWOverlayView *overlayView;
 @property(nonatomic) Place *place;
 @property(nonatomic) DWMenu *menuScreen;
-@property(nonatomic) DWMap *mapScreen;
 @property (nonatomic, weak) IBOutlet UILabel *nameLabel;
 @property (nonatomic, weak) IBOutlet UIButton *menuButton;
 @property (nonatomic, weak) IBOutlet UIButton *drinkButton;
@@ -23,7 +22,7 @@
 
 //- (id)initWithPlace:(Place *)place;
 - (id)initWithFrame:(CGRect)frame place:(Place *)place async:(BOOL)async;
--(void) animateImageToBack:(BOOL)isYes;
+-(void)animateImageToBack:(BOOL)isYes;
 -(void)animateImageToFront:(BOOL)isYes;
 
 @end

@@ -18,8 +18,6 @@
 @synthesize drinkButton = _drinkButton;
 @synthesize mapButton = _mapButton;
 @synthesize menuScreen = _menuScreen;
-@synthesize mapScreen = _mapScreen;
-
 
 - (id)initWithFrame:(CGRect)frame place:(Place *)place async:(BOOL)async
 {
@@ -32,27 +30,29 @@
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragged:)];
     [self addGestureRecognizer:self.panGestureRecognizer];
 
-    [self loadView:async];
-
+    [self initialLoadView:async];
+    if(!async)
+        [self secondaryLoadView:async];
+    
     self.overlayView = [[DWOverlayView alloc] initWithFrame:self.bounds];
     self.overlayView.alpha = 0;
     [self addSubview:self.overlayView];
-    
 
     return self;
 }
 
-- (void)loadView:(BOOL)async
+#pragma mark Load Card
+
+- (void)initialLoadView:(BOOL)async
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    UIButton *img = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-    [img addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+    //Images
     if(async)
-        [self downLoadImagesAsync];
+        [self downloadFirstImageAsync];
     else
-        [self downLoadImages];
+        [self downloadFirstImage];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ht - 100, wd, 40)];
     nameLabel.text = [NSString stringWithFormat:@"     %@", self.place.name];
@@ -98,7 +98,20 @@
     //self.menuButton = menuButton;
     [self addSubview:menuButton];
     
-    //Load Menus
+
+    self.backgroundColor = [UIColor whiteColor];
+    self.originalPoint = self.center;
+}
+
+- (void)secondaryLoadView:(BOOL)async
+{
+    //Images
+    if(async)
+        [self downloadRestOfImagesAsync];
+    else
+        [self downloadRestOfImages];
+    
+    //Menus
     [self loadMenu:0 async:async];
     if([self.place.drinkMenu length] > 0)
     {
@@ -108,10 +121,10 @@
     {
         [self loadMenu:2 async:async];
     }
-    
-    self.backgroundColor = [UIColor whiteColor];
-    self.originalPoint = self.center;
 }
+
+
+#pragma mark Images
 
 -(void)mainImageClicked:(id)sender
 {
@@ -127,6 +140,169 @@
     
 }
 
+-(void)downloadFirstImage
+{
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    NSUInteger i = 1;
+        
+    UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+    uiView.tag = i;
+    
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+    [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    UIImage *img = [UIImage imageWithData:data];
+    //UIImage *img = [[UIImage alloc] initWithData:data];
+    
+    [button setImage:img forState:UIControlStateNormal];
+    [uiView addSubview:button];
+    
+    [self addSubview:uiView];
+
+}
+-(void)downloadFirstImageAsync
+{
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    dispatch_queue_t queue = dispatch_queue_create("Download Image Queue",NULL);
+    NSUInteger i = 1;
+    
+    dispatch_async(queue, ^{
+        UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        uiView.tag = i;
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        //UIImage *img = [[UIImage alloc] initWithData:data];
+        UIImage *img = [UIImage imageWithData:data];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Update the UI
+            [button setImage:img forState:UIControlStateNormal];
+            [uiView addSubview:button];
+            
+            [self addSubview:uiView];
+            [self bringSubviewToFront:uiView];
+            [self bringSubviewToFront:self.overlayView];
+        });
+    });
+}
+
+-(void)downloadRestOfImages
+{
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    /*
+     UIImageView *uiImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+     
+     UIImage *loading = [UIImage imageNamed:@"loading@2x.gif"];
+     [uiImageView setImage:loading];
+     [self insertSubview:uiImageView atIndex:0];
+     */
+    
+    UIView *prevView = [[UIView alloc] init];
+    for(id subview in self.subviews)
+    {
+        if([subview isMemberOfClass:[UIView class]])
+        {
+            prevView = (UIView *)subview;
+            break;
+        }
+    }
+    
+    for (NSUInteger i = 2; i <= self.place.imageCount; i++) {
+        
+        UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        uiView.tag = i;
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        //UIImage *img = [[UIImage alloc] initWithData:data];
+        UIImage *img = [UIImage imageWithData:data];
+        [button setImage:img forState:UIControlStateNormal];
+        [uiView addSubview:button];
+        
+        [self insertSubview:uiView belowSubview:prevView];
+        prevView = uiView;
+        
+    }
+}
+-(void)downloadRestOfImagesAsync
+{
+    
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    dispatch_queue_t queue = dispatch_queue_create("Download Image Queue",NULL);
+    
+    
+    for (NSUInteger i = 2; i <= self.place.imageCount; i++) {
+        
+        UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        uiView.tag = i;
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
+        [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        dispatch_async(queue, ^{
+            
+            NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
+            NSData *data = [NSData dataWithContentsOfURL:url];
+            //UIImage *img = [[UIImage alloc] initWithData:data];
+            UIImage *img = [UIImage imageWithData:data];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // Update the UI
+                [button setImage:img forState:UIControlStateNormal];
+                [uiView addSubview:button];
+                
+                [self addSubview:uiView];
+                [self sendSubviewToBack:uiView];
+            });
+        });
+    }
+}
+
+-(void)changeMainImage:(id)sender
+{
+    
+    NSArray *views = self.subviews;
+    NSMutableArray *pictures = [[NSMutableArray alloc] init];
+    for(id subview in views)
+    {
+        if([subview isMemberOfClass:[UIView class]])
+        {
+            [pictures addObject:subview];
+        }
+    }
+    
+    [self sendSubviewToBack:pictures.lastObject];
+    
+}
+
+-(UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+    // Pass 1.0 to force exact pixel size.
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+#pragma mark Menu
+
 -(void)loadMenu:(NSUInteger)menuType async:(BOOL)async {
    
     if(self.menuScreen == nil) {
@@ -136,10 +312,7 @@
         [self addSubview:self.menuScreen];
     }
     
-
-    
     [self.menuScreen addMenu:menuType async:async];
-    
 }
 
 -(void)openMenu:(id)sender {
@@ -182,6 +355,8 @@
           }];
 }
 
+#pragma mark Map
+
 -(void)loadMap
 {
     [UIView animateWithDuration:.2
@@ -193,12 +368,13 @@
              completion:^(BOOL finished) {
                  CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
                  NSArray *places = [[NSArray alloc] initWithObjects:self.place, nil];
-                 self.mapScreen = [[DWMap alloc] initWithFrame:bounds places:places];
-                 [self addSubview:self.mapScreen];
+                 //self.mapScreen = [[DWMap alloc] initWithFrame:bounds places:places];
+                 DWMap *map = [[DWMap alloc] initWithFrame:bounds places:places];
+                 [self addSubview:map];
                  
                  [UIView animateWithDuration:0.3
                           animations:^{
-                              self.mapScreen.frame = self.bounds;
+                              map.frame = self.bounds;
                           }
                           completion:^(BOOL finished){
                               [self.superview bringSubviewToFront:self];
@@ -208,16 +384,7 @@
     
 }
 
--(UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
-    //UIGraphicsBeginImageContext(newSize);
-    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
-    // Pass 1.0 to force exact pixel size.
-    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
+#pragma mark Animations
 
 - (void)dragged:(UIPanGestureRecognizer *)gestureRecognizer
 {
@@ -306,18 +473,29 @@
     
 }
 
+-(void) returnImage
+{
+    [UIView animateWithDuration:.2
+         animations:^{
+             self.center = self.originalPoint;
+             self.overlayView.alpha = 0;
+             self.transform = CGAffineTransformMakeRotation(0);
+         }
+     ];
+}
+
 -(void) animateImage:(BOOL)isYes
 {
     float xOffset2 = (isYes) ? 1300 : -1300;
     
     [UIView animateWithDuration:1.0
-             animations:^{
-                 self.center = CGPointMake(self.originalPoint.x + xOffset2, self.originalPoint.y + 600);
-                 self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
-             }
-             completion:^(BOOL finished) {
-                 [self animateImageComplete:isYes];
-             }
+         animations:^{
+             self.center = CGPointMake(self.originalPoint.x + xOffset2, self.originalPoint.y + 600);
+             self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
+         }
+         completion:^(BOOL finished) {
+             [self animateImageComplete:isYes];
+         }
      ];
     
 }
@@ -332,21 +510,21 @@
     self.overlayView.alpha = 0.4;
     
     [UIView animateWithDuration:0.2
-             animations:^{
-                 self.center = CGPointMake(self.originalPoint.x + xOffset1, self.originalPoint.y - 80);
-                 self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
-             }
-             completion:^(BOOL finished) {
-                 [UIView animateWithDuration:1.0
-                          animations:^{
-                              self.center = CGPointMake(self.originalPoint.x + xOffset2, self.originalPoint.y + 600);
-                              self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
-                          }
-                          completion:^(BOOL finished) {
-                              [self animateImageComplete:isYes];
-                          }
-                  ];
-             }
+         animations:^{
+             self.center = CGPointMake(self.originalPoint.x + xOffset1, self.originalPoint.y - 80);
+             self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
+         }
+         completion:^(BOOL finished) {
+             [UIView animateWithDuration:1.0
+                  animations:^{
+                      self.center = CGPointMake(self.originalPoint.x + xOffset2, self.originalPoint.y + 600);
+                      self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(180));
+                  }
+                  completion:^(BOOL finished) {
+                      [self animateImageComplete:isYes];
+                  }
+              ];
+         }
      ];
 }
 
@@ -357,7 +535,8 @@
     self.transform = CGAffineTransformMakeRotation(0);
     self.overlayView.alpha = 0.0;
     [self.menuScreen exitMenu];
-    [self.mapScreen exitMap];
+    //TODO:Close map
+    //[self.mapScreen exitMap];
     
     NSMutableArray *yesPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
     NSMutableArray *noPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"noPlaces"]];
@@ -389,10 +568,16 @@
     
     [self nextPlace];
     
-    if(!isYes)
+    if(!isYes) {
+        for(id subview in self.subviews)
+        {
+            [subview removeFromSuperview];
+        }
         [self removeFromSuperview];
+    }
     else
-        self.alpha = 0;
+        [self removeItems];
+    
 }
 
 -(void) animateImageToFront:(BOOL)isYes
@@ -407,29 +592,33 @@
     [self.superview bringSubviewToFront:self];
     
     [UIView animateWithDuration:0.5
-                     animations:^{
-                         self.center = CGPointMake(self.originalPoint.x + xOffset1, self.originalPoint.y - 80);
-                         self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
-                     }
-                     completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.2
-                                          animations:^{
-                                              self.center = self.originalPoint;
-                                              self.transform = CGAffineTransformMakeRotation(0);
-                                          }
-                                          completion:^(BOOL finished) {
-                                              NSArray *views = self.superview.subviews;
-                                              for(id subview in views) {
-                                                  if([subview isMemberOfClass:[UINavigationBar class]]) {
-                                                      UINavigationBar *nav = (UINavigationBar *)subview;
-                                                      [self.superview bringSubviewToFront:nav];
-                                                  }
-                                              }
-                                          }
-                          ];
-                     }
+         animations:^{
+             self.center = CGPointMake(self.originalPoint.x + xOffset1, self.originalPoint.y - 80);
+             self.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
+         }
+         completion:^(BOOL finished) {
+             [UIView animateWithDuration:0.2
+                  animations:^{
+                      self.center = self.originalPoint;
+                      self.transform = CGAffineTransformMakeRotation(0);
+                  }
+                  completion:^(BOOL finished) {
+                      NSArray *views = self.superview.subviews;
+                      for(id subview in views) {
+                          if([subview isMemberOfClass:[UINavigationBar class]]) {
+                              UINavigationBar *nav = (UINavigationBar *)subview;
+                              [self.superview bringSubviewToFront:nav];
+                          }
+                      }
+                      [self secondaryLoadView:NO];
+                  }
+              ];
+         }
      ];
 }
+
+
+#pragma mark Remove Place
 
 -(void)updateLeftSideBar:(NSMutableArray *)places
 {
@@ -442,16 +631,40 @@
     }
 }
 
--(void) returnImage
+-(void)removeItems
 {
-    [UIView animateWithDuration:.2
-         animations:^{
-             self.center = self.originalPoint;
-             self.overlayView.alpha = 0;
-             self.transform = CGAffineTransformMakeRotation(0);
-         }
-     ];
+    self.alpha = 0;
+    [self removeImages];
+    [self removeMenus];
 }
+
+-(void)removeImages
+{
+    NSArray *views = self.subviews;
+    for(id subview in views)
+    {
+        if([subview isMemberOfClass:[UIView class]])
+        {
+            UIView *image = (UIView *)subview;
+            if(image.tag > 1) {
+                [image removeFromSuperview];
+            }
+        }
+    }
+}
+
+-(void)removeMenus
+{
+    for(id subview in self.menuScreen.subviews)
+    {
+        [subview removeFromSuperview];
+    }
+    
+    [self.menuScreen removeFromSuperview];
+    self.menuScreen = nil;
+}
+
+#pragma mark Next Place
 
 -(void)nextPlace
 {
@@ -462,6 +675,15 @@
     [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
     
     [self populateNextPlace:places[currentId]];
+    
+    for(id subview in self.superview.subviews)
+    {
+        if([subview isMemberOfClass:[DWDraggableView class]]) {
+            DWDraggableView *view = (DWDraggableView *)subview;
+            if(view.self.menuScreen == nil)
+                [view secondaryLoadView:YES];
+        }
+    }
 
 }
 
@@ -477,82 +699,6 @@
     
 }
 
--(void)downLoadImages
-{
-    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
-    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-  
-    /*
-    UIImageView *uiImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-    
-    UIImage *loading = [UIImage imageNamed:@"loading@2x.gif"];
-    [uiImageView setImage:loading];
-    [self insertSubview:uiImageView atIndex:0];
-     */
-    
-    for (NSUInteger i = self.place.imageCount; i > 0; i--) {
-
-        UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-            
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-        [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
-        
-        NSURL *url = [NSURL URLWithString:self.place.images[i - 1]];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *img = [[UIImage alloc] initWithData:data];
-        
-        [button setImage:img forState:UIControlStateNormal];
-        [uiView addSubview:button];
-
-        [self insertSubview:uiView atIndex:i + 10];
-                
-    }
-}
--(void)downLoadImagesAsync
-{
-    
-    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
-    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-    
-    dispatch_queue_t queue = dispatch_queue_create("Download Image Queue",NULL);
-    for (NSUInteger i = 0, ii = self.place.imageCount; i < ii; i++) {
-        dispatch_async(queue, ^{
-            UIView *uiView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-            
-            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-            [button addTarget:self action:@selector(mainImageClicked:) forControlEvents:UIControlEventTouchUpInside];
-            
-            NSURL *url = [NSURL URLWithString:self.place.images[i]];
-            NSData *data = [NSData dataWithContentsOfURL:url];
-            UIImage *img = [[UIImage alloc] initWithData:data];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // Update the UI
-                [button setImage:img forState:UIControlStateNormal];
-                [uiView addSubview:button];
-                
-                [self insertSubview:uiView atIndex:self.subviews.count - i];
-            });
-        });
-    }
-}
-
--(void)changeMainImage:(id)sender
-{
-    
-    NSArray *views = self.subviews;
-    NSMutableArray *buttons = [[NSMutableArray alloc] init];
-    for(id subview in views)
-    {
-        if([subview isMemberOfClass:[UIView class]])
-        {
-            [buttons addObject:subview];
-        }
-    }
-    
-    [self sendSubviewToBack:buttons.lastObject];
-
-}
 
 - (void)dealloc
 {

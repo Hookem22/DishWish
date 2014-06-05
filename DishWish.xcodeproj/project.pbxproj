@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		481981FA193D767C003EE160 /* loading@2x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 481981F9193D767C003EE160 /* loading@2x.gif */; };
 		BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */; };
+		BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */; };
+		BE3B5C0D1940E802002AE5FF /* nav_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0B1940E802002AE5FF /* nav_user@2x.png */; };
 		BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEEF191D82300087C645 /* Foundation.framework */; };
 		BEA9CEF2191D82300087C645 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF1191D82300087C645 /* CoreGraphics.framework */; };
 		BEA9CEF4191D82300087C645 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF3191D82300087C645 /* UIKit.framework */; };
@@ -56,6 +58,8 @@
 		481981F9193D767C003EE160 /* loading@2x.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading@2x.gif"; sourceTree = "<group>"; };
 		BE3B5C07193E76DC002AE5FF /* DWLeftSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWLeftSideBar.h; sourceTree = "<group>"; };
 		BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWLeftSideBar.m; sourceTree = "<group>"; };
+		BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_menu@2x.png"; sourceTree = "<group>"; };
+		BE3B5C0B1940E802002AE5FF /* nav_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_user@2x.png"; sourceTree = "<group>"; };
 		BEA9CEEC191D82300087C645 /* DishWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DishWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA9CEEF191D82300087C645 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BEA9CEF1191D82300087C645 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -219,6 +223,8 @@
 		BEA9CF2E191D830E0087C645 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */,
+				BE3B5C0B1940E802002AE5FF /* nav_user@2x.png */,
 				481981F9193D767C003EE160 /* loading@2x.gif */,
 				BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */,
 				BEF8244B1937D97F00BE0CC2 /* fork@2x.png */,
@@ -333,11 +339,13 @@
 				BEA9CF3B191D830E0087C645 /* map@2x.png in Resources */,
 				BEA9CF3C191D830E0087C645 /* menu@2x.png in Resources */,
 				BEA9CEFA191D82300087C645 /* InfoPlist.strings in Resources */,
+				BE3B5C0D1940E802002AE5FF /* nav_user@2x.png in Resources */,
 				BEF8244F1937D97F00BE0CC2 /* wine@2x.png in Resources */,
 				BEA9CF3F191D830E0087C645 /* trollface_300x200@2x.png in Resources */,
 				BEF8244E1937D97F00BE0CC2 /* fork@2x.png in Resources */,
 				BEF8244D1937D97F00BE0CC2 /* cocktail@2x.png in Resources */,
 				481981FA193D767C003EE160 /* loading@2x.gif in Resources */,
+				BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */,
 				BEA9CF03191D82300087C645 /* Main.storyboard in Resources */,
 				BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */,
 			);

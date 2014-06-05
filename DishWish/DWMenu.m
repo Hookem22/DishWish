@@ -164,7 +164,7 @@
         
         NSURL *url = [NSURL URLWithString:menu];
         NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *img = [[UIImage alloc] initWithData:data];
+        UIImage *img = [UIImage imageWithData:data]; //[[UIImage alloc] initWithData:data];
         double ratio = wd / img.size.width;
         
         NSUInteger height = img.size.height * ratio;
@@ -196,7 +196,7 @@
     
     NSURL *url = [NSURL URLWithString:menu];
     NSData *data = [NSData dataWithContentsOfURL:url];
-    UIImage *img = [[UIImage alloc] initWithData:data];
+    UIImage *img = [UIImage imageWithData:data]; //[[UIImage alloc] initWithData:data];
     double ratio = wd / img.size.width;
     
     NSUInteger height = img.size.height * ratio;
