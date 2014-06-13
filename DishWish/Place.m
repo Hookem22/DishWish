@@ -52,7 +52,7 @@
         NSMutableArray *imgArray = [[NSMutableArray alloc] initWithCapacity:self.imageCount];
         for(int i = 0; i < self.imageCount; i++)
         {
-            [imgArray addObject:[NSString stringWithFormat:@"%@%@_%d.png", container, self.placeId, i]];
+            [imgArray addObject:[NSString stringWithFormat:@"%@%@_%d.jpg", container, self.placeId, i]];
         }
         self.images = imgArray;
         
