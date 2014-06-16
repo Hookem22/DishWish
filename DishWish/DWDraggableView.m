@@ -112,6 +112,7 @@
         [self downloadRestOfImages];
     
     //Menus
+    /*
     [self loadMenu:0 async:async];
     if([self.place.drinkMenu length] > 0)
     {
@@ -121,6 +122,7 @@
     {
         [self loadMenu:2 async:async];
     }
+    */
 }
 
 
@@ -316,8 +318,11 @@
 }
 
 -(void)openMenu:(id)sender {
+    
     UIButton *button = (UIButton *) sender;
     NSUInteger menuType = button.tag;
+    
+    [self loadMenu:menuType async:false];
     
     NSArray *views = self.menuScreen.subviews;
     for(id subview in views)
@@ -566,17 +571,25 @@
 
     [self updateLeftSideBar:yesPlaces];
     
-    [self nextPlace];
-    
-    if(!isYes) {
+    int ct = 0;
+    for(id subview in self.superview.subviews)
+    {
+        if([subview isMemberOfClass:[DWDraggableView class]])
+            ct++;
+    }
+        
+    if(ct <= 4) //Number of cards
+        [self nextPlace];
+
+    //if(!isYes) {
         for(id subview in self.subviews)
         {
             [subview removeFromSuperview];
         }
         [self removeFromSuperview];
-    }
-    else
-        [self removeItems];
+    //}
+    //else
+    //    [self removeItems];
     
 }
 

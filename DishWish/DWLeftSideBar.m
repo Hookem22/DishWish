@@ -113,7 +113,17 @@
 
 -(void)loadCard:(Place *)place
 {
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
+    DWDraggableView *drag = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:place async:NO];
+
+    [self.superview addSubview:drag];
+    [self.superview sendSubviewToBack:drag];
+    [drag animateImageToFront:YES];
+
+   
+    /* Load Card already present
     NSArray *views = self.superview.subviews;
     for(id subview in views) {
         if([subview isMemberOfClass:[DWDraggableView class]]) {
@@ -128,6 +138,7 @@
             }
         }
     }
+    */
 }
 
 -(void)mapClicked:(id)sender

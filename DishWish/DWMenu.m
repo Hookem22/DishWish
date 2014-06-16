@@ -105,6 +105,7 @@
              completion:^(BOOL finished){
                  self.alpha = 0;
                  [topView bringSubviewToFront:navView];
+                 //[self removeFromSuperview];
              }];
 }
 
