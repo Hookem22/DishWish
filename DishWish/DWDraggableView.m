@@ -5,6 +5,7 @@
 @interface DWDraggableView ()
 @property(nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, assign) NSUInteger currentImage;
+@property (nonatomic, assign) BOOL secondaryLoad;
 @end
 
 @implementation DWDraggableView
@@ -26,6 +27,7 @@
 
     self.place = place;
     self.currentImage = 0;
+    self.secondaryLoad = NO;
     
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragged:)];
     [self addGestureRecognizer:self.panGestureRecognizer];
@@ -53,12 +55,6 @@
         [self downloadFirstImageAsync];
     else
         [self downloadFirstImage];
-    
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ht - 100, wd, 40)];
-    nameLabel.text = [NSString stringWithFormat:@"     %@", self.place.name];
-    nameLabel.backgroundColor = [UIColor whiteColor];
-    self.nameLabel = nameLabel;
-    [self addSubview:self.nameLabel];
     
     UIButton *mapButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 50, ht - 95, 40, 40)];
     [mapButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
@@ -91,13 +87,27 @@
         moreButtons += 50;
     }
     
-    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - moreButtons, ht - 95, 40, 40)];
-    [menuButton setImage:[UIImage imageNamed:@"fork"] forState:UIControlStateNormal];
-    [menuButton addTarget:self action:@selector(openMenu:) forControlEvents:UIControlEventTouchUpInside];
-    menuButton.tag = 0;
-    //self.menuButton = menuButton;
-    [self addSubview:menuButton];
+    if([self.place.menu length] > 0)
+    {
+        UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 100 - moreButtons, ht - 95, 40, 40)];
+        [menuButton setImage:[UIImage imageNamed:@"fork"] forState:UIControlStateNormal];
+        [menuButton addTarget:self action:@selector(openMenu:) forControlEvents:UIControlEventTouchUpInside];
+        menuButton.tag = 0;
+        //self.menuButton = menuButton;
+        [self addSubview:menuButton];
+        
+        moreButtons += 50;
+    }
     
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, ht - 90, wd - (moreButtons + 60), 80)];
+    nameLabel.text = [NSString stringWithFormat:@"%@", self.place.name];
+    //nameLabel.backgroundColor = [UIColor whiteColor];
+    nameLabel.numberOfLines = 2;
+    nameLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    [nameLabel sizeToFit];
+    
+    self.nameLabel = nameLabel;
+    [self addSubview:self.nameLabel];
 
     self.backgroundColor = [UIColor whiteColor];
     self.originalPoint = self.center;
@@ -105,6 +115,10 @@
 
 - (void)secondaryLoadView:(BOOL)async
 {
+    if(self.secondaryLoad)
+        return;
+    
+    self.secondaryLoad = YES;
     //Images
     if(async)
         [self downloadRestOfImagesAsync];
@@ -282,7 +296,7 @@
     NSMutableArray *pictures = [[NSMutableArray alloc] init];
     for(id subview in views)
     {
-        if([subview isMemberOfClass:[UIView class]])
+        if(![subview isMemberOfClass:[UIButton class]] && [subview isMemberOfClass:[UIView class]])
         {
             [pictures addObject:subview];
         }
@@ -577,7 +591,7 @@
         if([subview isMemberOfClass:[DWDraggableView class]])
             ct++;
     }
-        
+    
     if(ct <= 4) //Number of cards
         [self nextPlace];
 
@@ -693,8 +707,8 @@
     {
         if([subview isMemberOfClass:[DWDraggableView class]]) {
             DWDraggableView *view = (DWDraggableView *)subview;
-            if(view.self.menuScreen == nil)
-                [view secondaryLoadView:YES];
+
+            [view secondaryLoadView:YES];
         }
     }
 
