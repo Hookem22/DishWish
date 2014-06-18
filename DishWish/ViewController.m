@@ -33,14 +33,23 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    if ([CLLocationManager locationServicesEnabled]) {
+    if ([CLLocationManager locationServicesEnabled] &&
+        [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         _locationManager = [[CLLocationManager alloc] init];
         
         _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         _locationManager.delegate = self;
-        _locationManager.pausesLocationUpdatesAutomatically = NO;
+        //_locationManager.pausesLocationUpdatesAutomatically = NO;
         
         [_locationManager startUpdatingLocation];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No GPS"
+                                                        message:@"Turn on Location"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
 }
 
