@@ -7,23 +7,28 @@
     self = [super init];
     if (!self) return nil;
     
+    self.backgroundColor = [UIColor whiteColor];
+
+    return self;
+}
+
+-(void)setup:(CLLocation *)location
+{
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-    
-    self.backgroundColor = [UIColor whiteColor];
-    
-    [Place getAllPlaces:^(NSArray *places) {
+
+    [Place getAllPlaces:location completion:^(NSArray *places) {
         [[Session sessionVariables] setObject:places forKey:@"Places"];
         NSUInteger currentId = 10;
         [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
         
         [self loadDraggableCustomView:places];
         /*
-        [self loadDraggableCustomView:places[3]];
-        [self loadDraggableCustomView:places[2]];
-        [self loadDraggableCustomView:places[1]];
-        [self loadDraggableCustomView:places[0]];
-        */
+         [self loadDraggableCustomView:places[3]];
+         [self loadDraggableCustomView:places[2]];
+         [self loadDraggableCustomView:places[1]];
+         [self loadDraggableCustomView:places[0]];
+         */
         
         [self addNavBar:wd];
         
@@ -43,11 +48,7 @@
     
     DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
     [self addSubview:left];
-    
-    
-    return self;
 }
-
 -(void)addNavBar:(NSUInteger)width
 {
     UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, width, 60)];
@@ -65,6 +66,8 @@
 
 -(void)menuButtonPressed
 {
+    Location *location = [[Location alloc] init];
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     

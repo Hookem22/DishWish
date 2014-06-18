@@ -1,18 +1,16 @@
 //
-//  ViewController.h
+//  Location.h
 //  DishWish
 //
-//  Created by Will on 5/9/14.
+//  Created by Will on 6/18/14.
 //  Copyright (c) 2014 DishWish. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import "DWView.h"
 
-@interface ViewController : UIViewController <CLLocationManagerDelegate>
+@interface Location : UIViewController <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property(nonatomic, strong) DWView *mainView;
 
 @end

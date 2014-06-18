@@ -11,6 +11,9 @@
 		BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */; };
 		BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */; };
 		BE3B5C0D1940E802002AE5FF /* nav_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0B1940E802002AE5FF /* nav_user@2x.png */; };
+		BE529A8519520FD900BAE803 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = BE529A8419520FD900BAE803 /* Location.m */; };
+		BE529A87195212F600BAE803 /* default.gpx in Resources */ = {isa = PBXBuildFile; fileRef = BE529A86195212F600BAE803 /* default.gpx */; };
+		BE529A8B1952355700BAE803 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE529A8A1952355700BAE803 /* MapKit.framework */; };
 		BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEEF191D82300087C645 /* Foundation.framework */; };
 		BEA9CEF2191D82300087C645 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF1191D82300087C645 /* CoreGraphics.framework */; };
 		BEA9CEF4191D82300087C645 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEF3191D82300087C645 /* UIKit.framework */; };
@@ -60,6 +63,10 @@
 		BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWLeftSideBar.m; sourceTree = "<group>"; };
 		BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_menu@2x.png"; sourceTree = "<group>"; };
 		BE3B5C0B1940E802002AE5FF /* nav_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_user@2x.png"; sourceTree = "<group>"; };
+		BE529A8319520FD900BAE803 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		BE529A8419520FD900BAE803 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		BE529A86195212F600BAE803 /* default.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.gpx; sourceTree = "<group>"; };
+		BE529A8A1952355700BAE803 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		BEA9CEEC191D82300087C645 /* DishWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DishWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA9CEEF191D82300087C645 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BEA9CEF1191D82300087C645 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -113,6 +120,7 @@
 			files = (
 				BEA9CEF2191D82300087C645 /* CoreGraphics.framework in Frameworks */,
 				BEA9CEF4191D82300087C645 /* UIKit.framework in Frameworks */,
+				BE529A8B1952355700BAE803 /* MapKit.framework in Frameworks */,
 				BEA9CF43192123870087C645 /* WindowsAzureMobileServices.framework in Frameworks */,
 				BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */,
 			);
@@ -134,6 +142,7 @@
 		BEA9CEE3191D82300087C645 = {
 			isa = PBXGroup;
 			children = (
+				BE529A86195212F600BAE803 /* default.gpx */,
 				BEA9CEF5191D82300087C645 /* DishWish */,
 				BEA9CF14191D82300087C645 /* DishWishTests */,
 				BEA9CEEE191D82300087C645 /* Frameworks */,
@@ -153,6 +162,7 @@
 		BEA9CEEE191D82300087C645 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE529A8A1952355700BAE803 /* MapKit.framework */,
 				BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */,
 				BEA9CEEF191D82300087C645 /* Foundation.framework */,
 				BEA9CEF1191D82300087C645 /* CoreGraphics.framework */,
@@ -245,6 +255,8 @@
 				BEA9CF35191D830E0087C645 /* Place.m */,
 				BEF82447192E8F1D00BE0CC2 /* Session.h */,
 				BEF82448192E8F1D00BE0CC2 /* Session.m */,
+				BE529A8319520FD900BAE803 /* Location.h */,
+				BE529A8419520FD900BAE803 /* Location.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -305,6 +317,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = DishWish;
 				TargetAttributes = {
+					BEA9CEEB191D82300087C645 = {
+						SystemCapabilities = {
+							com.apple.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 					BEA9CF0C191D82300087C645 = {
 						TestTargetID = BEA9CEEB191D82300087C645;
 					};
@@ -348,6 +367,7 @@
 				BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */,
 				BEA9CF03191D82300087C645 /* Main.storyboard in Resources */,
 				BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */,
+				BE529A87195212F600BAE803 /* default.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEA9CF06191D82300087C645 /* ViewController.m in Sources */,
+				BE529A8519520FD900BAE803 /* Location.m in Sources */,
 				BEA9CF3A191D830E0087C645 /* DWView.m in Sources */,
 				BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */,
 				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,

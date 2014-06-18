@@ -10,6 +10,7 @@
 #import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 #import "QSAzureService.h"
 #import "Session.h"
+#import "Location.h"
 
 @interface Place : NSObject
 
@@ -38,7 +39,7 @@
 +(void)get:(QSCompletionBlock)completion;
 +(void)getFivePlaces:(QSCompletionBlock)completion;
 +(void)getNextPlace:(QSCompletionBlock)completion;
-+(void)getAllPlaces:(QSCompletionBlock)completion;
++(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion;
 
 @end
 

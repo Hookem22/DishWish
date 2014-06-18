@@ -5,4 +5,7 @@
 #import "DWLeftSideBar.h"
 
 @interface DWView : UIView
+
+-(void)setup:(CLLocation *)location;
+
 @end
