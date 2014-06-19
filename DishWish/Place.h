@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 #import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 #import "QSAzureService.h"
 #import "Session.h"
-#import "Location.h"
 
 @interface Place : NSObject
 

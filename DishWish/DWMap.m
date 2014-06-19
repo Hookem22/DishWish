@@ -1,6 +1,9 @@
 #import "DWMap.h"
 
 @interface DWMap ()
+@property (nonatomic, strong) MKMapView *mapView;
+@property(nonatomic, assign) CLLocationCoordinate2D endLocation;
+
 @end
 
 @implementation DWMap
@@ -21,7 +24,6 @@
         
         [self addNavBar:@""];
     }
-
     
     return self;
 }
@@ -43,23 +45,27 @@
 
 -(void)loadMap:(Place *)place
 {
-    MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.bounds];
+    self.mapView = [[MKMapView alloc] initWithFrame:self.bounds];
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(place.latitude, place.longitude);
     
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(coord, 1000, 1000);
-    MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
-    [mapView setRegion:adjustedRegion animated:YES];
+    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
+    [self.mapView setRegion:adjustedRegion animated:YES];
     
-    [mapView setCenterCoordinate:coord];
+    [self.mapView setCenterCoordinate:coord];
     
     MKPointAnnotation *point = [[MKPointAnnotation alloc] init];
     point.coordinate = coord;
     point.title = place.name;
     //point.subtitle = @"I'm here!!!";
     
-    [mapView addAnnotation:point];
+    [self.mapView addAnnotation:point];
     
-    [self addSubview:mapView];
+    [self addSubview:self.mapView];
+    
+    //mapView.delegate = self;
+    self.endLocation = coord;
+    [self getRouteTime];
     
 }
 
@@ -68,7 +74,7 @@
     MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.bounds];
     CLLocationCoordinate2D coord = [self centerCoord:places];
     
-    CLLocationDistance distance = [self mapDistance:places];
+    CLLocationDistance distance = [self mapSize:places];
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(coord, distance, distance);
     MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
     [mapView setRegion:adjustedRegion animated:YES];
@@ -83,7 +89,6 @@
         
         [mapView addAnnotation:point];
     }
-
     
     [self addSubview:mapView];
     
@@ -105,7 +110,7 @@
     return CLLocationCoordinate2DMake(lat, lng);
 }
 
-- (CLLocationDistance) mapDistance:(NSArray *)places{
+- (CLLocationDistance) mapSize:(NSArray *)places{
     double topLat = -1000;
     double topLng = -1000;
     double bottomLat = 1000;
@@ -143,6 +148,86 @@
                          (pSW.y - pNE.y));
 }
 */
+
+-(void)getRouteTime
+{
+    CLLocation *location = (CLLocation *)[Session sessionVariables][@"location"];
+    
+    MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:location.coordinate addressDictionary:nil];
+    MKMapItem *start = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    
+    MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:self.endLocation addressDictionary:nil];
+    MKMapItem *end = [[MKMapItem alloc] initWithPlacemark:endPlacemark];
+    
+    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
+    [request setSource:start];
+    [request setDestination:end];
+    [request setTransportType:MKDirectionsTransportTypeAny]; // This can be limited to automobile and walking directions.
+    [request setRequestsAlternateRoutes:YES]; // Gives you several route options.
+    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
+    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+        if (!error) {
+            if([response routes].count > 0)
+            {
+                MKRoute *route = [response routes][0];
+                NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+                NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+                
+                UILabel *travelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, ht - 80, wd, 40)];
+                travelLabel.backgroundColor = [UIColor whiteColor];
+                travelLabel.text = [NSString stringWithFormat:@"   Travel Time: %d minutes", (int)((route.expectedTravelTime / 60) + 1)];
+                [self addSubview:travelLabel];
+                
+                UIButton *directionsButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 50, ht - 75, 30, 30)];
+                [directionsButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
+                [directionsButton addTarget:self action:@selector(getRoute:) forControlEvents:UIControlEventTouchUpInside];
+                [self addSubview:directionsButton];
+            }
+        }
+    }];
+    
+}
+
+-(void)getRoute:(id)sender
+{
+    self.mapView.delegate = self;
+    
+    CLLocation *location = (CLLocation *)[Session sessionVariables][@"location"];
+    
+    MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:location.coordinate addressDictionary:nil];
+    MKMapItem *start = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    
+    MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:self.endLocation addressDictionary:nil];
+    MKMapItem *end = [[MKMapItem alloc] initWithPlacemark:endPlacemark];
+    
+    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
+    [request setSource:start];
+    [request setDestination:end];
+    [request setTransportType:MKDirectionsTransportTypeAny]; // This can be limited to automobile and walking directions.
+    [request setRequestsAlternateRoutes:YES]; // Gives you several route options.
+    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
+    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+        if (!error) {
+            for (MKRoute *route in [response routes]) {
+                [self.mapView addOverlay:[route polyline] level:MKOverlayLevelAboveRoads];
+                break;
+                // You can also get turn-by-turn steps, distance, advisory notices, ETA, etc by accessing various route properties.
+            }
+        }
+    }];
+
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
+        [renderer setStrokeColor:[UIColor blueColor]];
+        [renderer setLineWidth:5.0];
+        return renderer;
+    }
+    return nil;
+}
 
 -(void)exitMap
 {

@@ -66,8 +66,6 @@
 
 -(void)menuButtonPressed
 {
-    Location *location = [[Location alloc] init];
-    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
