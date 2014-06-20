@@ -178,8 +178,8 @@
                 travelLabel.text = [NSString stringWithFormat:@"   Travel Time: %d minutes", (int)((route.expectedTravelTime / 60) + 1)];
                 [self addSubview:travelLabel];
                 
-                UIButton *directionsButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 50, ht - 75, 30, 30)];
-                [directionsButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
+                UIButton *directionsButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 70, ht - 80, 72, 40)];
+                [directionsButton setImage:[UIImage imageNamed:@"directions"] forState:UIControlStateNormal];
                 [directionsButton addTarget:self action:@selector(getRoute:) forControlEvents:UIControlEventTouchUpInside];
                 [self addSubview:directionsButton];
             }
@@ -222,7 +222,7 @@
 {
     if ([overlay isKindOfClass:[MKPolyline class]]) {
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-        [renderer setStrokeColor:[UIColor blueColor]];
+        [renderer setStrokeColor:[UIColor colorWithRed:0/255.0 green:120.0/255.0 blue:250.0/255.0 alpha:1.0]];
         [renderer setLineWidth:5.0];
         return renderer;
     }
