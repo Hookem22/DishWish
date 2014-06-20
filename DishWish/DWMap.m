@@ -178,7 +178,7 @@
                 travelLabel.text = [NSString stringWithFormat:@"   Travel Time: %d minutes", (int)((route.expectedTravelTime / 60) + 1)];
                 [self addSubview:travelLabel];
                 
-                UIButton *directionsButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 70, ht - 80, 72, 40)];
+                UIButton *directionsButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 60, ht - 75, 60, 30)];
                 [directionsButton setImage:[UIImage imageNamed:@"directions"] forState:UIControlStateNormal];
                 [directionsButton addTarget:self action:@selector(getRoute:) forControlEvents:UIControlEventTouchUpInside];
                 [self addSubview:directionsButton];

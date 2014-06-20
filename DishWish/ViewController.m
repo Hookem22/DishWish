@@ -21,6 +21,14 @@
     self.mainView = [[DWView alloc] init];
     self.view = self.mainView;
     
+    //debugging only
+    if (TARGET_IPHONE_SIMULATOR)
+    {
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.261862, -97.758768);
+        CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
+        [self.mainView setup:location];
+    }
+
     //UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
     //navbar.topItem.title = @"DW";
     
