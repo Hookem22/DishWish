@@ -176,6 +176,13 @@
 
 -(void)shareClicked:(id)sender
 {
+    NSArray *views = self.superview.subviews;
+    for(id subview in views) {
+        if([subview isMemberOfClass:[DWRightSideBar class]]) {
+            DWRightSideBar *right = (DWRightSideBar *)subview;
+            [right addList];
+        }
+    }
     
 }
 

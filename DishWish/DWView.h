@@ -3,6 +3,7 @@
 #import "DWOverlayView.h"
 #import "Place.h"
 #import "DWLeftSideBar.h"
+#import "DWRightSideBar.h"
 
 @interface DWView : UIView
 

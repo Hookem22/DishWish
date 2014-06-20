@@ -11,6 +11,7 @@
 #import "Place.h"
 #import "DWDraggableView.h"
 #import "DWMap.h"
+#import "DWRightSideBar.h"
 
 @interface DWLeftSideBar : UIScrollView
 

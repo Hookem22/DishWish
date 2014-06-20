@@ -16,7 +16,7 @@
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-
+    
     [Place getAllPlaces:location completion:^(NSArray *places) {
         [[Session sessionVariables] setObject:places forKey:@"Places"];
         NSUInteger currentId = 10;
@@ -29,7 +29,6 @@
          [self loadDraggableCustomView:places[1]];
          [self loadDraggableCustomView:places[0]];
          */
-        
         [self addNavBar:wd];
         
     }];
@@ -48,6 +47,9 @@
     
     DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
     [self addSubview:left];
+    
+    DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
+    [self addSubview:right];
 }
 -(void)addNavBar:(NSUInteger)width
 {
@@ -93,6 +95,29 @@
 }
 -(void)userButtonPressed
 {
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    NSArray *views = self.subviews;
+    for(id subview in views) {
+        if([subview isMemberOfClass:[DWRightSideBar class]]) {
+            [self bringSubviewToFront:subview];
+            DWRightSideBar *right = (DWRightSideBar *)subview;
+
+            BOOL isOpen = right.frame.origin.x < wd;
+
+            [UIView animateWithDuration:0.2
+                 animations:^{
+                     if(isOpen)
+                         right.frame = CGRectMake(wd, 60, (wd * 3)/4, ht - 60);
+                     else
+                         right.frame = CGRectMake(wd /4, 60, (wd * 3)/4, ht - 60);
+                 }
+                 completion:^(BOOL finished){
+                     
+                 }];
+        }
+    }
 }
 
 - (void)loadDraggableCustomView:(NSArray *)places
