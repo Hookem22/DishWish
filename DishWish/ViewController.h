@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "DWView.h"
+#import "User.h"
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate>
 

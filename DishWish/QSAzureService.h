@@ -50,7 +50,7 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion;
 
 - (void)addItem:(NSDictionary *)item
-     completion:(QSCompletionWithIndexBlock)completion;
+     completion:(QSCompletionBlock)completion;
 
 - (void)completeItem:(NSDictionary *)item
           completion:(QSCompletionWithIndexBlock)completion;

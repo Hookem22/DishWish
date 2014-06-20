@@ -154,18 +154,15 @@
 }
 */
 
--(void)addItem:(NSDictionary *)item completion:(QSCompletionWithIndexBlock)completion
+-(void)addItem:(NSDictionary *)item completion:(QSCompletionBlock)completion
 {
     // Insert the item into the TodoItem table and add to the items array on completion
     [self.table insert:item completion:^(NSDictionary *result, NSError *error)
     {
         [self logErrorIfNotNil:error];
         
-        NSUInteger index = [items count];
-        [(NSMutableArray *)items insertObject:result atIndex:index];
-        
         // Let the caller know that we finished
-        completion(index);
+        completion(result);
     }];
 }
 

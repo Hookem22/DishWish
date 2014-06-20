@@ -20,6 +20,11 @@
     
     self.mainView = [[DWView alloc] init];
     self.view = self.mainView;
+
+    NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    [User login:^(User *user) {
+        NSString *userId = user.deviceId;
+    }];
     
     //debugging only
     if (TARGET_IPHONE_SIMULATOR)

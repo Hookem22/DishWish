@@ -41,6 +41,7 @@
 		BEA9CF40191D830E0087C645 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF35191D830E0087C645 /* Place.m */; };
 		BEA9CF43192123870087C645 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */; };
 		BEA9CF47192124480087C645 /* QSAzureService.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA9CF46192124480087C645 /* QSAzureService.m */; };
+		BEB35D651954BDC60081D3FB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB35D641954BDC60081D3FB /* User.m */; };
 		BEF82449192E8F1D00BE0CC2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF82448192E8F1D00BE0CC2 /* Session.m */; };
 		BEF8244D1937D97F00BE0CC2 /* cocktail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */; };
 		BEF8244E1937D97F00BE0CC2 /* fork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEF8244B1937D97F00BE0CC2 /* fork@2x.png */; };
@@ -105,6 +106,8 @@
 		BEA9CF42192123870087C645 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
 		BEA9CF45192124480087C645 /* QSAzureService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSAzureService.h; sourceTree = "<group>"; };
 		BEA9CF46192124480087C645 /* QSAzureService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSAzureService.m; sourceTree = "<group>"; };
+		BEB35D631954BDC60081D3FB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		BEB35D641954BDC60081D3FB /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		BEF82447192E8F1D00BE0CC2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		BEF82448192E8F1D00BE0CC2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cocktail@2x.png"; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 				BEA9CF35191D830E0087C645 /* Place.m */,
 				BEF82447192E8F1D00BE0CC2 /* Session.h */,
 				BEF82448192E8F1D00BE0CC2 /* Session.m */,
+				BEB35D631954BDC60081D3FB /* User.h */,
+				BEB35D641954BDC60081D3FB /* User.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -385,6 +390,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEB35D651954BDC60081D3FB /* User.m in Sources */,
 				BEA9CF06191D82300087C645 /* ViewController.m in Sources */,
 				BEA9CF3A191D830E0087C645 /* DWView.m in Sources */,
 				BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */,
