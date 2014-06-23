@@ -24,44 +24,53 @@
 
 -(void)addList
 {
-    NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
-    [self.savedLists addObject:places];
+    NSArray *list = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+    [self.savedLists addObject:list];
     
-    [self refreshLists];
-}
 
--(void)refreshLists
-{
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
-    NSUInteger i = 0;
-    for(NSArray *list in self.savedLists)
-    {
-        NSDate *now = [NSDate date];
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateStyle:NSDateFormatterShortStyle];
-        [formatter setTimeStyle:NSDateFormatterShortStyle];
-        NSLog(@"%@",[formatter stringFromDate:now]); 
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        //[button addTarget:self action:@selector(placeClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:[NSString stringWithFormat:@"Shared List: %@", [formatter stringFromDate:now]] forState:UIControlStateNormal];
-        button.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-        button.tag = i;
-        [self addSubview:button];
-        
-        UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height - 1.0f, button.frame.size.width, 1)];
-        bottomBorder.backgroundColor = [UIColor blackColor];
-        [button addSubview:bottomBorder];
-        
-        i++;
-    }
+    NSUInteger i = self.savedLists.count - 1;
+
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    //NSLog(@"%@",[formatter stringFromDate:now]);
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:[NSString stringWithFormat:@"Shared: %@", [formatter stringFromDate:now]] forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    button.tag = i;
+    [self addSubview:button];
+    
+    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height - 1.0f, button.frame.size.width, 1)];
+    bottomBorder.backgroundColor = [UIColor blackColor];
+    [button addSubview:bottomBorder];
+    
 }
 
-
+-(void)listClicked:(id)sender
+{
+    [self close];
+    
+    UIButton *button = (UIButton *)sender;
+    NSArray *places = self.savedLists[button.tag];
+    
+    [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
+    
+    NSArray *views = self.superview.subviews;
+    for(id subview in views) {
+        if([subview isMemberOfClass:[DWLeftSideBar class]]) {
+            DWLeftSideBar *left = (DWLeftSideBar *)subview;
+            [left updateLeftSideBar];
+        }
+    }
+}
 
 -(void)close {
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;

@@ -66,14 +66,14 @@
     mapButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     [self addSubview:mapButton];
     i++;
-    
+    /*
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [saveButton addTarget:self action:@selector(saveClicked:) forControlEvents:UIControlEventTouchUpInside];
     [saveButton setTitle:@"Save" forState:UIControlStateNormal];
     saveButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     [self addSubview:saveButton];
     i++;
-    
+    */
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [shareButton addTarget:self action:@selector(shareClicked:) forControlEvents:UIControlEventTouchUpInside];
     [shareButton setTitle:@"Share" forState:UIControlStateNormal];
@@ -176,6 +176,8 @@
 
 -(void)shareClicked:(id)sender
 {
+    [self close];
+    
     NSArray *views = self.superview.subviews;
     for(id subview in views) {
         if([subview isMemberOfClass:[DWRightSideBar class]]) {
