@@ -58,6 +58,16 @@
             [self loadImage:menu menuType:menuType];
         }
     }
+    
+    //[self.superview bringSubviewToFront:self];
+    
+    /*
+    for(id subview in self.subviews)
+    {
+        if([subview isMemberOfClass:[UINavigationBar class]])
+            [self bringSubviewToFront:subview];
+    }
+    */
 }
 
 -(NSString *)getMenu:(NSUInteger)menuType
@@ -140,6 +150,15 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
+    /*
+    UIImage *loading = [UIImage imageNamed:@"fork"];
+    //UIImage *loadingImg = [self imageWithImage:loading scaledToSize:CGSizeMake(wd / 2, wd / 2)];
+    UIImageView *loadingView = [[UIImageView alloc] initWithImage:loading];
+    loadingView.frame = CGRectMake((wd / 2) - 20, (ht / 2) - 120, 40, 40);
+    
+    [self addSubview:loadingView];
+    */
+    
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
     [webView setScalesPageToFit:YES];
     
@@ -148,10 +167,19 @@
     NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
     
     [webView loadRequest:requestObj];
+    webView.delegate = self;
     webView.scrollView.delegate = self;
     webView.tag = menuType;
     
     [self addSubview:webView];
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    [MBProgressHUD showHUDAddedTo:webView animated:YES];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [MBProgressHUD hideHUDForView:webView animated:YES];
 }
 
 - (void)loadImageAsync:(NSString *)menu menuType:(NSUInteger)menuType
@@ -194,6 +222,14 @@
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
+    
+    /*
+    UIImage *loading = [UIImage imageNamed:@"fork"];
+    UIImage *loadingImg = [self imageWithImage:loading scaledToSize:CGSizeMake(wd / 2, wd / 2)];
+    UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImg];
+    
+    [view addSubview:loadingView];
+    */
     
     NSURL *url = [NSURL URLWithString:menu];
     NSData *data = [NSData dataWithContentsOfURL:url];

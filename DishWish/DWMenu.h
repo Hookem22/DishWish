@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "Place.h"
+#import "MBProgressHUD.h"
 
 @interface DWMenu : UIView
 

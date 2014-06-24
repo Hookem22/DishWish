@@ -370,7 +370,8 @@
               self.menuScreen.frame = self.bounds;
           }
           completion:^(BOOL finished){
-              
+              [self.superview bringSubviewToFront:self];
+              [self bringSubviewToFront:self.menuScreen];
           }];
 }
 
