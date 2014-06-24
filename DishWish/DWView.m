@@ -8,7 +8,7 @@
     if (!self) return nil;
     
     self.backgroundColor = [UIColor whiteColor];
-
+    
     return self;
 }
 
@@ -31,6 +31,11 @@
          */
         [self addNavBar:wd];
         
+        for(id subview in self.subviews) {
+            if([subview isMemberOfClass:[UIImageView class]])
+                [subview removeFromSuperview];
+        }
+        
     }];
     
     UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(0, ht-40, wd/2, 40)];
@@ -50,6 +55,11 @@
     
     DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
     [self addSubview:right];
+    
+    UIImage *splash = [UIImage imageNamed:@"splash"];
+    UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
+    
+    [self addSubview:splashView];
 }
 -(void)addNavBar:(NSUInteger)width
 {

@@ -59,15 +59,6 @@
         }
     }
     
-    //[self.superview bringSubviewToFront:self];
-    
-    /*
-    for(id subview in self.subviews)
-    {
-        if([subview isMemberOfClass:[UINavigationBar class]])
-            [self bringSubviewToFront:subview];
-    }
-    */
 }
 
 -(NSString *)getMenu:(NSUInteger)menuType
