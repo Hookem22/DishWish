@@ -209,6 +209,13 @@
     [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
         if (!error) {
             for (MKRoute *route in [response routes]) {
+
+                NSUInteger minutes = (NSUInteger)((route.expectedTravelTime / 60) + 1);
+                NSUInteger meters = 1000 + (minutes * 200);
+                MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(self.mapView.region.center, meters, meters);
+                MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
+                [self.mapView setRegion:adjustedRegion animated:YES];
+                
                 [self.mapView addOverlay:[route polyline] level:MKOverlayLevelAboveRoads];
                 break;
                 // You can also get turn-by-turn steps, distance, advisory notices, ETA, etc by accessing various route properties.
