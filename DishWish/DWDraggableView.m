@@ -418,6 +418,22 @@
         //NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
     }
     
+    NSMutableArray *subviews = [[NSMutableArray alloc] init];
+    for(id subview in self.superview.subviews)
+    {
+        if([subview isKindOfClass:[DWDraggableView class]])
+            [subviews addObject:subview];
+    }
+    
+    DWDraggableView *topView = (DWDraggableView *)[subviews lastObject];
+    if(topView != self && topView.layer.animationKeys.count == 0)
+    {
+        BOOL isYes = topView.center.x >= 0;
+        [topView animateImageComplete:isYes];
+        NSLog([NSString stringWithFormat:@"%hhd", isYes]);
+        //NSLog([NSString stringWithFormat:@"%d", topView.layer.animationKeys.count]);
+    }
+    
     
     CGFloat xDistance = [gestureRecognizer translationInView:self].x;
     CGFloat yDistance = [gestureRecognizer translationInView:self].y;
