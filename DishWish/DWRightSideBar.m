@@ -18,6 +18,10 @@
     if (self) {
         self.savedLists = [[NSMutableArray alloc] init];
         self.backgroundColor = [UIColor whiteColor];
+        
+        UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+        [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
+        [self addGestureRecognizer:recognizer];
     }
     return self;
 }
@@ -49,7 +53,7 @@
     [self addSubview:button];
     
     UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height - 1.0f, button.frame.size.width, 1)];
-    bottomBorder.backgroundColor = [UIColor blackColor];
+    bottomBorder.backgroundColor = [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0];
     [button addSubview:bottomBorder];
     
 }

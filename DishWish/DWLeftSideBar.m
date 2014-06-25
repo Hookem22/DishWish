@@ -15,6 +15,10 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
+        
+        UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+        [recognizer setDirection:(UISwipeGestureRecognizerDirectionLeft)];
+        [self addGestureRecognizer:recognizer];
     }
     return self;
 }
@@ -54,7 +58,7 @@
         [self addSubview:nameButton];
         
         UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, nameButton.frame.size.height - 1.0f, nameButton.frame.size.width, 1)];
-        bottomBorder.backgroundColor = [UIColor blackColor];
+        bottomBorder.backgroundColor = [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0];
         [nameButton addSubview:bottomBorder];
         
         i++;
