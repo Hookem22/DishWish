@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DishWish/DWDraggableView.m"
-            timestampString = "425364723.168593"
+            timestampString = "425365573.931515"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "483"
-            endingLineNumber = "483"
+            startingLineNumber = "484"
+            endingLineNumber = "484"
             landmarkName = "-resetViewPositionAndTransformations:y:"
             landmarkType = "5">
          </BreakpointContent>

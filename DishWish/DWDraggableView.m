@@ -408,10 +408,11 @@
 
 - (void)dragged:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    /*Creating bug when swiping bottom section
     CGPoint point = [gestureRecognizer locationInView:gestureRecognizer.view];
     UIView *viewTouched = [gestureRecognizer.view hitTest:point withEvent:nil];
     if (!([viewTouched isKindOfClass:[DWDraggableView class]] || [viewTouched isKindOfClass:[DWOverlayView class]] || [viewTouched isKindOfClass:[UIButton class]] )) {
-        //NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
+        NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
         return;
     }
         else {
@@ -433,7 +434,7 @@
         NSLog([NSString stringWithFormat:@"%hhd", isYes]);
         //NSLog([NSString stringWithFormat:@"%d", topView.layer.animationKeys.count]);
     }
-    
+    */
     
     CGFloat xDistance = [gestureRecognizer translationInView:self].x;
     CGFloat yDistance = [gestureRecognizer translationInView:self].y;
