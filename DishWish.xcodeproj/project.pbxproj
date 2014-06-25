@@ -49,6 +49,7 @@
 		BEB35D7D195B1BE60081D3FB /* letseat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7C195B1BE60081D3FB /* letseat@2x.png */; };
 		BEB35D80195B1E1E0081D3FB /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7E195B1E1E0081D3FB /* check@2x.png */; };
 		BEB35D81195B1E1E0081D3FB /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7F195B1E1E0081D3FB /* x@2x.png */; };
+		BEB35D84195B6EAC0081D3FB /* DWMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB35D83195B6EAC0081D3FB /* DWMessage.m */; };
 		BEF82449192E8F1D00BE0CC2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF82448192E8F1D00BE0CC2 /* Session.m */; };
 		BEF8244D1937D97F00BE0CC2 /* cocktail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */; };
 		BEF8244E1937D97F00BE0CC2 /* fork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEF8244B1937D97F00BE0CC2 /* fork@2x.png */; };
@@ -124,6 +125,8 @@
 		BEB35D7C195B1BE60081D3FB /* letseat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "letseat@2x.png"; sourceTree = "<group>"; };
 		BEB35D7E195B1E1E0081D3FB /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
 		BEB35D7F195B1E1E0081D3FB /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
+		BEB35D82195B6EAC0081D3FB /* DWMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWMessage.h; sourceTree = "<group>"; };
+		BEB35D83195B6EAC0081D3FB /* DWMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWMessage.m; sourceTree = "<group>"; };
 		BEF82447192E8F1D00BE0CC2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		BEF82448192E8F1D00BE0CC2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cocktail@2x.png"; sourceTree = "<group>"; };
@@ -214,6 +217,8 @@
 				BEA9CF27191D830E0087C645 /* DWMap.m */,
 				BEA9CF28191D830E0087C645 /* DWMenu.h */,
 				BEA9CF29191D830E0087C645 /* DWMenu.m */,
+				BEB35D82195B6EAC0081D3FB /* DWMessage.h */,
+				BEB35D83195B6EAC0081D3FB /* DWMessage.m */,
 				BEA9CF2E191D830E0087C645 /* images */,
 				BEA9CF07191D82300087C645 /* Images.xcassets */,
 				BEA9CEF6191D82300087C645 /* Supporting Files */,
@@ -426,6 +431,7 @@
 				BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */,
 				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,
 				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
+				BEB35D84195B6EAC0081D3FB /* DWMessage.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,
 				BEB35D731959D5690081D3FB /* MBProgressHUD.m in Sources */,
 				BEA9CF47192124480087C645 /* QSAzureService.m in Sources */,

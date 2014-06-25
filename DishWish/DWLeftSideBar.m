@@ -182,6 +182,12 @@
 {
     [self close];
     
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    DWMessage * message = [[DWMessage alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
+    [self.superview addSubview:message];
+    
     NSArray *views = self.superview.subviews;
     for(id subview in views) {
         if([subview isMemberOfClass:[DWRightSideBar class]]) {

@@ -1,10 +1,3 @@
-//
-//  DWLeftSideBar.h
-//  DishWish
-//
-//  Created by Will on 6/3/14.
-//  Copyright (c) 2014 DishWish. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
 #import "Session.h"
@@ -12,6 +5,7 @@
 #import "DWDraggableView.h"
 #import "DWMap.h"
 #import "DWRightSideBar.h"
+#import "DWMessage.h"
 
 @interface DWLeftSideBar : UIScrollView
 
