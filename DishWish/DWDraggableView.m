@@ -408,6 +408,12 @@
 
 - (void)dragged:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    
+    if(self.menuScreen != nil && self.menuScreen.frame.origin.y >= 0)
+    {
+        return;
+    }
+    
     /*Creating bug when swiping bottom section
     CGPoint point = [gestureRecognizer locationInView:gestureRecognizer.view];
     UIView *viewTouched = [gestureRecognizer.view hitTest:point withEvent:nil];
