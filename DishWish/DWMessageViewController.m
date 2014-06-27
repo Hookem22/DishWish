@@ -5,15 +5,15 @@
 
 @property (nonatomic, strong) NSMutableArray *arrContactsData;
 @property (nonatomic, strong) ABPeoplePickerNavigationController *addressBookController;
-@property (nonatomic, strong) UINavigationItem *navItem;
 
--(void)showAddressBook;
-//-(void)buttonClicked:(UIButton*)sender;
-
+@property (nonatomic, strong) UITextField *peopleTextbox;
+@property (nonatomic, strong) UITextView *messageTextbox;
 @end
 
 @implementation DWMessageViewController
 
+@synthesize peopleTextbox = _peopleTextbox;
+@synthesize messageTextbox = _messageTextbox;
 
 - (void)viewDidLoad
 {
@@ -21,18 +21,71 @@
     
     [self.navigationItem setTitleView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]]];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    [[self navigationItem] setLeftBarButtonItem:backButton];
-    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
-    [[self navigationItem] setRightBarButtonItem:addButton];
+    [[self navigationItem] setLeftBarButtonItem:addButton];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    [[self navigationItem] setRightBarButtonItem:backButton];
+    
+    [self addUI];
+    
+}
+
+-(void)addUI
+{
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    self.peopleTextbox = [[UITextField alloc] initWithFrame:CGRectMake(10, 80, wd - 20, 40)];
+    self.peopleTextbox.borderStyle = UITextBorderStyleRoundedRect;
+    self.peopleTextbox.font = [UIFont systemFontOfSize:15];
+    self.peopleTextbox.placeholder = @"Add Friends";
+    //self.peopleTextbox.autocorrectionType = UITextAutocorrectionTypeNo;
+    //self.peopleTextbox.keyboardType = UIKeyboardTypeDefault;
+    //self.peopleTextbox.returnKeyType = UIReturnKeyDone;
+    //self.peopleTextbox.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.peopleTextbox.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    self.peopleTextbox.enabled = NO;
+    self.peopleTextbox.delegate = self;
+    [self.view addSubview:self.peopleTextbox];
+    
+    /*
+    UIView *wrapView = [[UIView alloc] initWithFrame: CGRectMake(10, 140, wd - 90, 80)];
+    //wrapView.layer.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
+    wrapView.layer.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/250.0 alpha:0.26].CGColor;
+    wrapView.layer.cornerRadius = 5.0;
+    wrapView.layer.borderColor = [UIColor colorWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/250.0 alpha:1.0].CGColor;
+    [self.view addSubview:wrapView];
+    */
+    
+    self.messageTextbox = [[UITextView alloc] initWithFrame:CGRectMake(10, 140, wd - 90, 80)];
+    //self.messageTextbox.textColor = [UIColor whiteColor];
+    self.messageTextbox.font = [UIFont systemFontOfSize:13];
+    //self.messageTextbox.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0];
+    self.messageTextbox.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/250.0 alpha:0.25];
+    [self.messageTextbox.layer setBorderColor:[[[UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/250.0 alpha:1.0] colorWithAlphaComponent:1.0] CGColor]];
+    [self.messageTextbox.layer setBorderWidth:1.0];
+    self.messageTextbox.layer.cornerRadius = 5;
+    self.messageTextbox.clipsToBounds = YES;
+    self.messageTextbox.editable = YES;
+    self.messageTextbox.text = [NSString stringWithFormat:@"Here's a list of places from Let's Eat: ios://letseat.com?i=1234|5678"];
+    [self.view addSubview:self.messageTextbox];
     
     
-    
+    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    sendButton.frame = CGRectMake(wd - 70, 188, 60, 40);
+    [sendButton setTitle:@"Send" forState:UIControlStateNormal];
+    [sendButton addTarget:self action:@selector(sendButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:sendButton];
 }
 
 -(void)cancel{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)sendButtonClick:(id)sender
+{
+    
 }
 
 -(void)showAddressBook {
@@ -135,6 +188,16 @@
     
     // Dismiss the address book view controller.
     [_addressBookController dismissViewControllerAnimated:YES completion:nil];
+    
+    NSString *peopleList = @"";
+    for(NSDictionary *dict in _arrContactsData)
+    {
+        peopleList = [NSString stringWithFormat:@"%@ %@ %@,", peopleList, [dict objectForKey:@"firstName"], [dict objectForKey:@"lastName"]];
+        
+    }
+    
+    peopleList = [peopleList substringToIndex:peopleList.length - 1];
+    [self.peopleTextbox setText:peopleList];
     
     return NO;
 }
