@@ -188,6 +188,7 @@
     
 }
 
+/*
 -(void)shareClicked:(id)sender
 {
     [self close];
@@ -210,7 +211,7 @@
     }
     
 }
-
+*/
 
 
 

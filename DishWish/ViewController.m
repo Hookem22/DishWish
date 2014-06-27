@@ -101,6 +101,7 @@
 
 - (IBAction)shareButtonPressed:(UIButton *)sender
 {
+    [self.mainView.leftSideBar close];
     [self performSegueWithIdentifier:@"MessageSegue" sender:self];
 }
 

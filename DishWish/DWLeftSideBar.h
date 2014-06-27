@@ -5,13 +5,12 @@
 #import "DWDraggableView.h"
 #import "DWMap.h"
 #import "DWRightSideBar.h"
-#import "DWMessage.h"
 
 @interface DWLeftSideBar : UIScrollView
 
 @property (nonatomic, strong) UIButton *shareButton;
 
 -(void)updateLeftSideBar;
-
+-(void)close;
 
 @end

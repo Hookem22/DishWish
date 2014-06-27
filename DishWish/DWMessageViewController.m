@@ -19,38 +19,6 @@
 {
     [super viewDidLoad];
     
-    
-    // Do any additional setup after loading the view, typically from a nib.
-    /*
-     DWMessageView *view = [[DWMessageView alloc] initWithFrame:CGRectMake(0, 0, 320, 600)];
-     self.view = view;
-     
-     
-     UIButton *mapButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 95, 40, 40)];
-     [mapButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
-     [mapButton addTarget:self action:@selector(showAddressBook) forControlEvents:UIControlEventTouchUpInside];
-     [self.view addSubview:mapButton];
-     */
-    
-    /*
-     UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
-     [self.view addSubview:naviBarObj];
-     
-     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
-     
-     
-     UINavigationItem *navigItem = [[UINavigationItem alloc] init];
-     navigItem.leftBarButtonItem = addButton;
-     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
-     
-     UIButton *but= [UIButton buttonWithType:UIButtonTypeRoundedRect];
-     [but addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-     [but setFrame:CGRectMake(52, 252, 215, 40)];
-     [but setTitle:@"Login" forState:UIControlStateNormal];
-     [but setExclusiveTouch:YES];
-     [self.view addSubview:but];
-     */
-    
     [self.navigationItem setTitleView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]]];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
