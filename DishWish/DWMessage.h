@@ -4,10 +4,8 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "Place.h"
 #import "Session.h"
+#import "DWMessageView.h"
 
-@interface DWMessage : UIView <ABPeoplePickerNavigationControllerDelegate>
-
-@property (nonatomic, strong) ABPeoplePickerNavigationController *addressBookController;
-
+@interface DWMessage : UINavigationController <ABPeoplePickerNavigationControllerDelegate>
 
 @end

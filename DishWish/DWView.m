@@ -2,6 +2,8 @@
 
 @implementation DWView
 
+@synthesize leftSideBar = _leftSideBar;
+
 - (id)init
 {
     self = [super init];
@@ -52,8 +54,8 @@
     [yesButton addTarget:self action:@selector(voteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:yesButton];
     
-    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
-    [self addSubview:left];
+    //DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
+    //[self addSubview:left];
     
     DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
     [self addSubview:right];

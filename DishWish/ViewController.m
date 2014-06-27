@@ -20,7 +20,7 @@
     
     self.mainView = [[DWView alloc] init];
     self.view = self.mainView;
-
+    
     [User login:^(User *user) {
         NSString *userId = user.deviceId;
     }];
@@ -32,18 +32,16 @@
         CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
         [self.mainView setup:location];
     }
-
-    //UINavigationBar *navbar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
-    //navbar.topItem.title = @"DW";
-    
-    //[self.view addSubview:navbar];
     
 }
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    [self addLeftSideBar];
     
     if ([CLLocationManager locationServicesEnabled] &&
         [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
@@ -65,6 +63,24 @@
     }
 }
 
+-(void)addLeftSideBar
+{
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [shareButton setTitle:@"Share" forState:UIControlStateNormal];
+    shareButton.frame = CGRectMake(0, 0, 0, 0);
+    [shareButton addTarget:self action:@selector(shareButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
+    
+    left.shareButton = shareButton;
+    [left addSubview:shareButton];
+    
+    self.mainView.leftSideBar = left;
+    [self.view addSubview:left];
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     // If it's a relatively recent event, turn off updates to save power.
     CLLocation* location = [locations lastObject];
@@ -81,6 +97,23 @@
               location.coordinate.latitude,
               location.coordinate.longitude);
     }
+}
+
+- (IBAction)shareButtonPressed:(UIButton *)sender
+{
+    [self performSegueWithIdentifier:@"MessageSegue" sender:self];
+}
+
+-(void)menuButtonPressed
+{
+    DWView *dwView = (DWView *)self.view;
+    [dwView menuButtonPressed];
+}
+
+-(void)userButtonPressed
+{
+    DWView *dwView = (DWView *)self.view;
+    [dwView userButtonPressed];
 }
 
 - (void)didReceiveMemoryWarning

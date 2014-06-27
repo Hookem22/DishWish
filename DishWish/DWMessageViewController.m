@@ -1,14 +1,7 @@
-//
-//  DWMessage.m
-//  DishWish
-//
-//  Created by Will on 6/25/14.
-//  Copyright (c) 2014 DishWish. All rights reserved.
-//
 
-#import "DWMessage.h"
+#import "DWMessageViewController.h"
 
-@interface DWMessage ()
+@interface DWMessageViewController ()
 
 @property (nonatomic, strong) NSMutableArray *arrContactsData;
 @property (nonatomic, strong) ABPeoplePickerNavigationController *addressBookController;
@@ -19,58 +12,60 @@
 
 @end
 
-@implementation DWMessage
+@implementation DWMessageViewController
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     
     // Do any additional setup after loading the view, typically from a nib.
-/*
-    DWMessageView *view = [[DWMessageView alloc] initWithFrame:CGRectMake(0, 0, 320, 600)];
-    self.view = view;
- 
-
-    UIButton *mapButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 95, 40, 40)];
-    [mapButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
-    [mapButton addTarget:self action:@selector(showAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:mapButton];
-*/
+    /*
+     DWMessageView *view = [[DWMessageView alloc] initWithFrame:CGRectMake(0, 0, 320, 600)];
+     self.view = view;
+     
+     
+     UIButton *mapButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 95, 40, 40)];
+     [mapButton setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
+     [mapButton addTarget:self action:@selector(showAddressBook) forControlEvents:UIControlEventTouchUpInside];
+     [self.view addSubview:mapButton];
+     */
     
     /*
-    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
-    [self.view addSubview:naviBarObj];
-    
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
-    
-    
-    UINavigationItem *navigItem = [[UINavigationItem alloc] init];
-    navigItem.leftBarButtonItem = addButton;
-    naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
-    
-    UIButton *but= [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [but addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [but setFrame:CGRectMake(52, 252, 215, 40)];
-    [but setTitle:@"Login" forState:UIControlStateNormal];
-    [but setExclusiveTouch:YES];
-    [self.view addSubview:but];
+     UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+     [self.view addSubview:naviBarObj];
+     
+     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
+     
+     
+     UINavigationItem *navigItem = [[UINavigationItem alloc] init];
+     navigItem.leftBarButtonItem = addButton;
+     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
+     
+     UIButton *but= [UIButton buttonWithType:UIButtonTypeRoundedRect];
+     [but addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+     [but setFrame:CGRectMake(52, 252, 215, 40)];
+     [but setTitle:@"Login" forState:UIControlStateNormal];
+     [but setExclusiveTouch:YES];
+     [self.view addSubview:but];
      */
-
-    self.navigationItem.title = @"Hello";
+    
+    [self.navigationItem setTitleView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]]];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    [[self navigationItem] setLeftBarButtonItem:backButton];
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
+    [[self navigationItem] setRightBarButtonItem:addButton];
     
-    self.navigationItem.leftBarButtonItem = addButton;
-    //self.view.backgroundColor = [UIColor whiteColor];
-
-    
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Show" style:UIBarButtonItemStylePlain target:self action:@selector(showAddressBook)];
-    [[self navigationItem] setRightBarButtonItem:anotherButton];
     
     
 }
 
+-(void)cancel{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 -(void)showAddressBook {
     _addressBookController = [[ABPeoplePickerNavigationController alloc] init];
@@ -191,28 +186,28 @@
 }
 
 /*
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = [UIColor whiteColor];
-        
-        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 60, frame.size.width - 20, 40)];
-        textField.borderStyle = UITextBorderStyleRoundedRect;
-        textField.font = [UIFont systemFontOfSize:15];
-        textField.placeholder = @"Add friends";
-        textField.autocorrectionType = UITextAutocorrectionTypeNo;
-        textField.keyboardType = UIKeyboardTypeDefault;
-        textField.returnKeyType = UIReturnKeyDone;
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        textField.delegate = self;
-        [self addSubview:textField];
-        
-        
-    }
-    return self;
-}
-*/
+ - (id)initWithFrame:(CGRect)frame
+ {
+ self = [super initWithFrame:frame];
+ if (self) {
+ self.backgroundColor = [UIColor whiteColor];
+ 
+ UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 60, frame.size.width - 20, 40)];
+ textField.borderStyle = UITextBorderStyleRoundedRect;
+ textField.font = [UIFont systemFontOfSize:15];
+ textField.placeholder = @"Add friends";
+ textField.autocorrectionType = UITextAutocorrectionTypeNo;
+ textField.keyboardType = UIKeyboardTypeDefault;
+ textField.returnKeyType = UIReturnKeyDone;
+ textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+ textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+ textField.delegate = self;
+ [self addSubview:textField];
+ 
+ 
+ }
+ return self;
+ }
+ */
 
 @end

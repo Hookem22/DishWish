@@ -10,6 +10,8 @@
 
 @implementation DWLeftSideBar
 
+@synthesize shareButton = _shareButton;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -26,7 +28,12 @@
 
 -(void)updateLeftSideBar
 {
-    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    for(id subview in self.subviews)
+    {
+        if(subview != self.shareButton)
+            [subview removeFromSuperview];
+    }
+    //[self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
@@ -77,13 +84,16 @@
     saveButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     [self addSubview:saveButton];
     i++;
-    */
+    
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [shareButton addTarget:self action:@selector(shareClicked:) forControlEvents:UIControlEventTouchUpInside];
     [shareButton setTitle:@"Share" forState:UIControlStateNormal];
     shareButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     [self addSubview:shareButton];
     i++;
+    */
+    
+    self.shareButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     
     self.contentSize = CGSizeMake(wd, (i * 40) + 20);
     
@@ -182,11 +192,14 @@
 {
     [self close];
     
-    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
-    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    //DWMessage *message = [[DWMessage alloc] init];
+    //[self.superview addSubview:message.view];
     
-    DWMessage * message = [[DWMessage alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
-    [self.superview addSubview:message];
+    //NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    //NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    //DWMessage * message = [[DWMessage alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
+    //[self.superview addSubview:message];
     
     NSArray *views = self.superview.subviews;
     for(id subview in views) {

@@ -11,7 +11,6 @@
 #import "Session.h"
 #import "DWLeftSideBar.h"
 
-
 @interface DWRightSideBar : UIScrollView
 
 @property (nonatomic, strong) NSMutableArray *savedLists;

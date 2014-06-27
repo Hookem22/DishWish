@@ -7,6 +7,10 @@
 
 @interface DWView : UIView
 
+@property (nonatomic, strong) DWLeftSideBar *leftSideBar;
 -(void)setup:(CLLocation *)location;
+
+-(void)menuButtonPressed;
+-(void)userButtonPressed;
 
 @end
