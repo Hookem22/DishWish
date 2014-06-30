@@ -4,6 +4,7 @@
 #import "Place.h"
 #import "DWLeftSideBar.h"
 #import "DWRightSideBar.h"
+#import "InstructionsView.h"
 
 @interface DWView : UIView
 

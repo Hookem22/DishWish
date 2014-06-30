@@ -33,6 +33,9 @@
          */
         [self addNavBar:wd];
         
+        InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
+        [self addSubview:instructions];
+        
         for(id subview in self.subviews) {
             if([subview isMemberOfClass:[UIImageView class]])
                 [subview removeFromSuperview];
@@ -64,6 +67,7 @@
     UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
     
     [self addSubview:splashView];
+    
 }
 -(void)addNavBar:(NSUInteger)width
 {

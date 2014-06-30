@@ -19,6 +19,12 @@
         self.savedLists = [[NSMutableArray alloc] init];
         self.backgroundColor = [UIColor whiteColor];
         
+        NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+        wd = (wd * 3) / 4;
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, wd, 40)];
+        headerLabel.text = @"Shared Lists";
+        [self addSubview:headerLabel];
+        
         UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
         [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
         [self addGestureRecognizer:recognizer];
@@ -35,7 +41,7 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
-    NSUInteger i = self.savedLists.count - 1;
+    NSUInteger i = self.savedLists.count;
 
     NSDate *now = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

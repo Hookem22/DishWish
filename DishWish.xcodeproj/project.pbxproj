@@ -50,6 +50,9 @@
 		BEB35D7D195B1BE60081D3FB /* letseat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7C195B1BE60081D3FB /* letseat@2x.png */; };
 		BEB35D80195B1E1E0081D3FB /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7E195B1E1E0081D3FB /* check@2x.png */; };
 		BEB35D81195B1E1E0081D3FB /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7F195B1E1E0081D3FB /* x@2x.png */; };
+		BEEB02A319620D2F0089E1A4 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEB02A219620D2F0089E1A4 /* icon@2x.png */; };
+		BEEB02A519620D350089E1A4 /* swipeRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEB02A419620D350089E1A4 /* swipeRight@2x.png */; };
+		BEEB02A819620D500089E1A4 /* InstructionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEEB02A719620D500089E1A4 /* InstructionsView.m */; };
 		BEF82449192E8F1D00BE0CC2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF82448192E8F1D00BE0CC2 /* Session.m */; };
 		BEF8244D1937D97F00BE0CC2 /* cocktail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */; };
 		BEF8244E1937D97F00BE0CC2 /* fork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEF8244B1937D97F00BE0CC2 /* fork@2x.png */; };
@@ -77,7 +80,7 @@
 		BE529A921954959C00BAE803 /* directions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions@2x.png"; sourceTree = "<group>"; };
 		BE9C22D3195C9E2000207A1C /* DWMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWMessageViewController.h; sourceTree = "<group>"; };
 		BE9C22D4195C9E2000207A1C /* DWMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWMessageViewController.m; sourceTree = "<group>"; };
-		BEA9CEEC191D82300087C645 /* DishWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DishWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEA9CEEC191D82300087C645 /* Let's Eat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Let's Eat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA9CEEF191D82300087C645 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BEA9CEF1191D82300087C645 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		BEA9CEF3191D82300087C645 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -127,6 +130,10 @@
 		BEB35D7C195B1BE60081D3FB /* letseat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "letseat@2x.png"; sourceTree = "<group>"; };
 		BEB35D7E195B1E1E0081D3FB /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
 		BEB35D7F195B1E1E0081D3FB /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
+		BEEB02A219620D2F0089E1A4 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		BEEB02A419620D350089E1A4 /* swipeRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipeRight@2x.png"; sourceTree = "<group>"; };
+		BEEB02A619620D500089E1A4 /* InstructionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstructionsView.h; sourceTree = "<group>"; };
+		BEEB02A719620D500089E1A4 /* InstructionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstructionsView.m; sourceTree = "<group>"; };
 		BEF82447192E8F1D00BE0CC2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		BEF82448192E8F1D00BE0CC2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		BEF8244A1937D97F00BE0CC2 /* cocktail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cocktail@2x.png"; sourceTree = "<group>"; };
@@ -174,7 +181,7 @@
 		BEA9CEED191D82300087C645 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BEA9CEEC191D82300087C645 /* DishWish.app */,
+				BEA9CEEC191D82300087C645 /* Let's Eat.app */,
 				BEA9CF0D191D82300087C645 /* DishWishTests.xctest */,
 			);
 			name = Products;
@@ -219,6 +226,8 @@
 				BEA9CF29191D830E0087C645 /* DWMenu.m */,
 				BE9C22D3195C9E2000207A1C /* DWMessageViewController.h */,
 				BE9C22D4195C9E2000207A1C /* DWMessageViewController.m */,
+				BEEB02A619620D500089E1A4 /* InstructionsView.h */,
+				BEEB02A719620D500089E1A4 /* InstructionsView.m */,
 				BEA9CF2E191D830E0087C645 /* images */,
 				BEA9CF07191D82300087C645 /* Images.xcassets */,
 				BEA9CEF6191D82300087C645 /* Supporting Files */,
@@ -258,6 +267,8 @@
 		BEA9CF2E191D830E0087C645 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				BEEB02A419620D350089E1A4 /* swipeRight@2x.png */,
+				BEEB02A219620D2F0089E1A4 /* icon@2x.png */,
 				BEB35D7E195B1E1E0081D3FB /* check@2x.png */,
 				BEB35D7F195B1E1E0081D3FB /* x@2x.png */,
 				BEB35D7C195B1BE60081D3FB /* letseat@2x.png */,
@@ -320,7 +331,7 @@
 			);
 			name = DishWish;
 			productName = DishWish;
-			productReference = BEA9CEEC191D82300087C645 /* DishWish.app */;
+			productReference = BEA9CEEC191D82300087C645 /* Let's Eat.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BEA9CF0C191D82300087C645 /* DishWishTests */ = {
@@ -402,11 +413,13 @@
 				481981FA193D767C003EE160 /* loading@2x.gif in Resources */,
 				BEB35D81195B1E1E0081D3FB /* x@2x.png in Resources */,
 				BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */,
+				BEEB02A519620D350089E1A4 /* swipeRight@2x.png in Resources */,
 				BEB35D80195B1E1E0081D3FB /* check@2x.png in Resources */,
 				BEB35D7D195B1BE60081D3FB /* letseat@2x.png in Resources */,
 				BEA9CF03191D82300087C645 /* Main.storyboard in Resources */,
 				BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */,
 				BE529A87195212F600BAE803 /* default.gpx in Resources */,
+				BEEB02A319620D2F0089E1A4 /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +454,7 @@
 				BEA9CEFC191D82300087C645 /* main.m in Sources */,
 				BEB35D681954D6C60081D3FB /* DWRightSideBar.m in Sources */,
 				BEA9CF36191D830E0087C645 /* DWDraggableView.m in Sources */,
+				BEEB02A819620D500089E1A4 /* InstructionsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,7 +586,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DishWish/DishWish-Prefix.pch";
 				INFOPLIST_FILE = "DishWish/DishWish-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Let's Eat";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -589,7 +603,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DishWish/DishWish-Prefix.pch";
 				INFOPLIST_FILE = "DishWish/DishWish-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Let's Eat";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

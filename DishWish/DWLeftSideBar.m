@@ -18,6 +18,12 @@
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         
+        NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+        wd = (wd * 3) / 4;
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, wd, 40)];
+        headerLabel.text = @"Saved Places List";
+        [self addSubview:headerLabel];
+        
         UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
         [recognizer setDirection:(UISwipeGestureRecognizerDirectionLeft)];
         [self addGestureRecognizer:recognizer];
@@ -38,9 +44,14 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, wd, 40)];
+    headerLabel.text = @"Saved Places List";
+    [self addSubview:headerLabel];
+    
+    
     NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
     
-    NSUInteger i = 0;
+    NSUInteger i = 1;
     for(Place *place in places)
     {
         /*
@@ -95,7 +106,7 @@
     
     self.shareButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     
-    self.contentSize = CGSizeMake(wd, (i * 40) + 20);
+    self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     
 }
 

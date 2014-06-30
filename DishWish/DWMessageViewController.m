@@ -72,8 +72,9 @@
     [self.view addSubview:self.messageTextbox];
     
     
-    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    sendButton.frame = CGRectMake(wd - 70, 188, 60, 40);
+    UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 70, 188, 60, 40)];
+    //sendButton.frame = CGRectMake(wd - 70, 188, 60, 40);
+    [sendButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(sendButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:sendButton];
