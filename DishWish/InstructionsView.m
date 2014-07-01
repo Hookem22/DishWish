@@ -18,7 +18,6 @@
         
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-
         
         UIImage *swipe = [UIImage imageNamed:@"swipeRight"];
         UIImageView *swipeView = [[UIImageView alloc] initWithImage:swipe];
@@ -38,13 +37,32 @@
         dismissButton.layer.cornerRadius = 5.0;
         [dismissButton setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
         [dismissButton setTitle:@"Got it" forState:UIControlStateNormal];
-        [dismissButton addTarget:self action:@selector(dismissButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [dismissButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:dismissButton];
+        
+        UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(animatedClose)];
+        [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
+        [self addGestureRecognizer:recognizer];
     }
     return self;
 }
 
--(void)dismissButtonClick:(id)sender
+-(void)animatedClose
+{
+    
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    
+    [UIView animateWithDuration:0.4
+         animations:^{
+             self.frame = CGRectMake(wd, 0, wd, ht);
+         }
+         completion:^(BOOL finished){
+             [self close];
+         }];
+}
+
+-(void)close
 {
     [self removeFromSuperview];
 }

@@ -32,7 +32,6 @@
         CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
         [self.mainView setup:location];
     }
-    
 }
 
 
@@ -42,6 +41,14 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     [self addLeftSideBar];
+    
+    ////////////// Costa Rica Cheat
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.2675896, -97.7429886);
+    CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
+    [self.mainView setup:location];
+    return;
+    //////////////
+    
     
     if ([CLLocationManager locationServicesEnabled] &&
         [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
@@ -86,6 +93,9 @@
     CLLocation* location = [locations lastObject];
     
     [_locationManager stopUpdatingLocation];
+    
+    if(self.mainView.subviews.count > 1) //Bug for loading cards twice
+        return;
     
     [self.mainView setup:location];
     
