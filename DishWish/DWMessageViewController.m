@@ -21,8 +21,10 @@
     
     [self.navigationItem setTitleView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]]];
     
+    /* Remove button from nav bar
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
     [[self navigationItem] setLeftBarButtonItem:addButton];
+    */
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     [[self navigationItem] setRightBarButtonItem:backButton];
@@ -48,6 +50,12 @@
     self.peopleTextbox.enabled = NO;
     self.peopleTextbox.delegate = self;
     [self.view addSubview:self.peopleTextbox];
+    
+    UIButton *contactAddButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    contactAddButton.frame = CGRectMake(wd - 40, 90, 20, 20);
+    [contactAddButton addTarget:self action:@selector(showAddressBook) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:contactAddButton];
+    
     
     /*
     UIView *wrapView = [[UIView alloc] initWithFrame: CGRectMake(10, 140, wd - 90, 80)];
@@ -193,7 +201,15 @@
     NSString *peopleList = @"";
     for(NSDictionary *dict in _arrContactsData)
     {
-        peopleList = [NSString stringWithFormat:@"%@ %@ %@,", peopleList, [dict objectForKey:@"firstName"], [dict objectForKey:@"lastName"]];
+        NSString *firstName = [dict objectForKey:@"firstName"];
+        NSString *lastName = [dict objectForKey:@"lastName"];
+        
+        if(firstName.length > 0)
+            peopleList = [NSString stringWithFormat:@"%@ %@", peopleList, firstName];
+        if(lastName.length > 0)
+            peopleList = [NSString stringWithFormat:@"%@ %@", peopleList, lastName];
+        
+        peopleList = [NSString stringWithFormat:@"%@,", peopleList];
         
     }
     
