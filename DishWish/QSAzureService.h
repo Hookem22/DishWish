@@ -47,6 +47,8 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 
 - (void)getAllPlaces:(NSDictionary *)params completion:(QSCompletionBlock)completion;
 
+- (void)voteYes:(NSDictionary *)params;
+
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion;
 
 - (void)addItem:(NSDictionary *)item

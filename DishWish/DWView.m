@@ -20,21 +20,21 @@
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     [Place getAllPlaces:location completion:^(NSArray *places) {
+        
+        [places[0] voteYes];
+        
+        
+        
         [[Session sessionVariables] setObject:places forKey:@"Places"];
         NSUInteger currentId = 10;
         [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
         
         [self loadDraggableCustomView:places];
-        /*
-         [self loadDraggableCustomView:places[3]];
-         [self loadDraggableCustomView:places[2]];
-         [self loadDraggableCustomView:places[1]];
-         [self loadDraggableCustomView:places[0]];
-         */
+
         [self addNavBar:wd];
         
-        InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
-        [self addSubview:instructions];
+        //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
+        //[self addSubview:instructions];
         
         for(id subview in self.subviews) {
             if([subview isMemberOfClass:[UIImageView class]])

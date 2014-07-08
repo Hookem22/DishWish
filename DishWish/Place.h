@@ -31,7 +31,8 @@
 @property (nonatomic, copy) NSString *brunchMenu;
 @property (nonatomic, copy) NSString *drinkMenu;
 @property (nonatomic, copy) NSString *happyHourMenu;
-
+@property (nonatomic, assign) NSUInteger yesVote;
+@property (nonatomic, assign) NSUInteger noVote;
 
 + (NSArray *)initialPlaces;
 -(void)savePlace;
@@ -40,6 +41,7 @@
 +(void)getFivePlaces:(QSCompletionBlock)completion;
 +(void)getNextPlace:(QSCompletionBlock)completion;
 +(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion;
+-(void)voteYes;
 
 @end
 

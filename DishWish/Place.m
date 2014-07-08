@@ -47,6 +47,8 @@
         self.brunchMenu = [place valueForKey:@"brunchmenu"];
         self.drinkMenu = [place valueForKey:@"drinkmenu"];
         self.happyHourMenu = [place valueForKey:@"happyhourmenu"];        
+        self.yesVote = [[place objectForKey:@"yesvote"] isKindOfClass:[NSNull class]] ? 0 : [[place objectForKey:@"yesvote"] intValue];
+        self.noVote = [[place objectForKey:@"novote"] isKindOfClass:[NSNull class]] ? 0 : [[place objectForKey:@"novote"] intValue];;
         
         NSString *container = @"http://dishwishes.blob.core.windows.net/places/";
         NSMutableArray *imgArray = [[NSMutableArray alloc] initWithCapacity:self.imageCount];
@@ -210,5 +212,18 @@
     
     return randomPlaces;
 }
+
+-(void)voteYes
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    [params setValue:self.placeId forKey:@"placeid"];
+    [params setValue:[NSString stringWithFormat:@"%lu", self.yesVote + 1] forKey:@"votes"];
+    
+    [service voteYes:params];
+}
+    
 
 @end
