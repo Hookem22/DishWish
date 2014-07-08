@@ -73,7 +73,7 @@
      }];
 }
 
-
+/*
 +(void)get:(id)placeId completion:(QSCompletionBlock)completion
 {
 
@@ -143,7 +143,7 @@
         
     }];
 }
-
+*/
 +(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"Place"];
@@ -165,8 +165,50 @@
             [places addObject:[[Place alloc] init:item]];
         }
         
-        completion(places);
+        NSMutableArray *randomPlaces = [self randomizePlaces:places];
+        
+        completion(randomPlaces);
     }];
+}
+
++(NSMutableArray *)randomizePlaces:(NSMutableArray *)places
+{
+    NSMutableDictionary *placesDict = [[NSMutableDictionary alloc] init];
+    int i = 5;
+    for(Place * place in places)
+    {
+        int r = (arc4random() % 10) + 1;
+        int key = r * i;
+        
+        while(true)
+        {
+            NSString *keyId = [NSString stringWithFormat:@"%d", key];
+            if([placesDict objectForKey:keyId] == nil)
+            {
+                [placesDict setObject:place forKey:keyId];
+                i++;
+                break;
+            }
+            key++;
+        }
+        
+    }
+    
+    i = 1;
+    NSMutableArray *randomPlaces = [[NSMutableArray alloc] initWithCapacity:places.count];
+    while(placesDict.count > 0)
+    {
+        NSString *keyId = [NSString stringWithFormat:@"%d", i];
+        Place *newPlace = (Place *)[placesDict objectForKey:keyId];
+        if([placesDict objectForKey:keyId] != nil)
+        {
+            [randomPlaces addObject:newPlace];
+            [placesDict removeObjectForKey:keyId];
+        }
+        i++;
+    }
+    
+    return randomPlaces;
 }
 
 @end
