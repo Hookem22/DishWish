@@ -94,7 +94,29 @@
 
 -(void)sendButtonClick:(id)sender
 {
+    if(_arrContactsData == nil || _arrContactsData.count == 0)
+    {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"No Friends Added" message:@"Add friends to send message." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
     
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSArray *recipents = @[@"12345678", @"72345524"];
+    NSString *message = [NSString stringWithFormat:@"Just sent the file to your email. Please check!"];
+    
+    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+    messageController.messageComposeDelegate = self;
+    [messageController setRecipients:recipents];
+    [messageController setBody:message];
+    
+    // Present message view controller on screen
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)showAddressBook {
