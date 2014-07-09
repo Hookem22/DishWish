@@ -101,11 +101,37 @@
         return;
     }
     
+    /*
     if(![MFMessageComposeViewController canSendText]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
     }
+    */
+    
+    for(NSMutableDictionary *contact in _arrContactsData)
+    {
+        NSString *phoneNumber = [[contact objectForKey:@"mobileNumber"] length] > 0 ? [contact objectForKey:@"mobileNumber"] : [contact objectForKey:@"homeNumber"];
+        
+        phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
+
+        [User getByPhoneNumber:phoneNumber completion:^(User *user)  {
+            if(user == NULL)
+            {
+                //Send SMS
+                NSLog(@"SMS");
+            }
+            else
+            {
+                //Send push message
+                NSLog(@"Push");
+            }
+            
+        }];
+
+        
+    }
+    
     
     NSArray *recipents = @[@"12345678", @"72345524"];
     NSString *message = [NSString stringWithFormat:@"Just sent the file to your email. Please check!"];
@@ -115,7 +141,6 @@
     [messageController setRecipients:recipents];
     [messageController setBody:message];
     
-    // Present message view controller on screen
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
