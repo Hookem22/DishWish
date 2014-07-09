@@ -26,7 +26,7 @@
     }];
     
     //debugging only
-    if (TARGET_IPHONE_SIMULATOR && false)
+    if (TARGET_IPHONE_SIMULATOR)
     {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.261862, -97.758768);
         CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
@@ -41,14 +41,6 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     [self addLeftSideBar];
-    
-    ////////////// Costa Rica Cheat
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.2675896, -97.7429886);
-    CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
-    [self.mainView setup:location];
-    return;
-    //////////////
-    
     
     if ([CLLocationManager locationServicesEnabled] &&
         [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {

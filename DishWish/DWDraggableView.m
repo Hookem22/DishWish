@@ -629,6 +629,11 @@
     //else
     //    [self removeItems];
     
+    //Vote to see what places people like
+    if (!TARGET_IPHONE_SIMULATOR)
+    {
+        [self.place vote:isYes];
+    }
 }
 
 -(void) animateImageToFront:(BOOL)isYes

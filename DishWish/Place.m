@@ -213,17 +213,27 @@
     return randomPlaces;
 }
 
--(void)voteYes
+-(void)vote:(BOOL)isYes
 {
     QSAzureService *service = [QSAzureService defaultService:@"Place"];
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     
     [params setValue:self.placeId forKey:@"placeid"];
-    [params setValue:[NSString stringWithFormat:@"%lu", self.yesVote + 1] forKey:@"votes"];
     
-    [service voteYes:params];
+    if(isYes)
+    {
+        [params setValue:[NSString stringWithFormat:@"%lu", self.yesVote + 1] forKey:@"votes"];
+        [params setValue:[NSString stringWithFormat:@"%@", @"yesvote"] forKey:@"yesorno"];
+    }
+    else
+    {
+        [params setValue:[NSString stringWithFormat:@"%lu", self.noVote + 1] forKey:@"votes"];
+        [params setValue:[NSString stringWithFormat:@"%@", @"novote"] forKey:@"yesorno"];
+    }
+    
+    [service vote:params];
 }
-    
+
 
 @end

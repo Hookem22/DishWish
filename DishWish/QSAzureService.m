@@ -134,17 +134,14 @@
            }];
 }
 
--(void)voteYes:(NSDictionary *)params
+-(void)vote:(NSDictionary *)params
 {
-    NSLog([NSString stringWithFormat:@"%@", params]);
-    [self.client invokeAPI:@"voteyes" body:params HTTPMethod:@"POST" parameters:nil
+    [self.client invokeAPI:@"vote" body:params HTTPMethod:@"POST" parameters:nil
            headers:nil completion:^(NSString *results, NSHTTPURLResponse *response, NSError *error) {
                [self logErrorIfNotNil:error];
-               //NSLog([NSString stringWithFormat:@"%@", results]);
-               //items = [results mutableCopy];
-               NSLog([NSString stringWithFormat:@"%@", results]);
            }];
 }
+
 
 /*
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion

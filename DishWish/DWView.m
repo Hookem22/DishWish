@@ -19,11 +19,7 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    [Place getAllPlaces:location completion:^(NSArray *places) {
-        
-        [places[0] voteYes];
-        
-        
+    [Place getAllPlaces:location completion:^(NSArray *places) { 
         
         [[Session sessionVariables] setObject:places forKey:@"Places"];
         NSUInteger currentId = 10;

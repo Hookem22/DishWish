@@ -41,7 +41,7 @@
 +(void)getFivePlaces:(QSCompletionBlock)completion;
 +(void)getNextPlace:(QSCompletionBlock)completion;
 +(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion;
--(void)voteYes;
+-(void)vote:(BOOL)isYes;
 
 @end
 
