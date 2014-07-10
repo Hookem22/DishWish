@@ -110,42 +110,63 @@
     */
     
     [Place saveList:^(NSString *saveListId) {
-        NSLog(saveListId);
+        [self getContacts:saveListId];
     }];
     
     
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)getContacts:(NSString *)savedListId
+{
     
     for(NSDictionary *contact in _arrContactsData)
     {
         NSString *phoneNumber = [[contact objectForKey:@"mobileNumber"] length] > 0 ? [contact objectForKey:@"mobileNumber"] : [contact objectForKey:@"homeNumber"];
         
         phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
-
+        
         [User getByPhoneNumber:phoneNumber completion:^(User *user)  {
             if(user == NULL || user.lastSignedIn == NULL)
             {
                 //Send SMS
                 NSLog(@"SMS");
-                [self sendSMS:phoneNumber];
+                [self createUser:phoneNumber listId:savedListId];
             }
             else
             {
                 //Send push message
                 NSLog(@"Push");
-                [self sendPushMessage:user.deviceId];
+                [self createXref:user listId:savedListId isSms:NO];
             }
             
         }];
         
     }
-
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)sendSMS:(NSString *)phoneNumber
+-(void)createUser:(NSString *)phoneNumber listId:(NSString *)listId
 {
-    NSString *message = [NSString stringWithFormat:@"Here's a list of places from Let's Eat: ios://letseat.com?i=1234|5678"];
+    //Create user
+    User *user = [[User alloc] init];
+    [self createXref:user listId:listId isSms:YES];
+}
+
+-(void)createXref:(User *)user listId:(NSString *)listId isSms:(BOOL)isSms
+{
+    //CreateXref
+    NSString *message = @"";
+    
+    if(isSms)
+        [self sendSMS:user.phoneNumber message:message];
+    else
+        [self sendPushMessage:user.deviceId message:message];
+}
+
+
+-(void)sendSMS:(NSString *)phoneNumber message:(NSString *)message
+{
+
     NSArray *recipients = [[NSArray alloc] initWithObjects:phoneNumber, nil];
     
     MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
@@ -154,7 +175,8 @@
     [messageController setBody:message];
 }
 
--(void)sendPushMessage:(NSString *)deviceId
+
+-(void)sendPushMessage:(NSString *)deviceId message:(NSString *)message
 {
     
 }
