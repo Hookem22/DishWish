@@ -235,5 +235,27 @@
     [service vote:params];
 }
 
++(void)saveList:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    
+    NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    
+    NSString *places = @"";
+    NSArray *yesPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+    for(Place *place in yesPlaces)
+    {
+        places = [NSString stringWithFormat:@"%@|%@", places, place.placeId];
+    }
+    
+    places = [places substringFromIndex:1];
+    
+    NSDictionary *savedList = @{@"name" : @"", @"createduserid" : deviceId, @"places" : places };
+    [service addItem:savedList completion:^(NSDictionary *item)
+     {
+         completion([item valueForKey:@"id"]);
+     }];
+}
+
 
 @end

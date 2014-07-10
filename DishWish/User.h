@@ -15,7 +15,7 @@
 @property (nonatomic, copy) NSString *deviceId;
 @property (nonatomic, copy) NSString *facebookId;
 @property (nonatomic, copy) NSString *phoneNumber;
-@property (nonatomic, copy) NSString *lastSignedIn;
+@property (nonatomic, copy) NSDate *lastSignedIn;
 
 +(void)login:(QSCompletionBlock)completion;
 +(void)getByPhoneNumber:(NSString *)phoneNumber completion:(QSCompletionBlock)completion;

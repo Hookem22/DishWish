@@ -21,7 +21,7 @@
             self.deviceId = [user valueForKey:@"id"];
             self.facebookId = [user valueForKey:@"facebookid"];
             self.phoneNumber = [user valueForKey:@"phonenumber"];
-            self.lastSignedIn = [user valueForKey:@"lastsignedin"];
+            self.lastSignedIn = [user objectForKey:@"lastsignedin"];
     }
 	return self;
 }
@@ -34,7 +34,12 @@
         
         if(user != nil && user.deviceId != nil)
         {
-            completion(user);
+            NSDate *timeStamp = [NSDate date];
+            user.lastSignedIn = timeStamp;
+            
+            [user update:^(User *user) {
+                completion(user);
+            }];
         }
         else
         {
@@ -81,8 +86,22 @@
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
     
     NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    NSDictionary *device = @{@"id" : deviceId, @"facebookid" : @"", @"phonenumber" : @"", @"lastsignedin" : @"" };
+    NSString *timestamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970] * 1000];
+    
+    NSDictionary *device = @{@"id" : deviceId, @"facebookid" : @"", @"phonenumber" : @"", @"lastsignedin" : timestamp };
     [service addItem:device completion:^(NSDictionary *item)
+     {
+         User *user = [[User alloc] init:item];
+         completion(user);
+     }];
+}
+
+-(void)update:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Users"];
+    
+    NSDictionary *user = @{@"id" : self.deviceId, @"facebookid" : self.facebookId, @"phonenumber" : self.phoneNumber, @"lastsignedin" : self.lastSignedIn };
+    [service updateItem:user completion:^(NSDictionary *item)
      {
          User *user = [[User alloc] init:item];
          completion(user);

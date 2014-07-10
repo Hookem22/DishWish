@@ -39,12 +39,16 @@
 
 + (QSAzureService *)defaultService:(NSString *)tableName
 {
+    /*
     // Create a singleton instance of QSAzureService
     static QSAzureService* service;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         service = [[QSAzureService alloc] init:tableName];
     });
+    */
+    
+    QSAzureService *service = [[QSAzureService alloc] init:tableName];
     
     return service;
 }
@@ -185,6 +189,17 @@
         // Let the caller know that we finished
         completion(result);
     }];
+}
+
+-(void)updateItem:(NSDictionary *)item completion:(QSCompletionBlock)completion
+{
+    [self.table update:item completion:^(NSDictionary *result, NSError *error)
+     {
+         [self logErrorIfNotNil:error];
+         
+         // Let the caller know that we finished
+         completion(result);
+     }];
 }
 
 -(void)completeItem:(NSDictionary *)item completion:(QSCompletionWithIndexBlock)completion

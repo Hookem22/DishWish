@@ -42,6 +42,7 @@
 +(void)getNextPlace:(QSCompletionBlock)completion;
 +(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion;
 -(void)vote:(BOOL)isYes;
++(void)saveList:(QSCompletionBlock)completion;
 
 @end
 

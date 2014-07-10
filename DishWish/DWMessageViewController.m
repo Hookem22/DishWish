@@ -109,39 +109,54 @@
     }
     */
     
-    for(NSMutableDictionary *contact in _arrContactsData)
+    [Place saveList:^(NSString *saveListId) {
+        NSLog(saveListId);
+    }];
+    
+    
+    
+    for(NSDictionary *contact in _arrContactsData)
     {
         NSString *phoneNumber = [[contact objectForKey:@"mobileNumber"] length] > 0 ? [contact objectForKey:@"mobileNumber"] : [contact objectForKey:@"homeNumber"];
         
         phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
 
         [User getByPhoneNumber:phoneNumber completion:^(User *user)  {
-            if(user == NULL)
+            if(user == NULL || user.lastSignedIn == NULL)
             {
                 //Send SMS
                 NSLog(@"SMS");
+                [self sendSMS:phoneNumber];
             }
             else
             {
                 //Send push message
                 NSLog(@"Push");
+                [self sendPushMessage:user.deviceId];
             }
             
         }];
-
         
     }
+
     
-    
-    NSArray *recipents = @[@"12345678", @"72345524"];
-    NSString *message = [NSString stringWithFormat:@"Just sent the file to your email. Please check!"];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)sendSMS:(NSString *)phoneNumber
+{
+    NSString *message = [NSString stringWithFormat:@"Here's a list of places from Let's Eat: ios://letseat.com?i=1234|5678"];
+    NSArray *recipients = [[NSArray alloc] initWithObjects:phoneNumber, nil];
     
     MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
     messageController.messageComposeDelegate = self;
-    [messageController setRecipients:recipents];
+    [messageController setRecipients:recipients];
     [messageController setBody:message];
+}
+
+-(void)sendPushMessage:(NSString *)deviceId
+{
     
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)showAddressBook {
