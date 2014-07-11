@@ -76,7 +76,7 @@
     self.messageTextbox.layer.cornerRadius = 5;
     self.messageTextbox.clipsToBounds = YES;
     self.messageTextbox.editable = YES;
-    self.messageTextbox.text = [NSString stringWithFormat:@"Here's a list of places from Let's Eat: ios://letseat.com?i=1234|5678"];
+    self.messageTextbox.text = [NSString stringWithFormat:@"Here's a list of places from Let's Eat: ios://letseat.com?i=5678"];
     [self.view addSubview:self.messageTextbox];
     
     
@@ -101,13 +101,11 @@
         return;
     }
     
-    /*
     if(![MFMessageComposeViewController canSendText]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
     }
-    */
     
     [Place saveList:^(NSString *saveListId) {
         [self getContacts:saveListId];
@@ -127,7 +125,7 @@
         phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
         
         [User getByPhoneNumber:phoneNumber completion:^(User *user)  {
-            if(user == NULL || user.lastSignedIn == NULL)
+            if(user == NULL || [user.lastSignedIn isMemberOfClass:[NSNull class]])
             {
                 //Send SMS
                 NSLog(@"SMS");
@@ -147,7 +145,6 @@
 
 -(void)createUser:(NSString *)phoneNumber listId:(NSString *)listId
 {
-    //Create user
     [User newPhoneNumber:phoneNumber completion:^(User *user) {
         [self createXref:user listId:listId isSms:YES];
     }];
@@ -157,12 +154,15 @@
 -(void)createXref:(User *)user listId:(NSString *)listId isSms:(BOOL)isSms
 {
     //CreateXref
-    NSString *message = @"";
-    
-    if(isSms)
-        [self sendSMS:user.phoneNumber message:message];
-    else
-        [self sendPushMessage:user.deviceId message:message];
+    [Place saveXref:user.deviceId listId:listId completion:^(NSString *xrefId) {
+        NSString *message = [NSString stringWithFormat:@"Here's a list of places from Let's Eat: ios://letseat.com?i=%@", xrefId];
+        
+        if(isSms)
+            [self sendSMS:user.phoneNumber message:message];
+        else
+            [self sendPushMessage:user.deviceId message:message];
+    }];
+
 }
 
 

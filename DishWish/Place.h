@@ -43,6 +43,7 @@
 +(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion;
 -(void)vote:(BOOL)isYes;
 +(void)saveList:(QSCompletionBlock)completion;
++(void)saveXref:(NSString *)userId listId:(NSString *)listId completion:(QSCompletionBlock)completion;
 
 @end
 
