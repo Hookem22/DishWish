@@ -148,8 +148,10 @@
 -(void)createUser:(NSString *)phoneNumber listId:(NSString *)listId
 {
     //Create user
-    User *user = [[User alloc] init];
-    [self createXref:user listId:listId isSms:YES];
+    [User newPhoneNumber:phoneNumber completion:^(User *user) {
+        [self createXref:user listId:listId isSms:YES];
+    }];
+
 }
 
 -(void)createXref:(User *)user listId:(NSString *)listId isSms:(BOOL)isSms

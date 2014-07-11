@@ -19,5 +19,6 @@
 
 +(void)login:(QSCompletionBlock)completion;
 +(void)getByPhoneNumber:(NSString *)phoneNumber completion:(QSCompletionBlock)completion;
++(void)newPhoneNumber:(NSString *)phoneNumber completion:(QSCompletionBlock)completion;
 
 @end

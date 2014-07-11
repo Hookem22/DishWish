@@ -96,6 +96,18 @@
      }];
 }
 
++(void)newPhoneNumber:(NSString *)phoneNumber completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Users"];
+    
+    NSDictionary *user = @{@"facebookid" : @"", @"phonenumber" : phoneNumber };
+    [service addItem:user completion:^(NSDictionary *item)
+     {
+         User *user = [[User alloc] init:item];
+         completion(user);
+     }];
+}
+
 -(void)update:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
