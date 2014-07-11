@@ -67,7 +67,7 @@
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [shareButton setTitle:@"Share" forState:UIControlStateNormal];
+    [shareButton setTitle:@"Send List to Friends" forState:UIControlStateNormal];
     shareButton.frame = CGRectMake(0, 0, 0, 0);
     [shareButton addTarget:self action:@selector(shareButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     

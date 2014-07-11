@@ -84,7 +84,7 @@
     
     UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [mapButton addTarget:self action:@selector(mapClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [mapButton setTitle:@"Map All" forState:UIControlStateNormal];
+    [mapButton setTitle:@"Map All Places" forState:UIControlStateNormal];
     mapButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     [self addSubview:mapButton];
     i++;
