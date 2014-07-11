@@ -42,6 +42,12 @@
     
     [self addLeftSideBar];
     
+    
+    [Place getPlacesByListId:@"27F78E51-4402-419A-A84D-1262981AC0AE" completion:^(NSArray * places) {
+        
+    }];
+    
+    
     if ([CLLocationManager locationServicesEnabled] &&
         [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         _locationManager = [[CLLocationManager alloc] init];

@@ -213,6 +213,24 @@
     return randomPlaces;
 }
 
++(void)getPlacesByListId:(NSString *)listId completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    [params setValue:listId forKey:@"savedlistid"];
+    
+    [service getPlacesByListId:params completion:^(NSDictionary *results) {
+        
+        NSString *places = [results valueForKey:@"places"];
+        NSLog([NSString stringWithFormat:@"%@", places]);
+        
+        
+        completion(results);
+    }];
+}
+
 -(void)vote:(BOOL)isYes
 {
     QSAzureService *service = [QSAzureService defaultService:@"Place"];

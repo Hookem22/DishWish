@@ -150,6 +150,42 @@
            }];
 }
 
+- (void)getPlacesByListId:(NSDictionary *)params completion:(QSCompletionBlock)completion
+{
+    [self.client invokeAPI:@"getplacesbylistid" body:params HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                       
+                       NSString *places = [results valueForKey:@"places"];
+                       
+                       //NEED TO FORMAT PLACES SQL STRING
+                       
+                       [self getPlacesByIds:places completion:^(NSArray * places) {
+                           completion(places);
+                       }];
+                       
+
+                   }];
+}
+
+- (void)getPlacesByIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
+{
+    // Create a predicate that finds items where complete is false
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"id in {%@}", placeIds];
+    
+    // Query the TodoItem table and update the items property with the results from the service
+    [self.table readWithPredicate:predicate completion:^(NSArray *results, NSInteger totalCount, NSError *error)
+     {
+         [self logErrorIfNotNil:error];
+         
+         items = [results mutableCopy];
+         
+         // Let the caller know that we finished
+         completion(results);
+     }];
+    
+}
+
 -(void)vote:(NSDictionary *)params
 {
     [self.client invokeAPI:@"vote" body:params HTTPMethod:@"POST" parameters:nil
