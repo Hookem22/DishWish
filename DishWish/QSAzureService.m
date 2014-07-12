@@ -153,25 +153,38 @@
 - (void)getPlacesByListId:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
     [self.client invokeAPI:@"getplacesbylistid" body:params HTTPMethod:@"POST" parameters:nil
-                   headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
-                       [self logErrorIfNotNil:error];
-                       
-                       NSString *places = [results valueForKey:@"places"];
-                       
-                       //NEED TO FORMAT PLACES SQL STRING
-                       
-                       [self getPlacesByIds:places completion:^(NSArray * places) {
-                           completion(places);
-                       }];
-                       
+           headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
+               [self logErrorIfNotNil:error];
+               
+               NSString *places = [results valueForKey:@"places"];
+               places = [NSString stringWithFormat:@"%@", places];
+               places = [places substringFromIndex:1];
+               places = [places substringToIndex:[places length] - 1];
+               places = [places stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+               places = [places substringFromIndex:1];
+               places = [places substringToIndex:[places length] - 1];
+               
+               NSArray *placesArray = [places componentsSeparatedByString:@"|"];
+               places = @"";
+               for(NSString *place in placesArray)
+               {
+                   places = [NSString stringWithFormat:@"%@, '%@'", places, place];
+               }
+               
+               places = [places substringFromIndex:1];
+               
+               [self getPlacesByIds:places completion:^(NSArray * places) {
+                   completion(places);
+               }];
+               
 
-                   }];
+           }];
 }
 
 - (void)getPlacesByIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
 {
     // Create a predicate that finds items where complete is false
-    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"id in {%@}", placeIds];
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id in {%@}", placeIds]];
     
     // Query the TodoItem table and update the items property with the results from the service
     [self.table readWithPredicate:predicate completion:^(NSArray *results, NSInteger totalCount, NSError *error)
