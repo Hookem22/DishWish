@@ -44,7 +44,7 @@
     
     
     [Place getPlacesByListId:@"27F78E51-4402-419A-A84D-1262981AC0AE" completion:^(NSArray * places) {
-        
+        NSLog(@"TODO: Check load if it has a list id");
     }];
     
     

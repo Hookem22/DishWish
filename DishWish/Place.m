@@ -221,13 +221,14 @@
     
     [params setValue:listId forKey:@"savedlistid"];
     
-    [service getPlacesByListId:params completion:^(NSDictionary *results) {
+    [service getPlacesByListId:params completion:^(NSArray *results) {
+        NSMutableArray *places = [[NSMutableArray alloc] init];
+        for(id item in results) {
+            [places addObject:[[Place alloc] init:item]];
+        }
         
-        NSString *places = [results valueForKey:@"places"];
-        NSLog([NSString stringWithFormat:@"%@", places]);
         
-        
-        completion(results);
+        completion(places);
     }];
 }
 
