@@ -115,8 +115,8 @@
     UIButton *button = (UIButton *)sender;
 
     NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
-    
-    Place *place = (Place *)places[button.tag];
+
+    Place *place = (Place *)places[button.tag - 1];
     
     [self close];
     [self loadCard:place];

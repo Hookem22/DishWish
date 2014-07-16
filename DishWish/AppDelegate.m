@@ -13,7 +13,35 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    //[[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
     return YES;
+}
+
+// We are registered, so now store the device token (as a string) on the AppDelegate instance
+// taking care to remove the angle brackets first.
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:
+(NSData *)deviceToken {
+    NSCharacterSet *angleBrackets = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
+    self.deviceToken = [[deviceToken description] stringByTrimmingCharactersInSet:angleBrackets];
+}
+
+// Handle any failure to register. In this case we set the deviceToken to an empty
+// string to prevent the insert from failing.
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:
+(NSError *)error {
+    NSLog(@"Failed to register for remote notifications: %@", error);
+    self.deviceToken = @"";
+}
+
+// Because toast alerts don't work when the app is running, the app handles them.
+// This uses the userInfo in the payload to display a UIAlertView.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:
+(NSDictionary *)userInfo {
+    NSLog(@"%@", userInfo);
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification" message:
+                          [userInfo objectForKey:@"inAppMessage"] delegate:nil cancelButtonTitle:
+                          @"OK" otherButtonTitles:nil, nil];
+    [alert show];
 }
 
 /*

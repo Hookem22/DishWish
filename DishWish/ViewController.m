@@ -21,6 +21,12 @@
     self.mainView = [[DWView alloc] init];
     self.view = self.mainView;
     
+    /*
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    
+    NSDictionary *item = @{  @"deviceToken" : delegate.deviceToken  };
+    */
+    
     [User login:^(User *user) {
         NSString *userId = user.deviceId;
     }];
@@ -42,11 +48,11 @@
     
     [self addLeftSideBar];
     
-    
+    /*
     [Place getPlacesByListId:@"27F78E51-4402-419A-A84D-1262981AC0AE" completion:^(NSArray * places) {
         NSLog(@"TODO: Check load if it has a list id");
     }];
-    
+    */
     
     if ([CLLocationManager locationServicesEnabled] &&
         [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
