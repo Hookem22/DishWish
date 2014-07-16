@@ -5,11 +5,12 @@
 #import "DWLeftSideBar.h"
 #import "DWRightSideBar.h"
 #import "InstructionsView.h"
+#import "AppDelegate.h"
 
 @interface DWView : UIView
 
 @property (nonatomic, strong) DWLeftSideBar *leftSideBar;
--(void)setup:(CLLocation *)location;
+-(void)setup;
 
 -(void)menuButtonPressed;
 -(void)userButtonPressed;

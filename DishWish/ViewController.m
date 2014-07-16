@@ -27,16 +27,20 @@
     NSDictionary *item = @{  @"deviceToken" : delegate.deviceToken  };
     */
     
+    /*
     [User login:^(User *user) {
         NSString *userId = user.deviceId;
     }];
+    */
     
     //debugging only
     if (TARGET_IPHONE_SIMULATOR)
     {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.261862, -97.758768);
         CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
-        [self.mainView setup:location];
+        [[Session sessionVariables] setObject:location forKey:@"location"];
+        
+        [self.mainView setup];
     }
 }
 
@@ -98,10 +102,12 @@
     
     [_locationManager stopUpdatingLocation];
     
+    [[Session sessionVariables] setObject:location forKey:@"location"];
+    
     if(self.mainView.subviews.count > 1) //Bug for loading cards twice
         return;
     
-    [self.mainView setup:location];
+    [self.mainView setup];
     
     NSDate* eventDate = location.timestamp;
     NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];

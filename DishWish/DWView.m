@@ -14,12 +14,16 @@
     return self;
 }
 
--(void)setup:(CLLocation *)location
+-(void)setup
 {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    NSString *someString = appDelegate.queryValue;
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    [Place getAllPlaces:location completion:^(NSArray *places) { 
+    [Place getAllPlaces:^(NSArray *places) { 
         
         [[Session sessionVariables] setObject:places forKey:@"Places"];
         NSUInteger currentId = 10;

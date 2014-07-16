@@ -146,16 +146,16 @@
     }];
 }
 */
-+(void)getAllPlaces:(CLLocation *)location completion:(QSCompletionBlock)completion
++(void)getAllPlaces:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"Place"];
+    
+    CLLocation *location = (CLLocation *)[Session sessionVariables][@"location"];
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 
     [params setValue:[NSString stringWithFormat:@"%f", location.coordinate.latitude] forKey:@"latitude"];
     [params setValue:[NSString stringWithFormat:@"%f", location.coordinate.longitude] forKey:@"longitude"];
-    
-    [[Session sessionVariables] setObject:location forKey:@"location"];
     
     //[params setValue:@"30.261862" forKey:@"latitude"]; //TODO Get device location
     //[params setValue:@"-97.758768" forKey:@"longitude"];
