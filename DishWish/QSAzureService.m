@@ -150,6 +150,24 @@
            }];
 }
 
+- (void)getSharedList:(NSString *)xrefId completion:(QSCompletionBlock)completion
+{
+    // Create a predicate that finds items where complete is false
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"xrefId = %@", xrefId]];
+    
+    // Query the TodoItem table and update the items property with the results from the service
+    [self.table readWithPredicate:predicate completion:^(NSArray *results, NSInteger totalCount, NSError *error)
+     {
+         [self logErrorIfNotNil:error];
+         
+         items = [results mutableCopy];
+         
+         // Let the caller know that we finished
+         completion(results);
+     }];
+    
+}
+
 - (void)getPlacesByListId:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
     [self.client invokeAPI:@"getplacesbylistid" body:params HTTPMethod:@"POST" parameters:nil

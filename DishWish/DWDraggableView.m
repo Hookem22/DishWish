@@ -730,6 +730,11 @@
     currentId++;
     [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
     
+    if(currentId >= places.count) {
+        [self removeFromSuperview];
+        return;
+    }
+    
     [self populateNextPlace:places[currentId]];
     
     for(id subview in self.superview.subviews)

@@ -16,32 +16,54 @@
 
 -(void)setup
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    NSString *someString = appDelegate.queryValue;
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    [Place getAllPlaces:^(NSArray *places) { 
-        
-        [[Session sessionVariables] setObject:places forKey:@"Places"];
-        NSUInteger currentId = 10;
-        [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
-        
-        [self loadDraggableCustomView:places];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSString *savedListId = appDelegate.queryValue;
+    
+    if([savedListId length] > 0)
+    {
+        [SharedList get:savedListId completion:^(SharedList *sharedList) {
+            
+            [Place getPlacesByListId:sharedList.listId completion:^(NSArray *places) {
+                
+                [[Session sessionVariables] setObject:places forKey:@"Places"];
+                
+                [self loadDraggableCustomView:places];
+                
+                [self addNavBar:wd];
+                
+                for(id subview in self.subviews) {
+                    if([subview isMemberOfClass:[UIImageView class]])
+                        [subview removeFromSuperview];
+                }
+                
+            }];
+        }];
 
-        [self addNavBar:wd];
-        
-        //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
-        //[self addSubview:instructions];
-        
-        for(id subview in self.subviews) {
-            if([subview isMemberOfClass:[UIImageView class]])
-                [subview removeFromSuperview];
-        }
-        
-    }];
+    }
+    else
+    {
+        [Place getAllPlaces:^(NSArray *places) {
+            
+            [[Session sessionVariables] setObject:places forKey:@"Places"];
+            
+            [self loadDraggableCustomView:places];
+
+            [self addNavBar:wd];
+            
+            //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
+            //[self addSubview:instructions];
+            
+            for(id subview in self.subviews) {
+                if([subview isMemberOfClass:[UIImageView class]])
+                    [subview removeFromSuperview];
+            }
+            
+        }];
+    }
     
     UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(0, ht-40, wd/2, 40)];
     noButton.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
@@ -202,8 +224,12 @@
     DWDraggableView *prevDraggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[0] async:NO];
     [self addSubview:prevDraggableView];
     
-    for(int i = 1; i < 4; i++)
+    NSUInteger currentId = places.count - 1 > 3 ? 3 : places.count - 1;
+    [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
+    
+    for(int i = 1; i <= currentId; i++)
     {
+        
         BOOL async = i > 1;
         DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[i] async:async];
 

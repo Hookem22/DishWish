@@ -8,12 +8,21 @@
 
 #import "AppDelegate.h"
 
+#import "ViewController.h"
+
 @implementation AppDelegate
+
+@synthesize viewController = _viewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     //[[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.viewController = (ViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+    self.window.rootViewController = self.viewController;
+    
     return YES;
 }
 
@@ -53,6 +62,10 @@
     NSLog(@"URL query: %@", [url query]);
     
     self.queryValue = [url query];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.viewController = (ViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+    self.window.rootViewController = self.viewController;
     
     return YES;
 }

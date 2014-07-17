@@ -12,10 +12,12 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "DWView.h"
 #import "User.h"
+#import "DWMessageViewController.h"
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property(nonatomic, strong) DWView *mainView;
+@property (nonatomic, strong) NSString *savedListId;
 
 @end

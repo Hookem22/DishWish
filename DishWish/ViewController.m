@@ -15,6 +15,7 @@
 @implementation ViewController
 
 @synthesize mainView = _mainView;
+@synthesize savedListId = _savedListId;
 
 - (void)loadView {
     
@@ -122,6 +123,10 @@
 - (IBAction)shareButtonPressed:(UIButton *)sender
 {   
     [self.mainView.leftSideBar close];
+    //DWMessageViewController *message = [[DWMessageViewController alloc] init];
+    //UIStoryboardSegue *segue = [[UIStoryboardSegue alloc] initWithIdentifier:@"MessageSegue1" source:self destination:message];
+    
+    //[self performSegueWithIdentifier:@"MessageSegue1" sender:self];
     [self performSegueWithIdentifier:@"MessageSegue" sender:self];
 }
 

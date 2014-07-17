@@ -100,12 +100,13 @@
         [warningAlert show];
         return;
     }
-    
+    /*
     if(![MFMessageComposeViewController canSendText]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
     }
+    */
     
     [Place saveList:^(NSString *saveListId) {
         [self getContacts:saveListId];
@@ -124,18 +125,20 @@
         
         phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
         
+        NSString *contactName = [contact objectForKey:@"firstName"];
+        
         [User getByPhoneNumber:phoneNumber completion:^(User *user)  {
             if(user == NULL || [user.lastSignedIn isMemberOfClass:[NSNull class]])
             {
                 //Send SMS
                 NSLog(@"SMS");
-                [self createUser:phoneNumber listId:savedListId];
+                [self createUser:phoneNumber name:contactName listId:savedListId];
             }
             else
             {
                 //Send push message
                 NSLog(@"Push");
-                [self createXref:user listId:savedListId isSms:NO];
+                [self createXref:user name:contactName listId:savedListId isSms:NO];
             }
             
         }];
@@ -143,18 +146,18 @@
     }
 }
 
--(void)createUser:(NSString *)phoneNumber listId:(NSString *)listId
+-(void)createUser:(NSString *)phoneNumber name:(NSString *)name listId:(NSString *)listId
 {
     [User newPhoneNumber:phoneNumber completion:^(User *user) {
-        [self createXref:user listId:listId isSms:YES];
+        [self createXref:user name:name listId:listId isSms:YES];
     }];
 
 }
 
--(void)createXref:(User *)user listId:(NSString *)listId isSms:(BOOL)isSms
+-(void)createXref:(User *)user name:(NSString *)name listId:(NSString *)listId isSms:(BOOL)isSms
 {
     //CreateXref
-    [Place saveXref:user.deviceId listId:listId completion:^(NSString *xrefId) {
+    [Place saveXref:user.deviceId name:name listId:listId completion:^(NSString *xrefId) {
         NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%@ (if you don't have Let's Eat app get it here http://letse.at?%@", xrefId, xrefId];
         
         if(isSms)

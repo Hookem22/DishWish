@@ -276,11 +276,11 @@
      }];
 }
 
-+(void)saveXref:(NSString *)userId listId:(NSString *)listId completion:(QSCompletionBlock)completion
++(void)saveXref:(NSString *)userId name:(NSString *)name listId:(NSString *)listId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SharedList"];
     
-    NSDictionary *sharedList = @{@"id" : userId, @"listid" : listId, @"xrefid" : @"0" };
+    NSDictionary *sharedList = @{@"id" : @"", @"userid" : userId, @"name" : name, @"listid" : listId, @"xrefid" : @"0" };
     [service addItem:sharedList completion:^(NSDictionary *item)
      {
          long xrefId = [[item objectForKey:@"xrefid"] longValue];

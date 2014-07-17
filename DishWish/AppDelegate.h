@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class ViewController;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSString *deviceToken;
 @property (strong, nonatomic) NSString *queryValue;
+
+@property (strong, nonatomic) ViewController *viewController;
 
 @end
