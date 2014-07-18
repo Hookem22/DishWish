@@ -6,12 +6,14 @@
 @property (nonatomic, strong) NSMutableArray *arrContactsData;
 @property (nonatomic, strong) ABPeoplePickerNavigationController *addressBookController;
 
+@property (nonatomic, strong) UITextField *fromTextbox;
 @property (nonatomic, strong) UITextField *peopleTextbox;
 @property (nonatomic, strong) UITextView *messageTextbox;
 @end
 
 @implementation DWMessageViewController
 
+@synthesize fromTextbox = _fromTextbox;
 @synthesize peopleTextbox = _peopleTextbox;
 @synthesize messageTextbox = _messageTextbox;
 
@@ -38,7 +40,24 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    self.peopleTextbox = [[UITextField alloc] initWithFrame:CGRectMake(10, 80, wd - 20, 40)];
+    UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 90, 50, 20)];
+    fromLabel.text = @"From";
+    [self.view addSubview:fromLabel];
+    
+    self.fromTextbox = [[UITextField alloc] initWithFrame:CGRectMake(56, 80, wd - 66, 40)];
+    self.fromTextbox.borderStyle = UITextBorderStyleRoundedRect;
+    self.fromTextbox.font = [UIFont systemFontOfSize:15];
+    self.fromTextbox.placeholder = @"From";
+    self.fromTextbox.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    NSString *phoneName = [[UIDevice currentDevice] name];
+    if ([phoneName rangeOfString:@"'"].location != NSNotFound)
+    {
+        phoneName = [phoneName substringToIndex:[phoneName rangeOfString:@"'"].location];
+    }
+    self.fromTextbox.text = phoneName;
+    [self.view addSubview:self.fromTextbox];
+    
+    self.peopleTextbox = [[UITextField alloc] initWithFrame:CGRectMake(10, 130, wd - 20, 40)];
     self.peopleTextbox.borderStyle = UITextBorderStyleRoundedRect;
     self.peopleTextbox.font = [UIFont systemFontOfSize:15];
     self.peopleTextbox.placeholder = @"Add Friends";
@@ -52,7 +71,7 @@
     [self.view addSubview:self.peopleTextbox];
     
     UIButton *contactAddButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    contactAddButton.frame = CGRectMake(wd - 40, 90, 20, 20);
+    contactAddButton.frame = CGRectMake(wd - 40, 140, 20, 20);
     [contactAddButton addTarget:self action:@selector(showAddressBook) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:contactAddButton];
     
@@ -66,7 +85,7 @@
     [self.view addSubview:wrapView];
     */
     
-    self.messageTextbox = [[UITextView alloc] initWithFrame:CGRectMake(10, 140, wd - 90, 80)];
+    self.messageTextbox = [[UITextView alloc] initWithFrame:CGRectMake(10, 190, wd - 90, 80)];
     //self.messageTextbox.textColor = [UIColor whiteColor];
     self.messageTextbox.font = [UIFont systemFontOfSize:13];
     //self.messageTextbox.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0];
@@ -80,7 +99,7 @@
     [self.view addSubview:self.messageTextbox];
     
     
-    UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 70, 188, 60, 40)];
+    UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(wd - 70, 238, 60, 40)];
     //sendButton.frame = CGRectMake(wd - 70, 188, 60, 40);
     [sendButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
