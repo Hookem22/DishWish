@@ -33,7 +33,6 @@
         NSString *userId = user.deviceId;
     }];
     */
-    
     //debugging only
     if (TARGET_IPHONE_SIMULATOR)
     {

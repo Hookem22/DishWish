@@ -151,13 +151,18 @@
             {
                 //Send SMS
                 NSLog(@"SMS");
-                [self createUser:phoneNumber name:contactName listId:savedListId];
+                User *newUser = [[User alloc] init];
+                newUser.phoneNumber = phoneNumber;
+                newUser.name = contactName;
+                [newUser add:^(User *addedUser) {
+                   [self createXref:addedUser listId:savedListId isSms:YES];
+                }];
             }
             else
             {
                 //Send push message
                 NSLog(@"Push");
-                [self createXref:user name:contactName listId:savedListId isSms:NO];
+                [self createXref:user listId:savedListId isSms:NO];
             }
             
         }];
@@ -165,18 +170,12 @@
     }
 }
 
--(void)createUser:(NSString *)phoneNumber name:(NSString *)name listId:(NSString *)listId
-{
-    [User newPhoneNumber:phoneNumber completion:^(User *user) {
-        [self createXref:user name:name listId:listId isSms:YES];
-    }];
 
-}
 
--(void)createXref:(User *)user name:(NSString *)name listId:(NSString *)listId isSms:(BOOL)isSms
+-(void)createXref:(User *)user listId:(NSString *)listId isSms:(BOOL)isSms
 {
     //CreateXref
-    [Place saveXref:user.deviceId name:name listId:listId completion:^(NSString *xrefId) {
+    [Place saveXref:user.deviceId name:user.name listId:listId completion:^(NSString *xrefId) {
         NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%@ (if you don't have Let's Eat app get it here http://letse.at?%@", xrefId, xrefId];
         
         if(isSms)

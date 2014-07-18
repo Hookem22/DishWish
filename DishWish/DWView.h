@@ -7,6 +7,7 @@
 #import "InstructionsView.h"
 #import "AppDelegate.h"
 #import "SharedList.h"
+#import "User.h"
 
 @interface DWView : UIView
 

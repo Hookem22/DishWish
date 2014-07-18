@@ -33,12 +33,7 @@
                 
                 [self loadDraggableCustomView:places];
                 
-                [self addNavBar:wd];
-                
-                for(id subview in self.subviews) {
-                    if([subview isMemberOfClass:[UIImageView class]])
-                        [subview removeFromSuperview];
-                }
+                [self placesDidLoad];
                 
             }];
         }];
@@ -52,15 +47,7 @@
             
             [self loadDraggableCustomView:places];
 
-            [self addNavBar:wd];
-            
-            //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
-            //[self addSubview:instructions];
-            
-            for(id subview in self.subviews) {
-                if([subview isMemberOfClass:[UIImageView class]])
-                    [subview removeFromSuperview];
-            }
+            [self placesDidLoad];
             
         }];
     }
@@ -106,6 +93,24 @@
     navigItem.leftBarButtonItem = menuButton;
     //navigItem.rightBarButtonItem = userButton;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
+}
+
+-(void)placesDidLoad
+{
+    [self addNavBar:[[UIScreen mainScreen] bounds].size.width];
+    
+    //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
+    //[self addSubview:instructions];
+    
+    for(id subview in self.subviews) {
+        if([subview isMemberOfClass:[UIImageView class]])
+            [subview removeFromSuperview];
+    }
+    
+    
+    [User login:^(User *user) {
+        NSString *userId = user.deviceId;
+    }];
 }
 
 -(void)menuButtonPressed

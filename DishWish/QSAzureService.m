@@ -102,6 +102,24 @@
      }];
 }
 
+- (void)getByWhere:(NSString *)whereStatement completion:(QSCompletionBlock)completion
+{
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:whereStatement];
+    
+    [self.table readWithPredicate:predicate completion:^(NSArray *results, NSInteger totalCount, NSError *error)
+     {
+         [self logErrorIfNotNil:error];
+         
+         items = [results mutableCopy];
+         
+         // Let the caller know that we finished
+         completion(results);
+     }];
+    
+}
+
+
+//TODO REFACTOR
 - (void)getByColumn:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
     [self.client invokeAPI:@"getbycolumn" body:params HTTPMethod:@"POST" parameters:nil
