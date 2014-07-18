@@ -13,6 +13,7 @@
 #import "DWView.h"
 #import "User.h"
 #import "DWMessageViewController.h"
+#import "PushMessage.h"
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate>
 

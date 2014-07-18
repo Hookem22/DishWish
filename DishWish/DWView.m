@@ -82,8 +82,8 @@
     //DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
     //[self addSubview:left];
     
-    DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
-    [self addSubview:right];
+    //DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
+    //[self addSubview:right];
     
     UIImage *splash = [UIImage imageNamed:@"splash"];
     UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
@@ -98,12 +98,13 @@
     
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)];
     
-    UIBarButtonItem *userButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_user"] style:UIBarButtonItemStyleBordered target:self action:@selector(userButtonPressed)];
+    //No right button for now
+    //UIBarButtonItem *userButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_user"] style:UIBarButtonItemStyleBordered target:self action:@selector(userButtonPressed)];
     
     UINavigationItem *navigItem = [[UINavigationItem alloc] init];
     navigItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]];
     navigItem.leftBarButtonItem = menuButton;
-    navigItem.rightBarButtonItem = userButton;
+    //navigItem.rightBarButtonItem = userButton;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
 }
 

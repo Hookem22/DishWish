@@ -21,7 +21,7 @@
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         wd = (wd * 3) / 4;
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, wd, 40)];
-        headerLabel.text = @"Saved Places List";
+        headerLabel.text = @"Places List";
         [self addSubview:headerLabel];
         
         UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
@@ -45,7 +45,7 @@
     wd = (wd * 3) / 4;
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, wd, 40)];
-    headerLabel.text = @"Saved Places List";
+    headerLabel.text = @"Places List";
     [self addSubview:headerLabel];
     
     

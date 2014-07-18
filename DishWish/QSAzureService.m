@@ -225,6 +225,13 @@
            }];
 }
 
+- (void)sendPushMessage:(NSDictionary *)params
+{
+    [self.client invokeAPI:@"sendpushmessage" body:params HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                   }];
+}
 
 /*
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion

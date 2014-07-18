@@ -55,6 +55,8 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 
 - (void)vote:(NSDictionary *)params;
 
+- (void)sendPushMessage:(NSDictionary *)params;
+
 - (void)refreshDataOnSuccess:(QSCompletionBlock)completion;
 
 - (void)addItem:(NSDictionary *)item completion:(QSCompletionBlock)completion;
@@ -68,5 +70,7 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 - (void)handleRequest:(NSURLRequest *)request
                  next:(MSFilterNextBlock)next
              response:(MSFilterResponseBlock)response;
+
+
 
 @end

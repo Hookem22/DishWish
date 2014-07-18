@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		481981FA193D767C003EE160 /* loading@2x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 481981F9193D767C003EE160 /* loading@2x.gif */; };
+		48E404771978D60E00A1AD38 /* PushMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 48E404761978D60E00A1AD38 /* PushMessage.m */; };
 		BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */; };
 		BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */; };
 		BE3B5C0D1940E802002AE5FF /* nav_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0B1940E802002AE5FF /* nav_user@2x.png */; };
@@ -72,6 +73,8 @@
 
 /* Begin PBXFileReference section */
 		481981F9193D767C003EE160 /* loading@2x.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading@2x.gif"; sourceTree = "<group>"; };
+		48E404751978D60E00A1AD38 /* PushMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushMessage.h; sourceTree = "<group>"; };
+		48E404761978D60E00A1AD38 /* PushMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushMessage.m; sourceTree = "<group>"; };
 		BE3B5C07193E76DC002AE5FF /* DWLeftSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWLeftSideBar.h; sourceTree = "<group>"; };
 		BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWLeftSideBar.m; sourceTree = "<group>"; };
 		BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_menu@2x.png"; sourceTree = "<group>"; };
@@ -304,6 +307,8 @@
 				BEF82448192E8F1D00BE0CC2 /* Session.m */,
 				BE7E01C919786D6E0043F7F5 /* SharedList.h */,
 				BE7E01CA19786D6E0043F7F5 /* SharedList.m */,
+				48E404751978D60E00A1AD38 /* PushMessage.h */,
+				48E404761978D60E00A1AD38 /* PushMessage.m */,
 				BEB35D711959D5690081D3FB /* MBProgressHUD.h */,
 				BEB35D721959D5690081D3FB /* MBProgressHUD.m */,
 			);
@@ -367,6 +372,7 @@
 				ORGANIZATIONNAME = DishWish;
 				TargetAttributes = {
 					BEA9CEEB191D82300087C645 = {
+						DevelopmentTeam = TUFRCDJZ8S;
 						SystemCapabilities = {
 							com.apple.iOS = {
 								enabled = 1;
@@ -456,6 +462,7 @@
 				BEA9CF37191D830E0087C645 /* DWMap.m in Sources */,
 				BEF82449192E8F1D00BE0CC2 /* Session.m in Sources */,
 				BEA9CF40191D830E0087C645 /* Place.m in Sources */,
+				48E404771978D60E00A1AD38 /* PushMessage.m in Sources */,
 				BE9C22D5195C9E2000207A1C /* DWMessageViewController.m in Sources */,
 				BEA9CEFC191D82300087C645 /* main.m in Sources */,
 				BEB35D681954D6C60081D3FB /* DWRightSideBar.m in Sources */,
@@ -585,7 +592,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development IOS Push Services: com.letseat.Let-s-Eat";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -594,6 +602,7 @@
 				GCC_PREFIX_HEADER = "DishWish/DishWish-Prefix.pch";
 				INFOPLIST_FILE = "DishWish/DishWish-Info.plist";
 				PRODUCT_NAME = "Let's Eat";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -603,6 +612,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -611,6 +622,7 @@
 				GCC_PREFIX_HEADER = "DishWish/DishWish-Prefix.pch";
 				INFOPLIST_FILE = "DishWish/DishWish-Info.plist";
 				PRODUCT_NAME = "Let's Eat";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

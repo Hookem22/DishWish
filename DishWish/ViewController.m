@@ -122,11 +122,12 @@
 
 - (IBAction)shareButtonPressed:(UIButton *)sender
 {   
-    [self.mainView.leftSideBar close];
-    //DWMessageViewController *message = [[DWMessageViewController alloc] init];
-    //UIStoryboardSegue *segue = [[UIStoryboardSegue alloc] initWithIdentifier:@"MessageSegue1" source:self destination:message];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSString *deviceToken = appDelegate.deviceToken;
     
-    //[self performSegueWithIdentifier:@"MessageSegue1" sender:self];
+    [PushMessage push:deviceToken message:@"HELLO"];
+    
+    [self.mainView.leftSideBar close];
     [self performSegueWithIdentifier:@"MessageSegue" sender:self];
 }
 
