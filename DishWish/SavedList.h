@@ -23,6 +23,6 @@
 @property (nonatomic, copy) NSString *toUserName;
 
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;
-+(void)add:(NSString *)toUserId completion:(QSCompletionBlock)completion;
++(void)add:(NSString *)fromUserName toUser:(User *)toUser completion:(QSCompletionBlock)completion;
 
 @end

@@ -35,6 +35,7 @@
 @property (nonatomic, assign) NSUInteger noVote;
 
 + (NSArray *)initialPlaces;
+-(id)init:(NSDictionary *)place;
 -(void)savePlace;
 +(void)get:id completion:(QSCompletionBlock)completion;
 +(void)get:(QSCompletionBlock)completion;

@@ -147,9 +147,10 @@
         phoneNumber = [[phoneNumber componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
         
         NSString *contactName = [contact objectForKey:@"firstName"];
+        NSString *fromUserName = self.fromTextbox.text;
         
         [User getByPhoneNumber:phoneNumber completion:^(User *toUser)  {
-            if(toUser == NULL || [toUser.pushDeviceToken length] <= 0) //|| [toUser.lastSignedIn isMemberOfClass:[NSNull class]])
+            if(toUser == NULL) //|| [toUser.lastSignedIn isMemberOfClass:[NSNull class]])
             {
                 //Send SMS
                 NSLog(@"SMS");
@@ -157,14 +158,19 @@
                 newUser.phoneNumber = phoneNumber;
                 newUser.name = contactName;
                 [newUser add:^(User *addedUser) {
-                   [self saveList:addedUser isSms:YES];
+                   [self saveList:fromUserName toUser:addedUser isSms:YES];
                 }];
+            }
+            else if([toUser.pushDeviceToken length] <= 0)
+            {
+                NSLog(@"SMS");
+                [self saveList:fromUserName toUser:toUser isSms:YES];
             }
             else
             {
                 //Send push message
                 NSLog(@"Push");
-                [self saveList:toUser isSms:NO];
+                [self saveList:fromUserName toUser:toUser isSms:NO];
             }
             
         }];
@@ -174,10 +180,10 @@
 
 
 
--(void)saveList:(User *)toUser isSms:(BOOL)isSms
+-(void)saveList:(NSString *)fromUserName toUser:(User *)toUser isSms:(BOOL)isSms
 {
     //CreateXref
-    [SavedList add:toUser.userId completion:^(NSUInteger xrefId) {
+    [SavedList add:fromUserName toUser:toUser completion:^(NSUInteger xrefId) {
         NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%@ (if you don't have Let's Eat app get it here http://letse.at?%@", xrefId, xrefId];
         
         if(isSms)

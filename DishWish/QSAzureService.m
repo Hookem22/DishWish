@@ -168,7 +168,7 @@
            }];
 }
 
-- (void)getSharedList:(NSString *)xrefId completion:(QSCompletionBlock)completion
+- (void)getSavedList:(NSString *)xrefId completion:(QSCompletionBlock)completion
 {
     // Create a predicate that finds items where complete is false
     NSPredicate * predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"xrefId = %@", xrefId]];

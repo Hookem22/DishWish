@@ -27,15 +27,9 @@
     {
         [SavedList get:savedListId completion:^(SavedList *savedList) {
             
-            [Place getPlacesByListId:savedList.listId completion:^(NSArray *places) {
-                
-                [[Session sessionVariables] setObject:places forKey:@"Places"];
-                
-                [self loadDraggableCustomView:places];
-                
-                [self placesDidLoad];
-                
-            }];
+            [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
+            [self loadDraggableCustomView:savedList.places]; 
+            [self placesDidLoad];
         }];
 
     }
