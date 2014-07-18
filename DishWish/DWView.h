@@ -6,7 +6,7 @@
 #import "DWRightSideBar.h"
 #import "InstructionsView.h"
 #import "AppDelegate.h"
-#import "SharedList.h"
+#import "SavedList.h"
 #import "User.h"
 
 @interface DWView : UIView

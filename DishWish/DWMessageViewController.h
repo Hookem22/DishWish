@@ -5,6 +5,8 @@
 #import <MessageUI/MessageUI.h>
 #import "User.h"
 #import "Place.h"
+#import "PushMessage.h"
+#import "SavedList.h"
 
 @interface DWMessageViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, MFMessageComposeViewControllerDelegate>
 

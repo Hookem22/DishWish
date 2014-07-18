@@ -10,6 +10,7 @@
 
 @implementation User
 
+@synthesize userId = _userId;
 @synthesize deviceId = _deviceId;
 @synthesize name = _name;
 @synthesize pushDeviceToken = _pushDeviceToken;
@@ -17,10 +18,25 @@
 @synthesize phoneNumber = _phoneNumber;
 @synthesize lastSignedIn = _lastSignedIn;
 
+- (id)init {
+	self = [super init];
+	if (self) {
+        self.userId = @"";
+        self.deviceId = @"";
+        self.name = @"";
+        self.pushDeviceToken = @"";
+        self.facebookId = @"";
+        self.phoneNumber = @"";
+        self.lastSignedIn = [NSDate date];
+    }
+	return self;
+}
+
 - (id)init:(NSDictionary *)user {
 	self = [super init];
 	if (self) {
-        self.deviceId = [user valueForKey:@"id"];
+        self.userId = [user valueForKey:@"id"];
+        self.deviceId = [user valueForKey:@"deviceid"];
         self.name = [user objectForKey:@"name"];
         self.pushDeviceToken = [user objectForKey:@"pushdevicetoken"];
         self.facebookId = [user valueForKey:@"facebookid"];
@@ -39,7 +55,7 @@
     
     [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *user) {
         
-        if(user != nil && user.deviceId != nil)
+        if(user != nil || user.deviceId != nil)
         {
             user.pushDeviceToken = pushDeviceToken;
             NSDate *timeStamp = [NSDate date];
@@ -52,9 +68,9 @@
         }
         else
         {
-            NSDate *timeStamp = [NSDate date];
-            NSDictionary *newUserDict = @{@"id" : @"", @"name" : @"", @"pushdevicetoken" : pushDeviceToken, @"facebookid" : @"", @"phonenumber" : @"",  @"lastsignedin" : timeStamp };
-            User *newUser = [[User alloc] init:newUserDict];
+            User *newUser = [[User alloc] init];
+            newUser.deviceId = deviceId;
+            newUser.pushDeviceToken = pushDeviceToken;
             
             [newUser add:^(User *addedUser) {
                 [[Session sessionVariables] setObject:addedUser forKey:@"currentUser"];
@@ -69,9 +85,9 @@
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
     NSString *whereStatement = @"";
     if([pushDeviceToken length] > 0)
-        whereStatement = [NSString stringWithFormat:@"id = '%@' OR pushdevicetoken = '%@'", deviceId, pushDeviceToken];
+        whereStatement = [NSString stringWithFormat:@"deviceid = '%@' OR pushdevicetoken = '%@'", deviceId, pushDeviceToken];
     else
-        whereStatement = [NSString stringWithFormat:@"id = '%@'", deviceId];
+        whereStatement = [NSString stringWithFormat:@"deviceid = '%@'", deviceId];
     
     [service getByWhere:whereStatement completion:^(NSArray *results) {
         for(id item in results) {
@@ -136,11 +152,11 @@
 
 -(void)add:(QSCompletionBlock)completion
 {
-    NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+   
     
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
     
-    NSDictionary *user = @{@"id" : deviceId, @"name" : self.name, @"pushdevicetoken" : self.pushDeviceToken, @"facebookid" : self.facebookId, @"phonenumber" : self.phoneNumber,  @"lastsignedin" : self.lastSignedIn };
+    NSDictionary *user = @{@"deviceid" : self.deviceId, @"name" : self.name, @"pushdevicetoken" : self.pushDeviceToken, @"facebookid" : self.facebookId, @"phonenumber" : self.phoneNumber,  @"lastsignedin" : self.lastSignedIn };
     [service addItem:user completion:^(NSDictionary *item)
      {
          User *user = [[User alloc] init:item];
@@ -152,7 +168,7 @@
 {
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
     
-    NSDictionary *user = @{@"id" : self.deviceId, @"name" : self.name, @"pushdevicetoken" : self.pushDeviceToken, @"facebookid" : self.facebookId, @"phonenumber" : self.phoneNumber,  @"lastsignedin" : self.lastSignedIn };
+    NSDictionary *user = @{@"id" : self.userId, @"deviceid" : self.deviceId, @"name" : self.name, @"pushdevicetoken" : self.pushDeviceToken, @"facebookid" : self.facebookId, @"phonenumber" : self.phoneNumber,  @"lastsignedin" : self.lastSignedIn };
     [service updateItem:user completion:^(NSDictionary *item)
      {
          User *user = [[User alloc] init:item];

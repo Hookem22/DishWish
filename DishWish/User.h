@@ -14,6 +14,7 @@
 
 @interface User : NSObject
 
+@property (nonatomic, copy) NSString *userId;
 @property (nonatomic, copy) NSString *deviceId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *pushDeviceToken;

@@ -25,9 +25,9 @@
     
     if([savedListId length] > 0)
     {
-        [SharedList get:savedListId completion:^(SharedList *sharedList) {
+        [SavedList get:savedListId completion:^(SavedList *savedList) {
             
-            [Place getPlacesByListId:sharedList.listId completion:^(NSArray *places) {
+            [Place getPlacesByListId:savedList.listId completion:^(NSArray *places) {
                 
                 [[Session sessionVariables] setObject:places forKey:@"Places"];
                 

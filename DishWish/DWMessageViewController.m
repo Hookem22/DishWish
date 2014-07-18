@@ -126,16 +126,18 @@
         return;
     }
     */
-    
+    /*
     [Place saveList:^(NSString *saveListId) {
         [self getContacts:saveListId];
     }];
+    */
     
+    [self getContacts];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)getContacts:(NSString *)savedListId
+-(void)getContacts
 {
     
     for(NSDictionary *contact in _arrContactsData)
@@ -146,8 +148,8 @@
         
         NSString *contactName = [contact objectForKey:@"firstName"];
         
-        [User getByPhoneNumber:phoneNumber completion:^(User *user)  {
-            if(user == NULL || [user.lastSignedIn isMemberOfClass:[NSNull class]])
+        [User getByPhoneNumber:phoneNumber completion:^(User *toUser)  {
+            if(toUser == NULL || [toUser.pushDeviceToken length] <= 0) //|| [toUser.lastSignedIn isMemberOfClass:[NSNull class]])
             {
                 //Send SMS
                 NSLog(@"SMS");
@@ -155,14 +157,14 @@
                 newUser.phoneNumber = phoneNumber;
                 newUser.name = contactName;
                 [newUser add:^(User *addedUser) {
-                   [self createXref:addedUser listId:savedListId isSms:YES];
+                   [self saveList:addedUser isSms:YES];
                 }];
             }
             else
             {
                 //Send push message
                 NSLog(@"Push");
-                [self createXref:user listId:savedListId isSms:NO];
+                [self saveList:toUser isSms:NO];
             }
             
         }];
@@ -172,16 +174,16 @@
 
 
 
--(void)createXref:(User *)user listId:(NSString *)listId isSms:(BOOL)isSms
+-(void)saveList:(User *)toUser isSms:(BOOL)isSms
 {
     //CreateXref
-    [Place saveXref:user.deviceId name:user.name listId:listId completion:^(NSString *xrefId) {
+    [SavedList add:toUser.userId completion:^(NSUInteger xrefId) {
         NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%@ (if you don't have Let's Eat app get it here http://letse.at?%@", xrefId, xrefId];
         
         if(isSms)
-            [self sendSMS:user.phoneNumber message:message];
+            [self sendSMS:toUser.phoneNumber message:message];
         else
-            [self sendPushMessage:user.deviceId message:message];
+            [self sendPushMessage:toUser.pushDeviceToken message:message];
     }];
 
 }
@@ -199,9 +201,10 @@
 }
 
 
--(void)sendPushMessage:(NSString *)deviceId message:(NSString *)message
+-(void)sendPushMessage:(NSString *)pushDeviceToken message:(NSString *)message
 {
     
+    [PushMessage push:pushDeviceToken message:message];
 }
 
 -(void)showAddressBook {
