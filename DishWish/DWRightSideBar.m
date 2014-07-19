@@ -32,12 +32,38 @@
     return self;
 }
 
--(void)addList
+-(void)addList:(SavedList *)list
 {
-    NSArray *list = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
     [self.savedLists addObject:list];
     
-
+    NSString *dateDiff = @"";
+    if(![list.createdAt isMemberOfClass:[NSNull class]])
+    {
+        NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:list.createdAt];
+        if(secondsBetween > 600000)
+        {
+            return;
+        }
+        else if(secondsBetween > 86400)
+        {
+            dateDiff = [NSString stringWithFormat:@"%d days ago", (int)secondsBetween / 86400];
+        }
+        else if(secondsBetween > 3600)
+        {
+            dateDiff = [NSString stringWithFormat:@"%d hours ago", (int)secondsBetween / 3600];
+        }
+        else
+        {
+            dateDiff = [NSString stringWithFormat:@"%d minutes ago", ((int)secondsBetween / 60) + 1];
+        }
+    }
+    NSString *title = @"";
+    if([list.fromUserName isMemberOfClass:[NSNull class]] || [list.fromUserName length] <= 0)
+        title = [NSString stringWithFormat:@"Sent to %@    %@", list.toUserName, dateDiff];
+    else
+        title = [NSString stringWithFormat:@"Recieved from %@    %@", list.fromUserName, dateDiff];
+    
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
@@ -51,7 +77,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:[NSString stringWithFormat:@"Shared: %@", [formatter stringFromDate:now]] forState:UIControlStateNormal];
+    [button setTitle:title forState:UIControlStateNormal];
     button.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
@@ -69,8 +95,11 @@
     [self close];
     
     UIButton *button = (UIButton *)sender;
-    NSArray *places = self.savedLists[button.tag];
+    SavedList *savedList = self.savedLists[button.tag];
     
+    //TODO SET List to saved places list
+    
+    /*
     [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
     
     NSArray *views = self.superview.subviews;
@@ -80,6 +109,7 @@
             [left updateLeftSideBar];
         }
     }
+    */
 }
 
 -(void)close {

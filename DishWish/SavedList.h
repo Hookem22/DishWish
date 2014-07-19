@@ -16,13 +16,16 @@
 
 @property (nonatomic, copy) NSString *listId;
 @property (nonatomic, copy) NSArray *places;
+@property (nonatomic, copy) NSString *placeIds;
 @property (nonatomic, assign) NSUInteger xrefId;
 @property (nonatomic, copy) NSString *fromUserId;
 @property (nonatomic, copy) NSString *fromUserName;
 @property (nonatomic, copy) NSString *toUserId;
 @property (nonatomic, copy) NSString *toUserName;
+@property (nonatomic, copy) NSDate *createdAt;
 
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;
++(void)getByUser:(QSCompletionBlock)completion;
 +(void)add:(NSString *)fromUserName toUser:(User *)toUser completion:(QSCompletionBlock)completion;
 
 @end

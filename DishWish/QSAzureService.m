@@ -118,7 +118,6 @@
     
 }
 
-
 //TODO REFACTOR
 - (void)getByColumn:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
@@ -168,22 +167,18 @@
            }];
 }
 
-- (void)getSavedList:(NSString *)xrefId completion:(QSCompletionBlock)completion
+
+- (void)getSavedList:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
-    // Create a predicate that finds items where complete is false
-    NSPredicate * predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"xrefId = %@", xrefId]];
-    
-    // Query the TodoItem table and update the items property with the results from the service
-    [self.table readWithPredicate:predicate completion:^(NSArray *results, NSInteger totalCount, NSError *error)
-     {
-         [self logErrorIfNotNil:error];
-         
-         items = [results mutableCopy];
-         
-         // Let the caller know that we finished
-         completion(results);
-     }];
-    
+    [self.client invokeAPI:@"getsavedlist" body:params HTTPMethod:@"POST" parameters:nil
+           headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
+               [self logErrorIfNotNil:error];
+               
+               items = [results mutableCopy];
+               
+               completion(results);
+               
+           }];
 }
 
 - (void)getPlacesByListId:(NSDictionary *)params completion:(QSCompletionBlock)completion

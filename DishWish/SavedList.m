@@ -11,22 +11,25 @@
 
 @synthesize listId = _listId;
 @synthesize places = _places;
+@synthesize placeIds = _placeIds;
 @synthesize xrefId = _xrefId;
 @synthesize fromUserId = _fromUserId;
 @synthesize fromUserName = _fromUserName;
 @synthesize toUserId = _toUserId;
 @synthesize toUserName = _toUserName;
+@synthesize createdAt = _createdAt;
 
 - (id)init:(NSDictionary *)savedList {
 	self = [super init];
 	if (self) {
         self.listId = [savedList valueForKey:@"id"];
-        self.places = [savedList valueForKey:@"places"];
+        self.placeIds = [savedList valueForKey:@"places"];
         self.xrefId = [[savedList valueForKey:@"xrefid"] longValue];
         self.fromUserId = [savedList valueForKey:@"fromuserid"];
         self.fromUserName = [savedList valueForKey:@"fromusername"];
         self.toUserId = [savedList valueForKey:@"touserid"];
         self.toUserName = [savedList valueForKey:@"tousername"];
+        self.createdAt = [savedList valueForKey:@"__createdAt"];
     }
 	return self;
 }
@@ -58,6 +61,32 @@
         {
             completion(nil);
         }
+    }];
+}
+
++(void)getByUser:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setValue:currentUser.userId forKey:@"userid"];
+    
+    [service getSavedList:params completion:^(NSArray *results)  {
+        NSMutableArray *listArray = [[NSMutableArray alloc] init];
+        for(id item in results)
+        {
+            SavedList *savedList = [[SavedList alloc] init:item];
+            
+            if([currentUser.userId isEqualToString:savedList.fromUserId])
+                savedList.fromUserName = @"";
+            else
+                savedList.toUserName = @"";
+            
+            [listArray addObject:savedList];
+        }
+        completion(listArray);
     }];
 }
 

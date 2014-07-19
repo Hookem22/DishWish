@@ -10,11 +10,12 @@
 #import "Place.h"
 #import "Session.h"
 #import "DWLeftSideBar.h"
+#import "SavedList.h"
 
 @interface DWRightSideBar : UIScrollView
 
 @property (nonatomic, strong) NSMutableArray *savedLists;
 
--(void)addList;
+-(void)addList:(SavedList *)list;
 
 @end

@@ -28,7 +28,7 @@
         [SavedList get:savedListId completion:^(SavedList *savedList) {
             
             [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
-            [self loadDraggableCustomView:savedList.places]; 
+            [self loadDraggableCustomView:savedList.places];
             [self placesDidLoad];
         }];
 
@@ -63,8 +63,8 @@
     //DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
     //[self addSubview:left];
     
-    //DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
-    //[self addSubview:right];
+    DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
+    [self addSubview:right];
     
     UIImage *splash = [UIImage imageNamed:@"splash"];
     UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
@@ -79,13 +79,12 @@
     
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)];
     
-    //No right button for now
-    //UIBarButtonItem *userButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_user"] style:UIBarButtonItemStyleBordered target:self action:@selector(userButtonPressed)];
+    UIBarButtonItem *userButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_user"] style:UIBarButtonItemStyleBordered target:self action:@selector(userButtonPressed)];
     
     UINavigationItem *navigItem = [[UINavigationItem alloc] init];
     navigItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]];
     navigItem.leftBarButtonItem = menuButton;
-    //navigItem.rightBarButtonItem = userButton;
+    navigItem.rightBarButtonItem = userButton;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
 }
 
@@ -104,6 +103,19 @@
     
     [User login:^(User *user) {
         NSString *userId = user.deviceId;
+        
+        [SavedList getByUser:^(NSArray *savedLists) {
+            DWRightSideBar *right;
+            for(id subview in self.subviews) {
+                if([subview isMemberOfClass:[DWRightSideBar class]])
+                    right = (DWRightSideBar *)subview;
+            }
+            
+            for(id savedList in savedLists)
+            {
+                [right addList:savedList];
+            }
+         }];
     }];
 }
 
