@@ -39,10 +39,7 @@
 -(void)savePlace;
 +(void)get:id completion:(QSCompletionBlock)completion;
 +(void)get:(QSCompletionBlock)completion;
-+(void)getFivePlaces:(QSCompletionBlock)completion;
-+(void)getNextPlace:(QSCompletionBlock)completion;
 +(void)getAllPlaces:(QSCompletionBlock)completion;
-+(void)getPlacesByListId:(NSString *)listId completion:(QSCompletionBlock)completion;
 -(void)vote:(BOOL)isYes;
 +(void)saveList:(QSCompletionBlock)completion;
 +(void)saveXref:(NSString *)userId name:(NSString *)name listId:(NSString *)listId completion:(QSCompletionBlock)completion;

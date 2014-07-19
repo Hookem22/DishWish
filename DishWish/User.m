@@ -103,14 +103,9 @@
 {
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
     
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    NSString *whereStatement = [NSString stringWithFormat:@"phonenumber = %@", phoneNumber];
     
-    [params setValue:@"Users" forKey:@"tablename"];
-    [params setValue:@"phonenumber" forKey:@"columnname"];
-    
-    [params setValue:[NSString stringWithFormat:@"%@", phoneNumber] forKey:@"columnval"];
-    
-    [service getByColumn:params completion:^(NSArray *results)  {
+    [service getByWhere:whereStatement completion:^(NSArray *results)  {
         for(id item in results) {
             User *user = [[User alloc] init:item];
             completion(user);

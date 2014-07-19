@@ -118,43 +118,7 @@
     
 }
 
-//TODO REFACTOR
-- (void)getByColumn:(NSDictionary *)params completion:(QSCompletionBlock)completion
-{
-    [self.client invokeAPI:@"getbycolumn" body:params HTTPMethod:@"POST" parameters:nil
-                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
-                       [self logErrorIfNotNil:error];
-                       items = [results mutableCopy];
-                       
-                       completion(items);
-                   }];
-}
 
-/*
-- (void)getTopFive:(QSCompletionBlock)completion
-{
-    [self.client invokeAPI:@"gettopfiveplaces" body:nil HTTPMethod:@"POST" parameters:nil
-                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
-                       [self logErrorIfNotNil:error];
-                       
-                       items = [results mutableCopy];
-
-                       completion(items);
-                   }];
-}
-
-- (void)getNextPlace:(NSDictionary *)params completion:(QSCompletionBlock)completion
-{
-    [self.client invokeAPI:@"getnextplace" body:params HTTPMethod:@"POST" parameters:nil
-                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
-                       [self logErrorIfNotNil:error];
-                       //NSLog([NSString stringWithFormat:@"%@", results]);
-                       items = [results mutableCopy];
-                       
-                       completion(items);
-                   }];
-}
-*/
 - (void)getAllPlaces:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
     [self.client invokeAPI:@"getallplaces" body:params HTTPMethod:@"POST" parameters:nil
@@ -178,37 +142,6 @@
                
                completion(results);
                
-           }];
-}
-
-- (void)getPlacesByListId:(NSDictionary *)params completion:(QSCompletionBlock)completion
-{
-    [self.client invokeAPI:@"getplacesbylistid" body:params HTTPMethod:@"POST" parameters:nil
-           headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
-               [self logErrorIfNotNil:error];
-               
-               NSString *places = [results valueForKey:@"places"];
-               places = [NSString stringWithFormat:@"%@", places];
-               places = [places substringFromIndex:1];
-               places = [places substringToIndex:[places length] - 1];
-               places = [places stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-               places = [places substringFromIndex:1];
-               places = [places substringToIndex:[places length] - 1];
-               
-               NSArray *placesArray = [places componentsSeparatedByString:@"|"];
-               places = @"";
-               for(NSString *place in placesArray)
-               {
-                   places = [NSString stringWithFormat:@"%@, '%@'", places, place];
-               }
-               
-               places = [places substringFromIndex:1];
-               
-               [self getPlacesByIds:places completion:^(NSArray * places) {
-                   completion(places);
-               }];
-               
-
            }];
 }
 
@@ -245,26 +178,6 @@
                        [self logErrorIfNotNil:error];
                    }];
 }
-
-/*
-- (void)refreshDataOnSuccess:(QSCompletionBlock)completion
-{
-    // Create a predicate that finds items where complete is false
-    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"complete == NO"];
-    
-    // Query the TodoItem table and update the items property with the results from the service
-    [self.table readWithPredicate:predicate completion:^(NSArray *results, NSInteger totalCount, NSError *error)
-    {
-        [self logErrorIfNotNil:error];
-        
-        items = [results mutableCopy];
-        
-        // Let the caller know that we finished
-        completion();
-    }];
-    
-}
-*/
 
 -(void)addItem:(NSDictionary *)item completion:(QSCompletionBlock)completion
 {
