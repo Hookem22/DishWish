@@ -35,64 +35,73 @@
 
 -(void)addList:(SavedList *)list
 {
-    NSUInteger i = self.savedLists.count;
-    [self.savedLists addObject:list];
+    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
-    NSString *dateDiff = @"";
-    if(![list.createdAt isMemberOfClass:[NSNull class]])
-    {
-        NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:list.createdAt];
-        if(secondsBetween > 600000)
-        {
-            return;
-        }
-        else if(secondsBetween > 86400)
-        {
-            dateDiff = [NSString stringWithFormat:@"%d days ago", (int)secondsBetween / 86400];
-        }
-        else if(secondsBetween > 3600)
-        {
-            dateDiff = [NSString stringWithFormat:@"%d hours ago", (int)secondsBetween / 3600];
-        }
-        else
-        {
-            dateDiff = [NSString stringWithFormat:@"%d minutes ago", ((int)secondsBetween / 60) + 1];
-        }
-    }
-    NSString *title = @"";
-    if([list.fromUserName isMemberOfClass:[NSNull class]] || [list.fromUserName length] <= 0)
-        title = [NSString stringWithFormat:@"Sent to %@    %@", list.toUserName, dateDiff];
-    else
-        title = [NSString stringWithFormat:@"Recieved from %@    %@", list.fromUserName, dateDiff];
-    
-    
+    [self.savedLists insertObject:list atIndex:0];
+    [self populateLists];
+}
+
+-(void) populateLists
+{
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
-
-    NSDate *now = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterShortStyle];
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    //NSLog(@"%@",[formatter stringFromDate:now]);
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:title forState:UIControlStateNormal];
-    button.frame = CGRectMake(0, (i * 40) + 50, wd, 40);
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-    button.tag = i;
-    [self addSubview:button];
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, wd, 40)];
+    headerLabel.text = @"Shared Lists";
+    [self addSubview:headerLabel];
     
-    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height - 1.0f, button.frame.size.width, 1)];
-    bottomBorder.backgroundColor = [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0];
-    [button addSubview:bottomBorder];
-    
+    NSUInteger i = 0;
+    for(SavedList *list in self.savedLists)
+    {
+        NSString *dateDiff = @"";
+        if(![list.createdAt isMemberOfClass:[NSNull class]])
+        {
+            NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:list.createdAt];
+            if(secondsBetween > 600000)
+            {
+                return;
+            }
+            else if(secondsBetween > 86400)
+            {
+                dateDiff = [NSString stringWithFormat:@"%d days ago", (int)secondsBetween / 86400];
+            }
+            else if(secondsBetween > 3600)
+            {
+                dateDiff = [NSString stringWithFormat:@"%d hours ago", (int)secondsBetween / 3600];
+            }
+            else
+            {
+                dateDiff = [NSString stringWithFormat:@"%d minutes ago", ((int)secondsBetween / 60) + 1];
+            }
+        }
+        NSString *title = @"";
+        if([list.fromUserName isMemberOfClass:[NSNull class]] || [list.fromUserName length] <= 0)
+            title = [NSString stringWithFormat:@"Sent to %@    %@", list.toUserName, dateDiff];
+        else
+            title = [NSString stringWithFormat:@"Recieved from %@    %@", list.fromUserName, dateDiff];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:title forState:UIControlStateNormal];
+        button.frame = CGRectMake(0, (i * 40) + 30, wd, 40);
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        button.tag = i;
+        [self addSubview:button];
+        
+        UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height - 1.0f, button.frame.size.width, 1)];
+        bottomBorder.backgroundColor = [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0];
+        [button addSubview:bottomBorder];
+        
+        i++;
+    }
 }
 
 -(void)listClicked:(id)sender
 {
     [self close];
+    
+    [MBProgressHUD showHUDAddedTo:self.superview animated:YES];
     
     UIButton *button = (UIButton *)sender;
     SavedList *savedList = self.savedLists[button.tag];
@@ -106,21 +115,20 @@
         [dwView loadDraggableCustomView:places];
 
         
+        [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
+        
+        NSArray *views = self.superview.subviews;
+        for(id subview in views) {
+            if([subview isMemberOfClass:[DWLeftSideBar class]]) {
+                DWLeftSideBar *left = (DWLeftSideBar *)subview;
+                [left updateLeftSideBar];
+            }
+        }
+        
+        [MBProgressHUD hideHUDForView:self.superview animated:YES];
+        
     }];
     
-    //TODO SET List to saved places list
-    
-    /*
-    [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
-    
-    NSArray *views = self.superview.subviews;
-    for(id subview in views) {
-        if([subview isMemberOfClass:[DWLeftSideBar class]]) {
-            DWLeftSideBar *left = (DWLeftSideBar *)subview;
-            [left updateLeftSideBar];
-        }
-    }
-    */
 }
 
 -(void)close {

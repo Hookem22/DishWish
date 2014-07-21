@@ -10,6 +10,7 @@
 #import "Place.h"
 #import "Session.h"
 #import "SavedList.h"
+#import "MBProgressHUD.h"
 
 @interface DWRightSideBar : UIScrollView
 

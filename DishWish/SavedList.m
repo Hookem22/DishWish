@@ -118,7 +118,8 @@
     NSDictionary *savedList = @{@"places" : places, @"fromuserid" : fromUser.userId, @"fromusername" : fromUserName, @"touserid": toUser.userId, @"tousername" : toUser.name };
     [service addItem:savedList completion:^(NSDictionary *item)
      {
-         completion([item valueForKey:@"xrefid"]);
+         SavedList *savedList = [[SavedList alloc] init:item];
+         completion(savedList);
      }];
 }
 

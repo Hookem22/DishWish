@@ -1,5 +1,7 @@
 
 #import "DWMessageViewController.h"
+#import "AppDelegate.h"
+#import "ViewController.h"
 
 @interface DWMessageViewController ()
 
@@ -37,6 +39,7 @@
 
 -(void)addUI
 {
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
@@ -126,11 +129,6 @@
         return;
     }
     */
-    /*
-    [Place saveList:^(NSString *saveListId) {
-        [self getContacts:saveListId];
-    }];
-    */
     
     [self getContacts];
     
@@ -183,8 +181,10 @@
 -(void)saveList:(NSString *)fromUserName toUser:(User *)toUser isSms:(BOOL)isSms
 {
     //CreateXref
-    [SavedList add:fromUserName toUser:toUser completion:^(NSUInteger xrefId) {
-        NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%@ (if you don't have Let's Eat app get it here http://letse.at?%@", xrefId, xrefId];
+    [SavedList add:fromUserName toUser:toUser completion:^(SavedList *savedList) {
+        [self addSavedListToRightSideBar:savedList];
+        
+        NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
         
         if(isSms)
             [self sendSMS:toUser.phoneNumber message:message];
@@ -192,6 +192,22 @@
             [self sendPushMessage:toUser.pushDeviceToken message:message];
     }];
 
+}
+
+-(void)addSavedListToRightSideBar:(SavedList *)savedList
+{
+    savedList.fromUserName = @"";
+    savedList.createdAt = [NSDate date];
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ViewController *vc = (ViewController *)appDelegate.viewController;
+    for(id subview in vc.mainView.subviews) {
+        if([subview isMemberOfClass:[DWRightSideBar class]])
+        {
+            DWRightSideBar *right = (DWRightSideBar *)subview;
+            [right addList:savedList];
+        }
+    }
 }
 
 

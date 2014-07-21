@@ -237,7 +237,7 @@
 
 - (void)loadDraggableCustomView:(NSArray *)places
 {
-    for(id subview in self.superview.subviews)
+    for(id subview in self.subviews)
     {
         if([subview isMemberOfClass:[DWDraggableView class]])
             [subview removeFromSuperview];
@@ -272,8 +272,12 @@
     
     BOOL isYes = (((UIButton*)sender).tag == 1);
     
-    DWDraggableView *card = [self getCurrentCard];
-    [card animateImageToBack:isYes];
+    @try {
+        DWDraggableView *card = [self getCurrentCard];
+        [card animateImageToBack:isYes];
+    }
+    @catch(NSException *ex) {
+    }
 }
 
 -(DWDraggableView *)getCurrentCard
