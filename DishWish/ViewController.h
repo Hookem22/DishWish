@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property(nonatomic, strong) DWView *mainView;
-@property (nonatomic, strong) NSString *savedListId;
+
+- (IBAction)shareButtonPressed:(UIButton *)sender;
 
 @end

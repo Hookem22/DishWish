@@ -1,8 +1,11 @@
 #import "DWView.h"
+#import "AppDelegate.h"
+#import "ViewController.h"
 
 @implementation DWView
 
 @synthesize leftSideBar = _leftSideBar;
+@synthesize savedList = _savedList;
 
 - (id)init
 {
@@ -27,7 +30,19 @@
     {
         [SavedList get:savedListId completion:^(SavedList *savedList) {
             
+            self.savedList = savedList;
             [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
+            
+            UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 220, wd - 20, 40)];
+            [shareButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+            NSString *shareTitle = [NSString stringWithFormat:@"Send list back to %@", savedList.fromUserName];
+            [shareButton setTitle:shareTitle forState:UIControlStateNormal];
+            [shareButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
+            [shareButton.layer setBorderWidth:1.0];
+            shareButton.layer.cornerRadius = 15;
+            [shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:shareButton];
+            
             [self loadDraggableCustomView:savedList.places];
             [self placesDidLoad];
         }];
@@ -36,15 +51,47 @@
     else
     {
         [Place getAllPlaces:^(NSArray *places) {
+                        
+            if(places.count == 0)
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unavailable"
+                                                                message:@"Let's Eat is not currently available in your city."
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                
+                [alert show];
+                return;
+            }
             
             [[Session sessionVariables] setObject:places forKey:@"Places"];
             
-            [self loadDraggableCustomView:places];
-
-            [self placesDidLoad];
+            UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake((wd - 220)/2, 220, 220, 40)];
+            [shareButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+            NSString *shareTitle = @"Send List to Friends";
+            [shareButton setTitle:shareTitle forState:UIControlStateNormal];
+            [shareButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
+            [shareButton.layer setBorderWidth:1.0];
+            shareButton.layer.cornerRadius = 15;
+            [shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:shareButton];
             
+            [self loadDraggableCustomView:places];
+            [self placesDidLoad];
         }];
     }
+    
+    NSUInteger buttonWidth = [savedListId length] > 0 ? wd - 20 : 220;
+    
+    UIButton *resetButton = [[UIButton alloc] initWithFrame:CGRectMake((wd - buttonWidth)/2, 160, buttonWidth, 40)];
+    [resetButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+    [resetButton setTitle:@"Load More Places" forState:UIControlStateNormal];
+    [resetButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
+    [resetButton.layer setBorderWidth:1.0];
+    resetButton.layer.cornerRadius = 15;
+    [resetButton addTarget:self action:@selector(reloadPlaces:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:resetButton];
+    
     
     UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(0, ht-40, wd/2, 40)];
     noButton.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
@@ -72,6 +119,22 @@
     [self addSubview:splashView];
     
 }
+
+-(void)reloadPlaces:(id)sender
+{
+    [MBProgressHUD showHUDAddedTo:self animated:YES];
+    
+    [Place getAllPlaces:^(NSArray *places) {
+        
+        [[Session sessionVariables] setObject:places forKey:@"Places"];
+        
+        [self loadDraggableCustomView:places];
+        [self placesDidLoad];
+        
+        [MBProgressHUD hideHUDForView:self animated:YES];
+    }];
+}
+
 -(void)addNavBar:(NSUInteger)width
 {
     for(id subview in self.subviews) {
@@ -126,6 +189,52 @@
     }];
 }
 
+-(void)shareButtonClick:(id)sender
+{
+
+    if(self.savedList != nil)
+    {
+        [MBProgressHUD showHUDAddedTo:self animated:YES];
+
+        User *toUser = [[User alloc] init];
+        toUser.userId = self.savedList.fromUserId;
+        toUser.name = self.savedList.fromUserName;
+        
+        [SavedList add:self.savedList.toUserName toUser:toUser completion:^(SavedList *savedList) {
+            for(id subview in self.subviews) {
+                if([subview isMemberOfClass:[DWRightSideBar class]])
+                {
+                    DWRightSideBar *right = (DWRightSideBar *)subview;
+                    [right addList:savedList];
+                }
+            }
+            
+            NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
+            
+            [User get:toUser.userId completion:^(User *user) {
+                [PushMessage push:user.pushDeviceToken message:message];
+            
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Message Sent"
+                                                                message:[NSString stringWithFormat:@"Your list was sent to %@", toUser.name]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                
+                [alert show];
+            
+                [MBProgressHUD hideHUDForView:self animated:YES];
+            }];
+            
+        }];
+    }
+    else
+    {
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        UIButton *button = [[UIButton alloc] init];
+        [appDelegate.viewController shareButtonPressed:button];
+    }
+}
+
 -(void)menuButtonPressed
 {
     [self closeRightSideBar];
@@ -170,12 +279,12 @@
                 return;
             
             [UIView animateWithDuration:0.2
-                             animations:^{
-                                left.frame = CGRectMake(0, 60, 0, ht - 60);
-                             }
-                             completion:^(BOOL finished){
-                                 
-                             }];
+                 animations:^{
+                    left.frame = CGRectMake(0, 60, 0, ht - 60);
+                 }
+                 completion:^(BOOL finished){
+                     
+                 }];
         }
     }
 }
@@ -225,12 +334,12 @@
                 return;
             
             [UIView animateWithDuration:0.2
-                             animations:^{
-                                 right.frame = CGRectMake(wd, 60, (wd * 3)/4, ht - 60);
-                             }
-                             completion:^(BOOL finished){
-                                 
-                             }];
+                 animations:^{
+                     right.frame = CGRectMake(wd, 60, (wd * 3)/4, ht - 60);
+                 }
+                 completion:^(BOOL finished){
+                     
+                 }];
         }
     }
 }
@@ -269,6 +378,13 @@
 {
     [self closeLeftSideBar];
     [self closeRightSideBar];
+    
+    for(id subview in self.subviews)
+    {
+        if([subview isMemberOfClass:[UIButton class]])
+            [self sendSubviewToBack:subview];
+    }
+    
     
     BOOL isYes = (((UIButton*)sender).tag == 1);
     

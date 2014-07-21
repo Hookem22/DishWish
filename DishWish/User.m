@@ -80,6 +80,21 @@
     }];
 }
 
++(void)get:(NSString *)userId completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Users"];
+    NSString *whereStatement = [NSString stringWithFormat:@"id = '%@'", userId];
+
+    [service getByWhere:whereStatement completion:^(NSArray *results) {
+        for(id item in results) {
+            User *user = [[User alloc] init:item];
+            completion(user);
+            return;
+        }
+        completion(nil);
+    }];
+}
+
 +(void)get:(id)deviceId pushDeviceToken:(NSString *)pushDeviceToken completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"Users"];

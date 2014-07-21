@@ -5,13 +5,15 @@
 #import "DWLeftSideBar.h"
 #import "DWRightSideBar.h"
 #import "InstructionsView.h"
-#import "AppDelegate.h"
 #import "SavedList.h"
 #import "User.h"
+#import "MBProgressHUD.h"
 
 @interface DWView : UIView
 
 @property (nonatomic, strong) DWLeftSideBar *leftSideBar;
+@property (nonatomic, strong) SavedList *savedList;
+
 -(void)setup;
 
 -(void)menuButtonPressed;

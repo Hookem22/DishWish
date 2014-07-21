@@ -15,7 +15,6 @@
 @implementation ViewController
 
 @synthesize mainView = _mainView;
-@synthesize savedListId = _savedListId;
 
 - (void)loadView {
     
@@ -34,7 +33,7 @@
     }];
     */
     //debugging only
-    if (TARGET_IPHONE_SIMULATOR)
+    if (false && TARGET_IPHONE_SIMULATOR)
     {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.261862, -97.758768);
         CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];
@@ -121,13 +120,23 @@
 
 - (IBAction)shareButtonPressed:(UIButton *)sender
 {   
-//    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//    NSString *deviceToken = appDelegate.deviceToken;
-//    
-//    [PushMessage push:deviceToken message:@"HELLO"];
-    
-    [self.mainView.leftSideBar close];
-    [self performSegueWithIdentifier:@"MessageSegue" sender:self];
+
+    NSArray *yesPlaces = (NSArray *)[Session sessionVariables][@"yesPlaces"];
+    if(yesPlaces.count <= 0)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Places"
+                                message:@"You have not added any places to your list."
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil];
+        
+         [alert show];
+    }
+    else
+    {
+        [self.mainView.leftSideBar close];
+        [self performSegueWithIdentifier:@"MessageSegue" sender:self];
+    }
 }
 
 -(void)menuButtonPressed

@@ -24,6 +24,7 @@
 
 
 +(void)login:(QSCompletionBlock)completion;
++(void)get:(NSString *)userId completion:(QSCompletionBlock)completion;
 -(void)add:(QSCompletionBlock)completion;
 -(void)update:(QSCompletionBlock)completion;
 
