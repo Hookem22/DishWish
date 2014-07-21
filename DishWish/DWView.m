@@ -74,6 +74,14 @@
 }
 -(void)addNavBar:(NSUInteger)width
 {
+    for(id subview in self.subviews) {
+        if([subview isMemberOfClass:[UINavigationBar class]])
+        {
+            [self bringSubviewToFront:subview];
+            return;
+        }
+    }
+    
     UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, width, 60)];
     [self addSubview:naviBarObj];
     
@@ -90,7 +98,6 @@
 
 -(void)placesDidLoad
 {
-    [self addNavBar:[[UIScreen mainScreen] bounds].size.width];
     
     //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
     //[self addSubview:instructions];
@@ -230,6 +237,12 @@
 
 - (void)loadDraggableCustomView:(NSArray *)places
 {
+    for(id subview in self.superview.subviews)
+    {
+        if([subview isMemberOfClass:[DWDraggableView class]])
+            [subview removeFromSuperview];
+    }
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
@@ -248,6 +261,8 @@
         [self insertSubview:draggableView belowSubview:prevDraggableView];
         prevDraggableView = draggableView;
     }
+    
+    [self addNavBar:[[UIScreen mainScreen] bounds].size.width];
 }
 
 -(void) voteButtonClick:(id)sender

@@ -16,5 +16,6 @@
 
 -(void)menuButtonPressed;
 -(void)userButtonPressed;
+- (void)loadDraggableCustomView:(NSArray *)places;
 
 @end

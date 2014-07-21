@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Place.h"
 #import "Session.h"
-#import "DWLeftSideBar.h"
 #import "SavedList.h"
 
 @interface DWRightSideBar : UIScrollView

@@ -7,6 +7,7 @@
 //
 
 #import "DWRightSideBar.h"
+#import "DWView.h"
 
 @implementation DWRightSideBar
 
@@ -34,6 +35,7 @@
 
 -(void)addList:(SavedList *)list
 {
+    NSUInteger i = self.savedLists.count;
     [self.savedLists addObject:list];
     
     NSString *dateDiff = @"";
@@ -66,8 +68,6 @@
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
-    
-    NSUInteger i = self.savedLists.count;
 
     NSDate *now = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -78,7 +78,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:title forState:UIControlStateNormal];
-    button.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+    button.frame = CGRectMake(0, (i * 40) + 50, wd, 40);
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     button.tag = i;
@@ -96,6 +96,17 @@
     
     UIButton *button = (UIButton *)sender;
     SavedList *savedList = self.savedLists[button.tag];
+    
+    [SavedList getByPlaceIds:savedList.placeIds completion:^(NSArray *places) {
+       
+        
+        DWView *dwView = (DWView *)self.superview;
+
+        [[Session sessionVariables] setObject:places forKey:@"Places"];
+        [dwView loadDraggableCustomView:places];
+
+        
+    }];
     
     //TODO SET List to saved places list
     

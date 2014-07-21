@@ -24,7 +24,8 @@
 	if (self) {
         self.listId = [savedList valueForKey:@"id"];
         self.placeIds = [savedList valueForKey:@"places"];
-        self.xrefId = [[savedList valueForKey:@"xrefid"] longValue];
+        self.places = [[NSArray alloc] init];
+        self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longValue];
         self.fromUserId = [savedList valueForKey:@"fromuserid"];
         self.fromUserName = [savedList valueForKey:@"fromusername"];
         self.toUserId = [savedList valueForKey:@"touserid"];
@@ -38,29 +39,38 @@
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
     
-    [service getSavedList:xrefId completion:^(NSArray *results)  {
+    NSString *where = [NSString stringWithFormat:@"xrefid = %@", xrefId];
+    
+    [service getByWhere:where completion:^(NSArray *results)  {
         if(results.count > 0) {
             SavedList *savedList = [[SavedList alloc] init:results[0]];
             
             NSString *placeIds = [results[0] valueForKey:@"places"];
             
-            QSAzureService *placeService = [QSAzureService defaultService:@"Place"];
-
-            [placeService getPlacesByIds:placeIds completion:^(NSArray * places) {
-                NSMutableArray *placeList = [[NSMutableArray alloc] init];
-                for(id place in places)
-                {
-                    [placeList addObject:[[Place alloc] init:place]];
-                }
+            [self getByPlaceIds:placeIds completion:^(NSArray * placeList) {
                 savedList.places = [NSArray arrayWithArray:placeList];
                 completion(savedList);
-            }];
-            
+             }];
         }
         else
         {
             completion(nil);
         }
+    }];
+}
+
++(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
+{
+
+    QSAzureService *placeService = [QSAzureService defaultService:@"Place"];
+    
+    [placeService getPlacesByIds:placeIds completion:^(NSArray * places) {
+        NSMutableArray *placeList = [[NSMutableArray alloc] init];
+        for(id place in places)
+        {
+            [placeList addObject:[[Place alloc] init:place]];
+        }
+        completion(placeList);
     }];
 }
 
@@ -73,7 +83,7 @@
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     [params setValue:currentUser.userId forKey:@"userid"];
     
-    [service getSavedList:params completion:^(NSArray *results)  {
+    [service getSavedListByUser:params completion:^(NSArray *results)  {
         NSMutableArray *listArray = [[NSMutableArray alloc] init];
         for(id item in results)
         {

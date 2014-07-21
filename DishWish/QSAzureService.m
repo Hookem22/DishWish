@@ -132,7 +132,7 @@
 }
 
 
-- (void)getSavedList:(NSDictionary *)params completion:(QSCompletionBlock)completion
+- (void)getSavedListByUser:(NSDictionary *)params completion:(QSCompletionBlock)completion
 {
     [self.client invokeAPI:@"getsavedlist" body:params HTTPMethod:@"POST" parameters:nil
            headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
