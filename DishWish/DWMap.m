@@ -133,22 +133,6 @@
     return [loc1 distanceFromLocation:loc2];
 }
 
-/*
-- (MKMapRect) mapRectThatFitsBoundsSW:(CLLocationCoordinate2D)sw
-                                   NE:(CLLocationCoordinate2D)ne
-{
-    MKMapPoint pSW = MKMapPointForCoordinate(sw);
-    MKMapPoint pNE = MKMapPointForCoordinate(ne);
-    
-    double antimeridianOveflow =
-    (ne.longitude > sw.longitude) ? 0 : MKMapSizeWorld.width;
-    
-    return MKMapRectMake(pSW.x, pNE.y,
-                         (pNE.x - pSW.x) + antimeridianOveflow,
-                         (pSW.y - pNE.y));
-}
-*/
-
 -(void)getRouteTime
 {
     CLLocation *location = (CLLocation *)[Session sessionVariables][@"location"];

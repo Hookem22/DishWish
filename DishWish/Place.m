@@ -70,7 +70,7 @@
     NSDictionary *thisPlace = @{@"id" : [NSString stringWithFormat: @"%lu", (unsigned long)self.placeId], @"Name" : self.name };
     [self.azureService addItem:thisPlace completion:^(NSUInteger index)
      {
-         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+         //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
 
      }];
 }
@@ -88,34 +88,6 @@
     }];
 }
 
-+(void)getNextPlace:(QSCompletionBlock)completion
-{
-    
-    QSAzureService *service = [QSAzureService defaultService:@"Place"];
-    NSMutableArray *allPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
-    [allPlaces addObjectsFromArray:[NSMutableArray arrayWithArray:[Session sessionVariables][@"noPlaces"]]];
-     
-    NSString *placeIds = @"";
-    for(id placeId in allPlaces) {
-         placeIds = [NSString stringWithFormat:@"%@'%@',", placeIds, placeId];
-    }
-    placeIds = [placeIds substringToIndex:placeIds.length - 1];
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    [params setValue:placeIds forKey:@"placeids"];
-    [params setValue:@"30.261862" forKey:@"latitude"]; //TODO Get device location
-    [params setValue:@"-97.758768" forKey:@"longitude"];
-
-    
-    [service getNextPlace:params completion:^(NSArray *results) {
-        
-        Place *place = [[Place alloc] init:results.lastObject];
-        completion(place);
-        
-    }];
-    
-}
-
 + (void)get:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"Place"];
@@ -129,21 +101,6 @@
         completion(places);
     }];
 
-}
-
-+(void)getFivePlaces:(QSCompletionBlock)completion
-{
-    QSAzureService *service = [QSAzureService defaultService:@"Place"];
-    
-    [service getTopFive:^(NSArray *results)  {
-        NSMutableArray *places = [[NSMutableArray alloc] init];
-        for(id item in results) {
-            [places addObject:[[Place alloc] init:item]];
-        }
-        
-        completion(places);
-        
-    }];
 }
 */
 +(void)getAllPlaces:(QSCompletionBlock)completion

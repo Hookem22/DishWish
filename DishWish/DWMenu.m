@@ -141,15 +141,6 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    /*
-    UIImage *loading = [UIImage imageNamed:@"fork"];
-    //UIImage *loadingImg = [self imageWithImage:loading scaledToSize:CGSizeMake(wd / 2, wd / 2)];
-    UIImageView *loadingView = [[UIImageView alloc] initWithImage:loading];
-    loadingView.frame = CGRectMake((wd / 2) - 20, (ht / 2) - 120, 40, 40);
-    
-    [self addSubview:loadingView];
-    */
-    
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
     [webView setScalesPageToFit:YES];
     
@@ -214,14 +205,6 @@
     
     UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0,60,wd,ht - 100)];
     
-    /*
-    UIImage *loading = [UIImage imageNamed:@"fork"];
-    UIImage *loadingImg = [self imageWithImage:loading scaledToSize:CGSizeMake(wd / 2, wd / 2)];
-    UIImageView *loadingView = [[UIImageView alloc] initWithImage:loadingImg];
-    
-    [view addSubview:loadingView];
-    */
-    
     NSURL *url = [NSURL URLWithString:menu];
     NSData *data = [NSData dataWithContentsOfURL:url];
     UIImage *img = [UIImage imageWithData:data]; //[[UIImage alloc] initWithData:data];
@@ -261,7 +244,6 @@
 {
     if (scrollView.contentOffset.y - 60 >= scrollView.contentSize.height - scrollView.frame.size.height) {
         [self exitMenu];
-        //NSLog([NSString stringWithFormat:@"%f", scrollView.contentOffset.y]);
     }
 }
 

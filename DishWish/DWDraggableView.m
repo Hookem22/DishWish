@@ -216,14 +216,6 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    /*
-     UIImageView *uiImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 100)];
-     
-     UIImage *loading = [UIImage imageNamed:@"loading@2x.gif"];
-     [uiImageView setImage:loading];
-     [self insertSubview:uiImageView atIndex:0];
-     */
-    
     UIView *prevView = [[UIView alloc] init];
     for(id subview in self.subviews)
     {
@@ -414,34 +406,6 @@
         return;
     }
     
-    /*Creating bug when swiping bottom section
-    CGPoint point = [gestureRecognizer locationInView:gestureRecognizer.view];
-    UIView *viewTouched = [gestureRecognizer.view hitTest:point withEvent:nil];
-    if (!([viewTouched isKindOfClass:[DWDraggableView class]] || [viewTouched isKindOfClass:[DWOverlayView class]] || [viewTouched isKindOfClass:[UIButton class]] )) {
-        NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
-        return;
-    }
-        else {
-        //NSLog([NSString stringWithFormat:@"%@", viewTouched.class]);
-    }
-    
-    NSMutableArray *subviews = [[NSMutableArray alloc] init];
-    for(id subview in self.superview.subviews)
-    {
-        if([subview isKindOfClass:[DWDraggableView class]])
-            [subviews addObject:subview];
-    }
-    
-    DWDraggableView *topView = (DWDraggableView *)[subviews lastObject];
-    if(topView != self && topView.layer.animationKeys.count == 0)
-    {
-        BOOL isYes = topView.center.x >= 0;
-        [topView animateImageComplete:isYes];
-        NSLog([NSString stringWithFormat:@"%hhd", isYes]);
-        //NSLog([NSString stringWithFormat:@"%d", topView.layer.animationKeys.count]);
-    }
-    */
-    
     CGFloat xDistance = [gestureRecognizer translationInView:self].x;
     CGFloat yDistance = [gestureRecognizer translationInView:self].y;
 
@@ -619,15 +583,12 @@
     if(ct <= 4) //Number of cards
         [self nextPlace];
 
-    //if(!isYes) {
-        for(id subview in self.subviews)
-        {
-            [subview removeFromSuperview];
-        }
-        [self removeFromSuperview];
-    //}
-    //else
-    //    [self removeItems];
+    for(id subview in self.subviews)
+    {
+        [subview removeFromSuperview];
+    }
+    [self removeFromSuperview];
+
     
     //Vote to see what places people like
     if (!TARGET_IPHONE_SIMULATOR)

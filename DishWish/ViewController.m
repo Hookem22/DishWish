@@ -21,17 +21,6 @@
     self.mainView = [[DWView alloc] init];
     self.view = self.mainView;
     
-    /*
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
-    NSDictionary *item = @{  @"deviceToken" : delegate.deviceToken  };
-    */
-    
-    /*
-    [User login:^(User *user) {
-        NSString *userId = user.deviceId;
-    }];
-    */
     //debugging only
     if (TARGET_IPHONE_SIMULATOR)
     {
@@ -50,12 +39,6 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     [self addLeftSideBar];
-    
-    /*
-    [Place getPlacesByListId:@"27F78E51-4402-419A-A84D-1262981AC0AE" completion:^(NSArray * places) {
-        NSLog(@"TODO: Check load if it has a list id");
-    }];
-    */
     
     if ([CLLocationManager locationServicesEnabled] &&
         [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
@@ -108,14 +91,6 @@
     
     [self.mainView setup];
     
-    NSDate* eventDate = location.timestamp;
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    if (abs(howRecent) < 15.0) {
-        // If the event is recent, do something with it.
-        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-              location.coordinate.latitude,
-              location.coordinate.longitude);
-    }
 }
 
 - (IBAction)shareButtonPressed:(UIButton *)sender
@@ -125,10 +100,10 @@
     if(yesPlaces.count <= 0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Places"
-                                message:@"You have not added any places to your list."
-                               delegate:nil
-                      cancelButtonTitle:@"OK"
-                      otherButtonTitles:nil];
+                    message:@"You have not added any places to your list."
+                    delegate:nil
+                    cancelButtonTitle:@"OK"
+                    otherButtonTitles:nil];
         
          [alert show];
     }

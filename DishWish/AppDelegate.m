@@ -38,7 +38,7 @@
 (NSData *)deviceToken {
     NSCharacterSet *angleBrackets = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
     self.deviceToken = [[deviceToken description] stringByTrimmingCharactersInSet:angleBrackets];
-    NSLog(self.deviceToken);
+    NSLog(@"%@", self.deviceToken);
 }
 
 // Handle any failure to register. In this case we set the deviceToken to an empty

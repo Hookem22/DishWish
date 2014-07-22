@@ -24,12 +24,7 @@
     [super viewDidLoad];
     
     [self.navigationItem setTitleView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]]];
-    
-    /* Remove button from nav bar
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
-    [[self navigationItem] setLeftBarButtonItem:addButton];
-    */
-    
+        
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     [[self navigationItem] setRightBarButtonItem:backButton];
     
@@ -41,7 +36,6 @@
 {
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
-    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 90, 50, 20)];
     fromLabel.text = @"From";
@@ -195,8 +189,6 @@
     [SavedList add:fromUserName toUser:toUser completion:^(SavedList *savedList) {
         [self addSavedListToRightSideBar:savedList];
         
-        NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
-        
         if(isSms)
         {
             NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
@@ -256,6 +248,13 @@
     [messageController setBody:message];
 }
 
+-(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    if(result == MessageComposeResultCancelled) {
+        //Message cancelled
+    } else if(result == MessageComposeResultSent) {
+        //Message sent
+    }
+}
 
 -(void)sendPushMessage:(NSString *)pushDeviceToken header:(NSString *)header message:(NSString *)message
 {

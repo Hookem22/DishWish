@@ -130,35 +130,6 @@
     }];
 }
 
-/*
-+(void)newDevice:(QSCompletionBlock)completion
-{
-    QSAzureService *service = [QSAzureService defaultService:@"Users"];
-    
-    NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    NSString *timestamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970] * 1000];
-    
-    NSDictionary *device = @{@"id" : deviceId, @"facebookid" : @"", @"phonenumber" : @"", @"lastsignedin" : timestamp };
-    [service addItem:device completion:^(NSDictionary *item)
-     {
-         User *user = [[User alloc] init:item];
-         completion(user);
-     }];
-}
-*/
-/*
-+(void)newPhoneNumber:(NSString *)phoneNumber completion:(QSCompletionBlock)completion
-{
-    QSAzureService *service = [QSAzureService defaultService:@"Users"];
-    
-    NSDictionary *user = @{@"facebookid" : @"", @"phonenumber" : phoneNumber };
-    [service addItem:user completion:^(NSDictionary *item)
-     {
-         User *user = [[User alloc] init:item];
-         completion(user);
-     }];
-}
-*/
 
 -(void)add:(QSCompletionBlock)completion
 {

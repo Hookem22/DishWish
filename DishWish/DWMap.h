@@ -4,7 +4,7 @@
 #import "Place.h"
 
 
-@interface DWMap : UIView
+@interface DWMap : UIView <MKMapViewDelegate>
 
 
 - (id)initWithFrame:(CGRect)frame places:(NSArray *)places;

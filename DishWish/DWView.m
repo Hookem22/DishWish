@@ -267,7 +267,6 @@
 }
 -(void)closeLeftSideBar
 {
-    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     NSArray *views = self.subviews;

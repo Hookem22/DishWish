@@ -2,7 +2,7 @@
 #import "Place.h"
 #import "MBProgressHUD.h"
 
-@interface DWMenu : UIView
+@interface DWMenu : UIView <UIScrollViewDelegate, UIWebViewDelegate>
 
 @property(nonatomic) Place *place;
 

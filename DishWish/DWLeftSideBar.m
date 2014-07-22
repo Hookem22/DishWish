@@ -54,17 +54,6 @@
     NSUInteger i = 1;
     for(Place *place in places)
     {
-        /*
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, (i * 40) + 10, wd, 40)];
-        nameLabel.text = [NSString stringWithFormat:@"%@", place.name];
-        [self addSubview:nameLabel];
-        */
-        /*
-        UIButton *nameButton = [[UIButton alloc] initWithFrame:CGRectMake(10, (i * 40) + 10, wd, 40)];
-        //[mapButton addTarget:self action:@selector(loadMap) forControlEvents:UIControlEventTouchUpInside];
-        [nameButton setTitle:[NSString stringWithFormat:@"%@", place.name] forState:UIControlStateNormal];
-        [self addSubview:nameButton];
-        */
         
         UIButton *nameButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [nameButton addTarget:self action:@selector(placeClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -147,23 +136,6 @@
     [self.superview sendSubviewToBack:drag];
     [drag animateImageToFront:YES];
 
-   
-    /* Load Card already present
-    NSArray *views = self.superview.subviews;
-    for(id subview in views) {
-        if([subview isMemberOfClass:[DWDraggableView class]]) {
-            DWDraggableView *drag = (DWDraggableView *)subview;
-            Place *p = drag.place;
-            NSString *pId = p.placeId;
-            
-            if(pId == place.placeId)
-            {
-                [drag animateImageToFront:YES];
-                break;
-            }
-        }
-    }
-    */
 }
 
 -(void)mapClicked:(id)sender
@@ -180,29 +152,15 @@
     DWMap *map = [[DWMap alloc] initWithFrame:CGRectMake(0, 0, wd, ht) places:places];
     
     [self.superview addSubview:map];
-    
-    /*
-     [UIView animateWithDuration:0.3
-          animations:^{
-              self.mapScreen.frame = self.bounds;
-              
-              CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
-              self.mapScreen = [[DWMap alloc] initWithFrame:bounds places:places];
-              [self addSubview:self.mapScreen];
-          }
-          completion:^(BOOL finished){
-              [self.superview bringSubviewToFront:self];
-          }];
-    */
 
 }
 
+/*
 -(void)saveClicked:(id)sender
 {
     
 }
 
-/*
 -(void)shareClicked:(id)sender
 {
     [self close];

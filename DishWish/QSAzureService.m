@@ -202,35 +202,6 @@
      }];
 }
 
--(void)completeItem:(NSDictionary *)item completion:(QSCompletionWithIndexBlock)completion
-{
-    // Cast the public items property to the mutable type (it was created as mutable)
-    NSMutableArray *mutableItems = (NSMutableArray *) items;
-    
-    // Set the item to be complete (we need a mutable copy)
-    NSMutableDictionary *mutable = [item mutableCopy];
-    [mutable setObject:@YES forKey:@"complete"];
-    
-    // Replace the original in the items array
-    NSUInteger index = [items indexOfObjectIdenticalTo:item];
-    [mutableItems replaceObjectAtIndex:index withObject:mutable];
-    
-    // Update the item in the TodoItem table and remove from the items array on completion
-    [self.table update:mutable completion:^(NSDictionary *item, NSError *error) {
-        
-        [self logErrorIfNotNil:error];
-        
-        NSUInteger index = [items indexOfObjectIdenticalTo:mutable];
-        if (index != NSNotFound)
-        {
-            [mutableItems removeObjectAtIndex:index];
-        }
-        
-        // Let the caller know that we have finished
-        completion(index);
-    }];
-}
-
 - (void)busy:(BOOL)busy
 {
     // assumes always executes on UI thread

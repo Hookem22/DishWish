@@ -9,6 +9,6 @@
 #import "SavedList.h"
 #import "Session.h"
 
-@interface DWMessageViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, MFMessageComposeViewControllerDelegate>
+@interface DWMessageViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UITextFieldDelegate>
 
 @end
