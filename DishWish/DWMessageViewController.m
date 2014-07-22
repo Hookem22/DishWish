@@ -52,12 +52,23 @@
     self.fromTextbox.font = [UIFont systemFontOfSize:15];
     self.fromTextbox.placeholder = @"From";
     self.fromTextbox.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    NSString *phoneName = [[UIDevice currentDevice] name];
-    if ([phoneName rangeOfString:@"'"].location != NSNotFound)
+    
+    NSString *userName = @"";
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    if([currentUser.name length] > 0)
     {
-        phoneName = [phoneName substringToIndex:[phoneName rangeOfString:@"'"].location];
+        userName = currentUser.name;
     }
-    self.fromTextbox.text = phoneName;
+    else
+    {
+        NSString *phoneName = [[UIDevice currentDevice] name];
+        if ([phoneName rangeOfString:@"'"].location != NSNotFound)
+        {
+            phoneName = [phoneName substringToIndex:[phoneName rangeOfString:@"'"].location];
+        }
+        userName = phoneName;
+    }
+    self.fromTextbox.text = userName;
     [self.view addSubview:self.fromTextbox];
     
     self.peopleTextbox = [[UITextField alloc] initWithFrame:CGRectMake(10, 130, wd - 20, 40)];
@@ -187,9 +198,32 @@
         NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
         
         if(isSms)
+        {
+            NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
+            
             [self sendSMS:toUser.phoneNumber message:message];
+        }
         else
-            [self sendPushMessage:toUser.pushDeviceToken message:message];
+        {
+            NSString *header = [NSString stringWithFormat:@"%@ sent you a list", fromUserName];
+            NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId];
+            
+            [self sendPushMessage:toUser.pushDeviceToken header:header message:message];
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Message Sent"
+                                    message:[NSString stringWithFormat:@"Your list was sent to %@", toUser.name]
+                                    delegate:nil
+                                    cancelButtonTitle:@"OK"
+                                    otherButtonTitles:nil];
+        
+        [alert show];
+        
+        User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+        if(currentUser.name != fromUserName)
+        {
+            currentUser.name = fromUserName;
+            [currentUser update:^(User *updatedUser) { }];
+        }
     }];
 
 }
@@ -223,10 +257,10 @@
 }
 
 
--(void)sendPushMessage:(NSString *)pushDeviceToken message:(NSString *)message
+-(void)sendPushMessage:(NSString *)pushDeviceToken header:(NSString *)header message:(NSString *)message
 {
     
-    [PushMessage push:pushDeviceToken message:message];
+    [PushMessage push:pushDeviceToken header:header message:message];
 }
 
 -(void)showAddressBook {

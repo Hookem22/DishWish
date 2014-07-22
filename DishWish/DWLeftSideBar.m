@@ -174,6 +174,9 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     
     NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
+    if(places.count == 0)
+        return;
+    
     DWMap *map = [[DWMap alloc] initWithFrame:CGRectMake(0, 0, wd, ht) places:places];
     
     [self.superview addSubview:map];

@@ -169,24 +169,23 @@
         if([subview isMemberOfClass:[UIImageView class]])
             [subview removeFromSuperview];
     }
-    
-    
+
     [User login:^(User *user) {
-        NSString *userId = user.deviceId;
         
         [SavedList getByUser:^(NSArray *savedLists) {
+            
             DWRightSideBar *right;
             for(id subview in self.subviews) {
                 if([subview isMemberOfClass:[DWRightSideBar class]])
+                {
                     right = (DWRightSideBar *)subview;
+                    [right addAllList:savedLists];
+                }
             }
-            
-            for(id savedList in savedLists)
-            {
-                [right addList:savedList];
-            }
-         }];
+
+        }];
     }];
+    
 }
 
 -(void)shareButtonClick:(id)sender
@@ -209,16 +208,18 @@
                 }
             }
             
-            NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
+            NSString *header = [NSString stringWithFormat:@"%@ sent you a list", savedList.fromUserName];
+            NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId];
             
             [User get:toUser.userId completion:^(User *user) {
-                [PushMessage push:user.pushDeviceToken message:message];
+                
+                [PushMessage push:user.pushDeviceToken header:header message:message];
             
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Message Sent"
-                                                                message:[NSString stringWithFormat:@"Your list was sent to %@", toUser.name]
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
+                                            message:[NSString stringWithFormat:@"Your list was sent to %@", toUser.name]
+                                            delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
                 
                 [alert show];
             

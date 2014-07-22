@@ -41,6 +41,14 @@
     [self populateLists];
 }
 
+-(void)addAllList:(NSArray *)listArray
+{
+    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
+    self.savedLists = [[NSMutableArray alloc] initWithArray:listArray];
+    [self populateLists];
+}
+
 -(void) populateLists
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
@@ -76,9 +84,9 @@
         }
         NSString *title = @"";
         if([list.fromUserName isMemberOfClass:[NSNull class]] || [list.fromUserName length] <= 0)
-            title = [NSString stringWithFormat:@"Sent to %@    %@", list.toUserName, dateDiff];
+            title = [NSString stringWithFormat:@"To %@    %@", list.toUserName, dateDiff];
         else
-            title = [NSString stringWithFormat:@"Recieved from %@    %@", list.fromUserName, dateDiff];
+            title = [NSString stringWithFormat:@"From %@    %@", list.fromUserName, dateDiff];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -94,6 +102,8 @@
         [button addSubview:bottomBorder];
         
         i++;
+        
+        self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }
 }
 

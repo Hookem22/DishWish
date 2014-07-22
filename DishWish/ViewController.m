@@ -33,7 +33,7 @@
     }];
     */
     //debugging only
-    if (false && TARGET_IPHONE_SIMULATOR)
+    if (TARGET_IPHONE_SIMULATOR)
     {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(30.261862, -97.758768);
         CLLocation *location = [[CLLocation alloc] initWithCoordinate:coord altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:nil];

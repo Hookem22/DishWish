@@ -16,12 +16,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    if(launchOptions != nil && ![[launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"] isMemberOfClass:[NSNull class]])
+    {
+        self.queryValue = [NSString stringWithFormat:@"%@", [[launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"] objectForKey:@"inAppMessage"]];
+    }
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     self.viewController = (ViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
     self.window.rootViewController = self.viewController;
+    
+    application.applicationIconBadgeNumber = 0;
     
     return YES;
 }
@@ -48,16 +54,45 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo {
     NSLog(@"%@", userInfo);
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification" message:
-                          [userInfo objectForKey:@"inAppMessage"] delegate:nil cancelButtonTitle:
-                          @"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    
+    if(userInfo != nil)
+    {
+        self.queryValue = [userInfo objectForKey:@"inAppMessage"];
+        NSString *title = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+
+        UIApplicationState state = [application applicationState];
+        if (state == UIApplicationStateActive) {
+            //the app is in the foreground, so here you do your stuff since the OS does not do it for you
+            //navigate the "aps" dictionary looking for "loc-args" and "loc-key", for example, or your personal payload)
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:@"" delegate:self cancelButtonTitle:@"Go to list" otherButtonTitles:@"Ignore", nil];
+            [alert show];
+        }
+        else
+        {
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            self.viewController = (ViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+            self.window.rootViewController = self.viewController;
+        }
+    }
+    application.applicationIconBadgeNumber = 0;
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        self.viewController = (ViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+        self.window.rootViewController = self.viewController;
+    }
+    else
+    {
+        self.queryValue = @"";
+    }
+}
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    
     NSLog(@"Calling Application Bundle ID: %@", sourceApplication);
     NSLog(@"URL scheme:%@", [url scheme]);
     NSLog(@"URL query: %@", [url query]);
