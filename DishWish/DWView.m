@@ -55,7 +55,7 @@
             if(places.count == 0)
             {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unavailable"
-                                                                message:@"Let's Eat is not currently available in your city."
+                                                                message:@"Let's Eat is not currently available in your city. It is currently only available in San Francisco."
                                                                delegate:nil
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];

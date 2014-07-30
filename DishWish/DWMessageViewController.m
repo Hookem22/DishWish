@@ -103,7 +103,7 @@
     self.messageTextbox.layer.cornerRadius = 5;
     self.messageTextbox.clipsToBounds = YES;
     self.messageTextbox.editable = YES;
-    self.messageTextbox.text = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: http://letse.at?5676"];
+    self.messageTextbox.text = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?5676"];
     [self.view addSubview:self.messageTextbox];
     
     
@@ -191,7 +191,7 @@
         
         if(isSms)
         {
-            NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://letse.at?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
+            NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://getletseat.com?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
             
             [self sendSMS:toUser.phoneNumber message:message];
         }
