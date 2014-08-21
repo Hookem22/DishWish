@@ -180,12 +180,14 @@
     
     if(isYes)
     {
-        [params setValue:[NSString stringWithFormat:@"%lu", self.yesVote + 1] forKey:@"votes"];
+        int yesVotes = (int)self.yesVote + 1;
+        [params setValue:[NSString stringWithFormat:@"%d", yesVotes] forKey:@"votes"];
         [params setValue:[NSString stringWithFormat:@"%@", @"yesvote"] forKey:@"yesorno"];
     }
     else
     {
-        [params setValue:[NSString stringWithFormat:@"%lu", self.noVote + 1] forKey:@"votes"];
+        int noVotes = (int)self.noVote + 1;
+        [params setValue:[NSString stringWithFormat:@"%d", noVotes] forKey:@"votes"];
         [params setValue:[NSString stringWithFormat:@"%@", @"novote"] forKey:@"yesorno"];
     }
     

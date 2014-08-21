@@ -17,7 +17,7 @@
         self.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.75];
         
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
-        NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+        //NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
         
         UIImage *swipe = [UIImage imageNamed:@"swipeRight"];
         UIImageView *swipeView = [[UIImageView alloc] initWithImage:swipe];
