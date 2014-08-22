@@ -186,6 +186,7 @@
 -(void)saveList:(NSString *)fromUserName toUser:(User *)toUser isSms:(BOOL)isSms
 {
     //CreateXref
+    /*
     [SavedList add:fromUserName toUser:toUser completion:^(SavedList *savedList) {
         [self addSavedListToRightSideBar:savedList];
         
@@ -217,11 +218,12 @@
             [currentUser update:^(User *updatedUser) { }];
         }
     }];
-
+     */
 }
 
 -(void)addSavedListToRightSideBar:(SavedList *)savedList
 {
+    /*
     savedList.fromUserName = @"";
     savedList.createdAt = [NSDate date];
     
@@ -234,6 +236,7 @@
             [right addList:savedList];
         }
     }
+     */
 }
 
 

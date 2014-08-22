@@ -10,26 +10,22 @@
 @implementation SavedList
 
 @synthesize listId = _listId;
-@synthesize places = _places;
-@synthesize placeIds = _placeIds;
 @synthesize xrefId = _xrefId;
-@synthesize fromUserId = _fromUserId;
-@synthesize fromUserName = _fromUserName;
-@synthesize toUserId = _toUserId;
-@synthesize toUserName = _toUserName;
+@synthesize userId = _userId;
+@synthesize userName = _userName;
+@synthesize yesPlaceIds = _yesPlaceIds;
+@synthesize noPlaceIds = _noPlaceIds;
 @synthesize createdAt = _createdAt;
 
 - (id)init:(NSDictionary *)savedList {
 	self = [super init];
 	if (self) {
         self.listId = [savedList valueForKey:@"id"];
-        self.placeIds = [savedList valueForKey:@"places"];
-        self.places = [[NSArray alloc] init];
         self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longValue];
-        self.fromUserId = [savedList valueForKey:@"fromuserid"];
-        self.fromUserName = [savedList valueForKey:@"fromusername"];
-        self.toUserId = [savedList valueForKey:@"touserid"];
-        self.toUserName = [savedList valueForKey:@"tousername"];
+        self.userId = [savedList valueForKey:@"userid"];
+        self.userName = [savedList valueForKey:@"username"];
+        self.yesPlaceIds = [savedList valueForKey:@"yesplaces"];
+        self.noPlaceIds = [savedList valueForKey:@"noplaces"];
         self.createdAt = [savedList valueForKey:@"__createdAt"];
     }
 	return self;
@@ -44,13 +40,14 @@
     [service getByWhere:where completion:^(NSArray *results)  {
         if(results.count > 0) {
             SavedList *savedList = [[SavedList alloc] init:results[0]];
-            
+            /*
             NSString *placeIds = [results[0] valueForKey:@"places"];
             
             [self getByPlaceIds:placeIds completion:^(NSArray * placeList) {
                 savedList.places = [NSArray arrayWithArray:placeList];
                 completion(savedList);
              }];
+             */
         }
         else
         {
@@ -88,18 +85,18 @@
         for(id item in results)
         {
             SavedList *savedList = [[SavedList alloc] init:item];
-            
+            /*
             if([currentUser.userId isEqualToString:savedList.fromUserId])
                 savedList.fromUserName = @"";
             else
                 savedList.toUserName = @"";
-            
+            */
             [listArray addObject:savedList];
         }
         completion(listArray);
     }];
 }
-
+/*
 +(void)add:(NSString *)fromUserName toUser:(User *)toUser completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
@@ -121,6 +118,56 @@
          SavedList *savedList = [[SavedList alloc] init:item];
          completion(savedList);
      }];
+}
+*/
+
++(void)add:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    
+    User *user = (User *)[Session sessionVariables][@"currentUser"];
+    
+    NSDictionary *savedList = @{@"userid" : user.userId, @"yesplaces" : @"", @"noplaces": @"" };
+    [service addItem:savedList completion:^(NSDictionary *item)
+     {
+         SavedList *savedList = [[SavedList alloc] init:item];
+         [[Session sessionVariables] setObject:savedList forKey:@"currentSavedList"];
+         completion(savedList);
+     }];
+}
+
++(void)updateList:(NSString *)placeId isYes:(BOOL)isYes;
+{
+    SavedList *savedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
+    
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    
+    [params setValue:savedList.listId forKey:@"savedlistid"];
+    
+    if(isYes)
+    {
+        if([savedList.yesPlaceIds length] > 0)
+            savedList.yesPlaceIds = [NSString stringWithFormat:@"%@,%@", savedList.yesPlaceIds, placeId];
+        else
+            savedList.yesPlaceIds = [NSString stringWithFormat:@"%@", placeId];
+                
+        [params setValue:[NSString stringWithFormat:@"%@", savedList.yesPlaceIds] forKey:@"placeids"];
+        [params setValue:[NSString stringWithFormat:@"%@", @"yesplaces"] forKey:@"yesorno"];
+    }
+    else
+    {
+        if([savedList.noPlaceIds length] > 0)
+            savedList.noPlaceIds = [NSString stringWithFormat:@"%@,%@", savedList.noPlaceIds, placeId];
+        else
+            savedList.noPlaceIds = [NSString stringWithFormat:@"%@", placeId];
+        
+        [params setValue:[NSString stringWithFormat:@"%@", savedList.noPlaceIds] forKey:@"placeids"];
+        [params setValue:[NSString stringWithFormat:@"%@", @"noplaces"] forKey:@"yesorno"];
+    }
+    
+    [service updateList:params];
 }
 
 @end

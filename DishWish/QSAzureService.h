@@ -49,6 +49,8 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 
 - (void)getPlacesByIds:(NSString *)placeIds completion:(QSCompletionBlock)completion;
 
+- (void)updateList:(NSDictionary *)params;
+
 - (void)vote:(NSDictionary *)params;
 
 - (void)sendPushMessage:(NSDictionary *)params;

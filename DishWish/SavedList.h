@@ -15,18 +15,17 @@
 @interface SavedList : NSObject
 
 @property (nonatomic, copy) NSString *listId;
-@property (nonatomic, copy) NSArray *places;
-@property (nonatomic, copy) NSString *placeIds;
 @property (nonatomic, assign) NSUInteger xrefId;
-@property (nonatomic, copy) NSString *fromUserId;
-@property (nonatomic, copy) NSString *fromUserName;
-@property (nonatomic, copy) NSString *toUserId;
-@property (nonatomic, copy) NSString *toUserName;
+@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *userName;
+@property (nonatomic, copy) NSString *yesPlaceIds;
+@property (nonatomic, copy) NSString *noPlaceIds;
 @property (nonatomic, copy) NSDate *createdAt;
 
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion;
 +(void)getByUser:(QSCompletionBlock)completion;
-+(void)add:(NSString *)fromUserName toUser:(User *)toUser completion:(QSCompletionBlock)completion;
++(void)add:(QSCompletionBlock)completion;
++(void)updateList:(NSString *)placeId isYes:(BOOL)isYes;
 
 @end

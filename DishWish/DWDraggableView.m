@@ -590,6 +590,8 @@
     [self removeFromSuperview];
 
     
+    [SavedList updateList:self.place.placeId isYes:isYes];
+    
     //Vote to see what places people like
     if (!TARGET_IPHONE_SIMULATOR)
     {

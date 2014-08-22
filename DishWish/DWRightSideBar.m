@@ -51,6 +51,7 @@
 
 -(void) populateLists
 {
+    /*
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
@@ -105,10 +106,12 @@
         
         self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }
+     */
 }
 
 -(void)listClicked:(id)sender
 {
+    /*
     [self close];
     
     [MBProgressHUD showHUDAddedTo:self.superview animated:YES];
@@ -138,6 +141,7 @@
         [MBProgressHUD hideHUDForView:self.superview animated:YES];
         
     }];
+     */
     
 }
 

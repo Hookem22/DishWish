@@ -28,6 +28,7 @@
     
     if([savedListId length] > 0)
     {
+        /*
         [SavedList get:savedListId completion:^(SavedList *savedList) {
             
             self.savedList = savedList;
@@ -46,6 +47,7 @@
             [self loadDraggableCustomView:savedList.places];
             [self placesDidLoad];
         }];
+         */
 
     }
     else
@@ -172,6 +174,10 @@
 
     [User login:^(User *user) {
         
+        [SavedList add:^(SavedList *savedList) {
+            
+        }];
+        /*
         [SavedList getByUser:^(NSArray *savedLists) {
             
             DWRightSideBar *right;
@@ -184,13 +190,14 @@
             }
 
         }];
+         */
     }];
     
 }
 
 -(void)shareButtonClick:(id)sender
 {
-
+/*
     if(self.savedList != nil)
     {
         [MBProgressHUD showHUDAddedTo:self animated:YES];
@@ -234,6 +241,7 @@
         UIButton *button = [[UIButton alloc] init];
         [appDelegate.viewController shareButtonPressed:button];
     }
+ */
 }
 
 -(void)menuButtonPressed
