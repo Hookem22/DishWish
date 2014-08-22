@@ -21,7 +21,7 @@
 	self = [super init];
 	if (self) {
         self.listId = [savedList valueForKey:@"id"];
-        self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longValue];
+        self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longLongValue];
         self.userId = [savedList valueForKey:@"userid"];
         self.userName = [savedList valueForKey:@"username"];
         self.yesPlaceIds = [savedList valueForKey:@"yesplaces"];
@@ -34,20 +34,18 @@
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
     
-    NSString *where = [NSString stringWithFormat:@"xrefid = %@", xrefId];
+    NSString *where = [NSString stringWithFormat:@"xrefid = %@ AND userid != '%@'", xrefId, currentUser.userId];
     
     [service getByWhere:where completion:^(NSArray *results)  {
         if(results.count > 0) {
-            SavedList *savedList = [[SavedList alloc] init:results[0]];
-            /*
-            NSString *placeIds = [results[0] valueForKey:@"places"];
-            
-            [self getByPlaceIds:placeIds completion:^(NSArray * placeList) {
-                savedList.places = [NSArray arrayWithArray:placeList];
-                completion(savedList);
-             }];
-             */
+            NSMutableArray *savedLists = [[NSMutableArray alloc] init];
+            for(id result in results)
+            {
+                [savedLists addObject:[[SavedList alloc] init:result]];
+            }
+            completion(savedLists);
         }
         else
         {
@@ -121,13 +119,13 @@
 }
 */
 
-+(void)add:(QSCompletionBlock)completion
++(void)add:(NSString *)xrefId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
     
     User *user = (User *)[Session sessionVariables][@"currentUser"];
     
-    NSDictionary *savedList = @{@"userid" : user.userId, @"yesplaces" : @"", @"noplaces": @"" };
+    NSDictionary *savedList = @{@"xrefid": xrefId, @"userid" : user.userId, @"yesplaces" : @"", @"noplaces": @"" };
     [service addItem:savedList completion:^(NSDictionary *item)
      {
          SavedList *savedList = [[SavedList alloc] init:item];

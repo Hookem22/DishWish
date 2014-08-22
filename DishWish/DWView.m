@@ -174,7 +174,7 @@
 
     [User login:^(User *user) {
         
-        [SavedList add:^(SavedList *savedList) {
+        [SavedList add:@"88" completion:^(SavedList *savedList) {
             
         }];
         /*

@@ -166,9 +166,9 @@
 -(void)updateList:(NSDictionary *)params
 {
     [self.client invokeAPI:@"updatelist" body:params HTTPMethod:@"POST" parameters:nil
-                   headers:nil completion:^(NSString *results, NSHTTPURLResponse *response, NSError *error) {
-                       [self logErrorIfNotNil:error];
-                   }];
+            headers:nil completion:^(NSString *results, NSHTTPURLResponse *response, NSError *error) {
+                [self logErrorIfNotNil:error];
+            }];
 }
 
 -(void)vote:(NSDictionary *)params
@@ -182,9 +182,9 @@
 - (void)sendPushMessage:(NSDictionary *)params
 {
     [self.client invokeAPI:@"sendpushmessage" body:params HTTPMethod:@"POST" parameters:nil
-                   headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
-                       [self logErrorIfNotNil:error];
-                   }];
+            headers:nil completion:^(NSDictionary *results, NSHTTPURLResponse *response, NSError *error) {
+                [self logErrorIfNotNil:error];
+            }];
 }
 
 -(void)addItem:(NSDictionary *)item completion:(QSCompletionBlock)completion
