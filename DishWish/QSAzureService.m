@@ -145,6 +145,19 @@
            }];
 }
 
+- (void)getSavedListByXrefId:(NSDictionary *)params completion:(QSCompletionBlock)completion
+{
+    [self.client invokeAPI:@"getsavedlistbyxrefid" body:params HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                       
+                       items = [results mutableCopy];
+                       
+                       completion(results);
+                       
+                   }];
+}
+
 - (void)getPlacesByIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
 {
     // Create a predicate that finds items where complete is false

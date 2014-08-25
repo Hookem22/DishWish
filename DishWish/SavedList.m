@@ -31,6 +31,33 @@
 	return self;
 }
 
+
++(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setValue:xrefId forKey:@"xrefid"];
+    [params setValue:currentUser.userId forKey:@"userid"];
+    
+    [service getSavedListByXrefId:params completion:^(NSArray *results)  {
+        if(results.count > 0) {
+            NSMutableArray *savedLists = [[NSMutableArray alloc] init];
+            for(id result in results)
+            {
+                [savedLists addObject:[[SavedList alloc] init:result]];
+            }
+            completion(savedLists);
+        }
+        else
+        {
+            completion(nil);
+        }
+    }];
+}
+
+/*
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
@@ -53,7 +80,7 @@
         }
     }];
 }
-
+*/
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
 {
 

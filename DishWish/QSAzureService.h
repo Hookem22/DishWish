@@ -47,6 +47,8 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 
 - (void)getSavedListByUser:(NSDictionary *)params completion:(QSCompletionBlock)completion;
 
+- (void)getSavedListByXrefId:(NSDictionary *)params completion:(QSCompletionBlock)completion;
+
 - (void)getPlacesByIds:(NSString *)placeIds completion:(QSCompletionBlock)completion;
 
 - (void)updateList:(NSDictionary *)params;

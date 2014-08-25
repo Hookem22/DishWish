@@ -57,38 +57,43 @@
         NSUInteger i = 1;
         for(Place *place in places)
         {
-            bool voteYes = false;
-            bool voteNo = false;
+            NSMutableArray *voteYes = [[NSMutableArray alloc] init];
+            NSMutableArray *voteNo = [[NSMutableArray alloc] init];
             for(SavedList *savedList in savedLists)
             {
                 if ([savedList.yesPlaceIds rangeOfString:place.placeId].location != NSNotFound)
-                    voteYes = true;
+                {
+                    if(savedList.userName.length > 0)
+                        [voteYes addObject:[savedList.userName substringToIndex:1]];
+                }
                 if ([savedList.noPlaceIds rangeOfString:place.placeId].location != NSNotFound)
-                    voteNo = true;
+                {
+                    if(savedList.userName.length > 0)
+                        [voteNo addObject:[savedList.userName substringToIndex:1]];
+                }
             }
             
             UIButton *nameButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
             [nameButton addTarget:self action:@selector(placeClicked:) forControlEvents:UIControlEventTouchUpInside];
             [nameButton setTitle:[NSString stringWithFormat:@"%@", place.name] forState:UIControlStateNormal];
             nameButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+
             nameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             nameButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             nameButton.tag = i;
-            if(voteYes && voteNo)
-            {
-                
-            }
-            else if(voteYes)
+            if(voteYes.count > voteNo.count)
             {
                 [nameButton setTitleColor:[UIColor colorWithRed:79.0/255.0 green:180.0/255.0 blue:114.0/255.0 alpha:1.0] forState:UIControlStateNormal];
                 nameButton.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
                 
+                /*
                 UIImage *check = [UIImage imageNamed:@"greencheck"];
                 UIImageView *checkView = [[UIImageView alloc] initWithImage:check];
                 checkView.frame = CGRectMake(nameButton.titleLabel.frame.size.width + 14, (nameButton.frame.size.height / 2) - 13, 18, 24);
                 [nameButton addSubview:checkView];
+                 */
             }
-            else if(voteNo)
+            else if(voteNo.count > voteYes.count)
             {
                 [nameButton setTitleColor:[UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0] forState:UIControlStateNormal];
                 nameButton.titleLabel.font = [UIFont italicSystemFontOfSize:16.0f];
@@ -97,6 +102,8 @@
                 strikethrough.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
                 [nameButton addSubview:strikethrough];
             }
+            
+            [self buildYesNo:nameButton voteYes:voteYes voteNo:voteNo];
             
             [self addSubview:nameButton];
             
@@ -133,6 +140,239 @@
 
         self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }];
+}
+
+-(void)buildYesNo:(UIButton *)button voteYes:(NSArray *)voteYes voteNo:(NSArray *)voteNo
+{
+    if(voteYes.count + voteNo.count == 0)
+        return;
+    
+    UIColor *green = [UIColor colorWithRed:79.0/255.0 green:180.0/255.0 blue:114.0/255.0 alpha:1.0];
+    UIColor *red = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
+    
+    if(voteYes.count + voteNo.count == 1)
+    {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 40, 0, 40, button.frame.size.height)];
+        if(voteYes.count == 1)
+        {
+            [label setText:voteYes[0]];
+            [label setBackgroundColor:green];
+        }
+        else
+        {
+            [label setText:voteNo[0]];
+            [label setBackgroundColor:red];
+        }
+        [label setTextColor:[UIColor whiteColor]];
+        [label setFont:[UIFont boldSystemFontOfSize:20.0f]];
+        label.textAlignment = NSTextAlignmentCenter;
+        [button addSubview:label];
+    }
+    else if(voteYes.count + voteNo.count == 2)
+    {
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 40, 0, 19, button.frame.size.height)];
+        UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 20, 0, 20, button.frame.size.height)];
+        if(voteYes.count == 2)
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteYes[1]];
+            [label2 setBackgroundColor:green];
+        }
+        else if(voteNo.count == 2)
+        {
+            [label1 setText:voteNo[0]];
+            [label1 setBackgroundColor:red];
+            
+            [label2 setText:voteNo[1]];
+            [label2 setBackgroundColor:red];
+        }
+        else
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteNo[0]];
+            [label2 setBackgroundColor:red];
+        }
+
+        [label1 setTextColor:[UIColor whiteColor]];
+        [label1 setFont:[UIFont boldSystemFontOfSize:16.0f]];
+        label1.textAlignment = NSTextAlignmentCenter;
+        
+        [label2 setTextColor:[UIColor whiteColor]];
+        [label2 setFont:[UIFont boldSystemFontOfSize:16.0f]];
+        label2.textAlignment = NSTextAlignmentCenter;
+        
+        [button addSubview:label1];
+        [button addSubview:label2];
+    }
+    else if(voteYes.count + voteNo.count == 3)
+    {
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 40, 0, 19, button.frame.size.height)];
+        UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 20, 0, 20, (button.frame.size.height / 2) - 1)];
+        UILabel *label3 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 20, button.frame.size.height / 2, 20, button.frame.size.height / 2)];
+        if(voteYes.count == 3)
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteYes[1]];
+            [label2 setBackgroundColor:green];
+            
+            [label3 setText:voteYes[2]];
+            [label3 setBackgroundColor:green];
+        }
+        else if(voteYes.count == 2)
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteYes[1]];
+            [label2 setBackgroundColor:green];
+            
+            [label3 setText:voteNo[0]];
+            [label3 setBackgroundColor:red];
+        }
+        else if(voteYes.count == 1)
+        {
+            [label1 setText:voteNo[0]];
+            [label1 setBackgroundColor:red];
+            
+            [label2 setText:voteYes[0]];
+            [label2 setBackgroundColor:green];
+            
+            [label3 setText:voteNo[1]];
+            [label3 setBackgroundColor:red];
+        }
+        else if(voteYes.count == 0)
+        {
+            [label1 setText:voteNo[0]];
+            [label1 setBackgroundColor:red];
+            
+            [label2 setText:voteNo[1]];
+            [label2 setBackgroundColor:red];
+            
+            [label3 setText:voteNo[2]];
+            [label3 setBackgroundColor:red];
+        }
+        
+        
+        [label1 setTextColor:[UIColor whiteColor]];
+        [label1 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label1.textAlignment = NSTextAlignmentCenter;
+        
+        [label2 setTextColor:[UIColor whiteColor]];
+        [label2 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label2.textAlignment = NSTextAlignmentCenter;
+        
+        [label3 setTextColor:[UIColor whiteColor]];
+        [label3 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label3.textAlignment = NSTextAlignmentCenter;
+        
+        [button addSubview:label1];
+        [button addSubview:label2];
+        [button addSubview:label3];
+    }
+    else
+    {
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 40, 0, 19, (button.frame.size.height / 2) - 1)];
+        UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 40, button.frame.size.height / 2, 19, button.frame.size.height / 2)];
+        UILabel *label3 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 20, 0, 20, (button.frame.size.height / 2) - 1)];
+        UILabel *label4 = [[UILabel alloc] initWithFrame:CGRectMake(button.frame.size.width - 20, button.frame.size.height / 2, 20, button.frame.size.height / 2)];
+        if(voteYes.count >= 4)
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteYes[1]];
+            [label2 setBackgroundColor:green];
+            
+            [label3 setText:voteYes[2]];
+            [label3 setBackgroundColor:green];
+            
+            [label4 setText:voteYes[3]];
+            [label4 setBackgroundColor:green];
+        }
+        if(voteYes.count == 3)
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteYes[1]];
+            [label2 setBackgroundColor:green];
+            
+            [label3 setText:voteYes[2]];
+            [label3 setBackgroundColor:green];
+            
+            [label4 setText:voteNo[0]];
+            [label4 setBackgroundColor:red];
+        }
+        else if(voteYes.count == 2)
+        {
+            [label1 setText:voteYes[0]];
+            [label1 setBackgroundColor:green];
+            
+            [label2 setText:voteNo[0]];
+            [label2 setBackgroundColor:red];
+            
+            [label3 setText:voteNo[1]];
+            [label3 setBackgroundColor:red];
+            
+            [label4 setText:voteYes[1]];
+            [label4 setBackgroundColor:green];
+        }
+        else if(voteYes.count == 1)
+        {
+            [label1 setText:voteNo[0]];
+            [label1 setBackgroundColor:red];
+            
+            [label2 setText:voteNo[1]];
+            [label2 setBackgroundColor:red];
+            
+            [label3 setText:voteYes[0]];
+            [label3 setBackgroundColor:green];
+            
+            [label4 setText:voteNo[2]];
+            [label4 setBackgroundColor:red];
+        }
+        else if(voteYes.count == 0)
+        {
+            [label1 setText:voteNo[0]];
+            [label1 setBackgroundColor:red];
+            
+            [label2 setText:voteNo[1]];
+            [label2 setBackgroundColor:red];
+            
+            [label3 setText:voteNo[2]];
+            [label3 setBackgroundColor:red];
+            
+            [label4 setText:voteNo[3]];
+            [label4 setBackgroundColor:red];
+        }
+        
+        [label1 setTextColor:[UIColor whiteColor]];
+        [label1 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label1.textAlignment = NSTextAlignmentCenter;
+        
+        [label2 setTextColor:[UIColor whiteColor]];
+        [label2 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label2.textAlignment = NSTextAlignmentCenter;
+        
+        [label3 setTextColor:[UIColor whiteColor]];
+        [label3 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label3.textAlignment = NSTextAlignmentCenter;
+        
+        [label4 setTextColor:[UIColor whiteColor]];
+        [label4 setFont:[UIFont boldSystemFontOfSize:14.0f]];
+        label4.textAlignment = NSTextAlignmentCenter;
+        
+        [button addSubview:label1];
+        [button addSubview:label2];
+        [button addSubview:label3];
+        [button addSubview:label4];
+    }
 }
 
 -(void)placeClicked:(id)sender
