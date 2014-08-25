@@ -49,7 +49,7 @@
 +(void)login:(QSCompletionBlock)completion
 {
     NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-   
+
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSString *pushDeviceToken = appDelegate.deviceToken;
     

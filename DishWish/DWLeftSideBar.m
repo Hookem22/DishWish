@@ -34,8 +34,11 @@
 
 -(void)updateLeftSideBar
 {
+    
     SavedList *currentSavedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
     [SavedList get:[NSString stringWithFormat:@"%lu", (unsigned long)currentSavedList.xrefId] completion:^(NSArray *savedLists){
+        
+        [self moveUpYesPlaces:(NSArray *)savedLists];
         
         for(id subview in self.subviews)
         {
@@ -140,6 +143,53 @@
 
         self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }];
+}
+
+-(void)moveUpYesPlaces:(NSArray *)savedLists
+{
+    NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"Places"]];
+    NSUInteger currentId = [[[Session sessionVariables] objectForKey:@"CurrentId"] intValue];
+    
+    NSLog([NSString stringWithFormat:@"Places %d", places.count]);
+    NSLog([NSString stringWithFormat:@"Current %d", currentId]);
+    
+    NSMutableArray *votedPlaces = [[NSMutableArray alloc] init];
+    for(SavedList *savedList in savedLists)
+    {
+        NSArray *yeses = [savedList.yesPlaceIds componentsSeparatedByString:@","];
+        for(NSString *yes in yeses)
+        {
+            if(![votedPlaces containsObject:yes])
+               [votedPlaces addObject:yes];
+        }
+        NSArray *nos = [savedList.noPlaceIds componentsSeparatedByString:@","];
+        for(NSString *no in nos)
+        {
+            if(![votedPlaces containsObject:no])
+                [votedPlaces addObject:no];
+        }
+    }
+    
+    NSMutableArray *newPlaces = [[NSMutableArray alloc] init];
+    NSUInteger i = -1;
+    for(Place *place in places)
+    {
+        i++;
+        if(i <= currentId + 1 || ![votedPlaces containsObject:place.placeId])
+        {
+            [newPlaces addObject:place];
+        }
+        else
+        {
+            [newPlaces insertObject:place atIndex:currentId + 1];
+        }
+        
+    }
+    
+    [[Session sessionVariables] setObject:newPlaces forKey:@"Places"];
+    
+    
+    NSLog([NSString stringWithFormat:@"Yes %d", newPlaces.count]);
 }
 
 -(void)buildYesNo:(UIButton *)button voteYes:(NSArray *)voteYes voteNo:(NSArray *)voteNo
