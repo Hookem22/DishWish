@@ -62,20 +62,21 @@
 
 -(void)addLeftSideBar
 {
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [shareButton setTitle:@"Send List to Friends" forState:UIControlStateNormal];
-    shareButton.frame = CGRectMake(0, 0, 0, 0);
+    [shareButton setTitle:@"Add Friends to Eat With" forState:UIControlStateNormal];
+    shareButton.frame = CGRectMake(0, 40, (wd * 3)/4, 40);
     [shareButton addTarget:self action:@selector(shareButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
+    DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
     
-    left.shareButton = shareButton;
-    [left addSubview:shareButton];
+    right.shareButton = shareButton;
+    [right addSubview:shareButton];
     
-    self.mainView.leftSideBar = left;
-    [self.view addSubview:left];
+    self.mainView.rightSideBar = right;
+    [self.view addSubview:right];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
@@ -109,7 +110,7 @@
     }
     else
     {
-        [self.mainView.leftSideBar close];
+        [self.mainView.rightSideBar close];
         [self performSegueWithIdentifier:@"MessageSegue" sender:self];
     }
 }

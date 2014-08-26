@@ -4,7 +4,7 @@
 
 @implementation DWView
 
-@synthesize leftSideBar = _leftSideBar;
+@synthesize rightSideBar = _rightSideBar;
 @synthesize savedList = _savedList;
 
 - (id)init
@@ -109,11 +109,11 @@
     [yesButton addTarget:self action:@selector(voteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:yesButton];
     
-    //DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
-    //[self addSubview:left];
+    DWLeftSideBar *left = [[DWLeftSideBar alloc] initWithFrame:CGRectMake(0, 60, 0, ht - 60)];
+    [self addSubview:left];
     
-    DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
-    [self addSubview:right];
+    //DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
+    //[self addSubview:right];
     
     UIImage *splash = [UIImage imageNamed:@"splash"];
     UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
@@ -176,6 +176,7 @@
 
         [SavedList add:@"88" completion:^(SavedList *savedList) {
             
+            /*
             [SavedList getByUser:^(NSArray *savedLists) {
                 DWRightSideBar *right;
                 for(id subview in self.subviews) {
@@ -187,6 +188,7 @@
                 }
 
             }];
+             */
         }];
          
     }];

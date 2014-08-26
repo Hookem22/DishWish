@@ -10,8 +10,6 @@
 
 @implementation DWLeftSideBar
 
-@synthesize shareButton = _shareButton;
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -39,13 +37,7 @@
     [SavedList get:[NSString stringWithFormat:@"%lu", (unsigned long)currentSavedList.xrefId] completion:^(NSArray *savedLists){
         
         [self moveUpYesPlaces:(NSArray *)savedLists];
-        
-        for(id subview in self.subviews)
-        {
-            if(subview != self.shareButton)
-                [subview removeFromSuperview];
-        }
-        //[self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+        [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
 
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         wd = (wd * 3) / 4;
@@ -139,7 +131,7 @@
         i++;
         */
 
-        self.shareButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
+        //self.shareButton.frame = CGRectMake(0, (i * 40) + 10, wd, 40);
 
         self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }];

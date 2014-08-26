@@ -53,6 +53,7 @@
 		BEB35D80195B1E1E0081D3FB /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7E195B1E1E0081D3FB /* check@2x.png */; };
 		BEB35D81195B1E1E0081D3FB /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB35D7F195B1E1E0081D3FB /* x@2x.png */; };
 		BEBC1E9F19A7F01D0000F084 /* greencheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEBC1E9E19A7F01D0000F084 /* greencheck@2x.png */; };
+		BEBC1EA219AD2FFA0000F084 /* DWPreviousSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBC1EA119AD2FFA0000F084 /* DWPreviousSideBar.m */; };
 		BEEB02A319620D2F0089E1A4 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEB02A219620D2F0089E1A4 /* icon@2x.png */; };
 		BEEB02A519620D350089E1A4 /* swipeRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEB02A419620D350089E1A4 /* swipeRight@2x.png */; };
 		BEEB02A819620D500089E1A4 /* InstructionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEEB02A719620D500089E1A4 /* InstructionsView.m */; };
@@ -138,6 +139,8 @@
 		BEB35D7E195B1E1E0081D3FB /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
 		BEB35D7F195B1E1E0081D3FB /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
 		BEBC1E9E19A7F01D0000F084 /* greencheck@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greencheck@2x.png"; sourceTree = "<group>"; };
+		BEBC1EA019AD2FFA0000F084 /* DWPreviousSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWPreviousSideBar.h; sourceTree = "<group>"; };
+		BEBC1EA119AD2FFA0000F084 /* DWPreviousSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWPreviousSideBar.m; sourceTree = "<group>"; };
 		BEEB02A219620D2F0089E1A4 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		BEEB02A419620D350089E1A4 /* swipeRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipeRight@2x.png"; sourceTree = "<group>"; };
 		BEEB02A619620D500089E1A4 /* InstructionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstructionsView.h; sourceTree = "<group>"; };
@@ -224,6 +227,8 @@
 				BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */,
 				BEB35D661954D6C60081D3FB /* DWRightSideBar.h */,
 				BEB35D671954D6C60081D3FB /* DWRightSideBar.m */,
+				BEBC1EA019AD2FFA0000F084 /* DWPreviousSideBar.h */,
+				BEBC1EA119AD2FFA0000F084 /* DWPreviousSideBar.m */,
 				BEA9CF24191D830E0087C645 /* DWDraggableView.h */,
 				BEA9CF25191D830E0087C645 /* DWDraggableView.m */,
 				BEA9CF2A191D830E0087C645 /* DWOverlayView.h */,
@@ -457,6 +462,7 @@
 				BEA9CF06191D82300087C645 /* ViewController.m in Sources */,
 				BEA9CF3A191D830E0087C645 /* DWView.m in Sources */,
 				BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */,
+				BEBC1EA219AD2FFA0000F084 /* DWPreviousSideBar.m in Sources */,
 				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,
 				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,

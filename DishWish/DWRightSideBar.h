@@ -14,8 +14,8 @@
 
 @interface DWRightSideBar : UIScrollView
 
-@property (nonatomic, strong) NSMutableArray *savedLists;
+@property (nonatomic, strong) UIButton *shareButton;
 
--(void)populateLists:(NSArray *)listArray;
+-(void)close;
 
 @end

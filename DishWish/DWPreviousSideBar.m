@@ -1,15 +1,14 @@
 //
-//  DWRightSideBar.m
+//  DWPreviousSideBar.m
 //  DishWish
 //
-//  Created by Will on 6/3/14.
+//  Created by Will on 8/26/14.
 //  Copyright (c) 2014 DishWish. All rights reserved.
 //
 
-#import "DWRightSideBar.h"
-#import "DWView.h"
+#import "DWPreviousSideBar.h"
 
-@implementation DWRightSideBar
+@implementation DWPreviousSideBar
 
 @synthesize savedLists = _savedLists;
 
@@ -34,21 +33,21 @@
 }
 
 /*
--(void)addList:(SavedList *)list
-{
-    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
-    
-    [self.savedLists insertObject:list atIndex:0];
-    [self populateLists];
-}
-
--(void)addAllList:(NSArray *)listArray
-{
-    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
-    
-    [self populateLists:listArray];
-}
-*/
+ -(void)addList:(SavedList *)list
+ {
+ [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+ 
+ [self.savedLists insertObject:list atIndex:0];
+ [self populateLists];
+ }
+ 
+ -(void)addAllList:(NSArray *)listArray
+ {
+ [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+ 
+ [self populateLists:listArray];
+ }
+ */
 -(void)populateLists:(NSArray *)listArray
 {
     [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
@@ -111,7 +110,7 @@
                     dateDiff = [NSString stringWithFormat:@"%d minutes ago", value];
             }
         }
-
+        
         UIButton *datebutton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [datebutton addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
         [datebutton setTitle:dateDiff forState:UIControlStateNormal];
@@ -138,41 +137,41 @@
         
         self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }
-     
+    
 }
 
 -(void)listClicked:(id)sender
 {
     /*
-    [self close];
-    
-    [MBProgressHUD showHUDAddedTo:self.superview animated:YES];
-    
-    UIButton *button = (UIButton *)sender;
-    SavedList *savedList = self.savedLists[button.tag];
-    
-    [SavedList getByPlaceIds:savedList.placeIds completion:^(NSArray *places) {
-       
-        
-        DWView *dwView = (DWView *)self.superview;
-
-        [[Session sessionVariables] setObject:places forKey:@"Places"];
-        [dwView loadDraggableCustomView:places];
-
-        
-        [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
-        
-        NSArray *views = self.superview.subviews;
-        for(id subview in views) {
-            if([subview isMemberOfClass:[DWLeftSideBar class]]) {
-                DWLeftSideBar *left = (DWLeftSideBar *)subview;
-                [left updateLeftSideBar];
-            }
-        }
-        
-        [MBProgressHUD hideHUDForView:self.superview animated:YES];
-        
-    }];
+     [self close];
+     
+     [MBProgressHUD showHUDAddedTo:self.superview animated:YES];
+     
+     UIButton *button = (UIButton *)sender;
+     SavedList *savedList = self.savedLists[button.tag];
+     
+     [SavedList getByPlaceIds:savedList.placeIds completion:^(NSArray *places) {
+     
+     
+     DWView *dwView = (DWView *)self.superview;
+     
+     [[Session sessionVariables] setObject:places forKey:@"Places"];
+     [dwView loadDraggableCustomView:places];
+     
+     
+     [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
+     
+     NSArray *views = self.superview.subviews;
+     for(id subview in views) {
+     if([subview isMemberOfClass:[DWLeftSideBar class]]) {
+     DWLeftSideBar *left = (DWLeftSideBar *)subview;
+     [left updateLeftSideBar];
+     }
+     }
+     
+     [MBProgressHUD hideHUDForView:self.superview animated:YES];
+     
+     }];
      */
     
 }
@@ -182,12 +181,12 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     
     [UIView animateWithDuration:0.2
-             animations:^{
-                 self.frame = CGRectMake(wd, 60, (wd * 3) / 4, ht - 60);
-             }
-             completion:^(BOOL finished) {
-                 //[self setContentOffset:CGPointZero];
-             }
+                     animations:^{
+                         self.frame = CGRectMake(wd, 60, (wd * 3) / 4, ht - 60);
+                     }
+                     completion:^(BOOL finished) {
+                         //[self setContentOffset:CGPointZero];
+                     }
      ];
     
 }

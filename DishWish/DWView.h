@@ -11,7 +11,7 @@
 
 @interface DWView : UIView
 
-@property (nonatomic, strong) DWLeftSideBar *leftSideBar;
+@property (nonatomic, strong) DWRightSideBar *rightSideBar;
 @property (nonatomic, strong) SavedList *savedList;
 
 -(void)setup;

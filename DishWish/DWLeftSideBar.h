@@ -8,8 +8,6 @@
 
 @interface DWLeftSideBar : UIScrollView
 
-@property (nonatomic, strong) UIButton *shareButton;
-
 -(void)updateLeftSideBar;
 -(void)close;
 
