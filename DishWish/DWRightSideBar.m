@@ -23,7 +23,7 @@
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         wd = (wd * 3) / 4;
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, wd, 40)];
-        headerLabel.text = @"Shared Lists";
+        headerLabel.text = @"Previous Eats";
         [self addSubview:headerLabel];
         
         UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
@@ -33,6 +33,7 @@
     return self;
 }
 
+/*
 -(void)addList:(SavedList *)list
 {
     [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
@@ -45,54 +46,85 @@
 {
     [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
-    self.savedLists = [[NSMutableArray alloc] initWithArray:listArray];
-    [self populateLists];
+    [self populateLists:listArray];
 }
-
--(void) populateLists
+*/
+-(void)populateLists:(NSArray *)listArray
 {
-    /*
+    [self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, wd, 40)];
-    headerLabel.text = @"Shared Lists";
+    headerLabel.text = @"Previous Eats";
     [self addSubview:headerLabel];
     
+    NSMutableArray *rightLists = [[NSMutableArray alloc] init];
+    for(SavedList *list in listArray)
+    {
+        if(rightLists.count > 0 && ((SavedList *)[rightLists objectAtIndex:rightLists.count - 1]).xrefId == list.xrefId)
+        {
+            ((SavedList *)[rightLists objectAtIndex:rightLists.count - 1]).userName = [NSString stringWithFormat:@"%@, %@", ((SavedList *)[rightLists objectAtIndex:rightLists.count - 1]).userName, list.userName];
+        }
+        else
+        {
+            [rightLists addObject:list];
+        }
+    }
+    
+    self.savedLists = [[NSMutableArray alloc] initWithArray:rightLists];
+    
     NSUInteger i = 0;
-    for(SavedList *list in self.savedLists)
+    for(SavedList *list in rightLists)
     {
         NSString *dateDiff = @"";
-        if(![list.createdAt isMemberOfClass:[NSNull class]])
+        if(![list.updatedAt isMemberOfClass:[NSNull class]])
         {
-            NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:list.createdAt];
+            NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:list.updatedAt];
             if(secondsBetween > 600000)
             {
                 return;
             }
             else if(secondsBetween > 86400)
             {
-                dateDiff = [NSString stringWithFormat:@"%d days ago", (int)secondsBetween / 86400];
+                int value = (int)secondsBetween / 86400;
+                if(value == 1)
+                    dateDiff = @"1 day ago";
+                else
+                    dateDiff = [NSString stringWithFormat:@"%d days ago", value];
             }
             else if(secondsBetween > 3600)
             {
-                dateDiff = [NSString stringWithFormat:@"%d hours ago", (int)secondsBetween / 3600];
+                int value = (int)secondsBetween / 3600;
+                if(value == 1)
+                    dateDiff = @"1 hour ago";
+                else
+                    dateDiff = [NSString stringWithFormat:@"%d hours ago", value];
             }
             else
             {
-                dateDiff = [NSString stringWithFormat:@"%d minutes ago", ((int)secondsBetween / 60) + 1];
+                int value = ((int)secondsBetween / 60) + 1;
+                if(value == 1)
+                    dateDiff = @"1 minute ago";
+                else
+                    dateDiff = [NSString stringWithFormat:@"%d minutes ago", value];
             }
         }
-        NSString *title = @"";
-        if([list.fromUserName isMemberOfClass:[NSNull class]] || [list.fromUserName length] <= 0)
-            title = [NSString stringWithFormat:@"To %@    %@", list.toUserName, dateDiff];
-        else
-            title = [NSString stringWithFormat:@"From %@    %@", list.fromUserName, dateDiff];
+
+        UIButton *datebutton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [datebutton addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [datebutton setTitle:dateDiff forState:UIControlStateNormal];
+        datebutton.frame = CGRectMake(0, (i * 40) + 30, wd, 40);
+        datebutton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        datebutton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+        datebutton.tag = i;
+        [self addSubview:datebutton];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [button addTarget:self action:@selector(listClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:title forState:UIControlStateNormal];
-        button.frame = CGRectMake(0, (i * 40) + 30, wd, 40);
+        [button setTitle:list.userName forState:UIControlStateNormal];
+        button.frame = CGRectMake(0, (i * 40) + 30, wd - datebutton.titleLabel.frame.size.width - 10, 40);
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
         button.tag = i;
@@ -106,7 +138,7 @@
         
         self.contentSize = CGSizeMake(wd, (i * 40) + 60);
     }
-     */
+     
 }
 
 -(void)listClicked:(id)sender

@@ -150,9 +150,6 @@
     NSArray *places = [NSArray arrayWithArray:[Session sessionVariables][@"Places"]];
     NSUInteger currentId = [[[Session sessionVariables] objectForKey:@"CurrentId"] intValue];
     
-    NSLog([NSString stringWithFormat:@"Places %d", places.count]);
-    NSLog([NSString stringWithFormat:@"Current %d", currentId]);
-    
     NSMutableArray *votedPlaces = [[NSMutableArray alloc] init];
     for(SavedList *savedList in savedLists)
     {
@@ -187,9 +184,6 @@
     }
     
     [[Session sessionVariables] setObject:newPlaces forKey:@"Places"];
-    
-    
-    NSLog([NSString stringWithFormat:@"Yes %d", newPlaces.count]);
 }
 
 -(void)buildYesNo:(UIButton *)button voteYes:(NSArray *)voteYes voteNo:(NSArray *)voteNo

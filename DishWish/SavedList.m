@@ -15,6 +15,7 @@
 @synthesize userName = _userName;
 @synthesize yesPlaceIds = _yesPlaceIds;
 @synthesize noPlaceIds = _noPlaceIds;
+@synthesize updatedAt = _updatedAt;
 @synthesize createdAt = _createdAt;
 
 - (id)init:(NSDictionary *)savedList {
@@ -26,6 +27,7 @@
         self.userName = [savedList valueForKey:@"username"];
         self.yesPlaceIds = [savedList valueForKey:@"yesplaces"];
         self.noPlaceIds = [savedList valueForKey:@"noplaces"];
+        self.updatedAt = [savedList valueForKey:@"__updatedAt"];
         self.createdAt = [savedList valueForKey:@"__createdAt"];
     }
 	return self;

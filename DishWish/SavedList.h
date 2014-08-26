@@ -20,6 +20,7 @@
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *yesPlaceIds;
 @property (nonatomic, copy) NSString *noPlaceIds;
+@property (nonatomic, copy) NSDate *updatedAt;
 @property (nonatomic, copy) NSDate *createdAt;
 
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;

@@ -16,7 +16,6 @@
 
 @property (nonatomic, strong) NSMutableArray *savedLists;
 
--(void)addList:(SavedList *)list;
--(void)addAllList:(NSArray *)listArray;
+-(void)populateLists:(NSArray *)listArray;
 
 @end

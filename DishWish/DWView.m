@@ -173,24 +173,22 @@
     }
 
     [User login:^(User *user) {
-        
-        [SavedList add:@"89" completion:^(SavedList *savedList) {
-            
-        }];
-        /*
-        [SavedList getByUser:^(NSArray *savedLists) {
-            
-            DWRightSideBar *right;
-            for(id subview in self.subviews) {
-                if([subview isMemberOfClass:[DWRightSideBar class]])
-                {
-                    right = (DWRightSideBar *)subview;
-                    [right addAllList:savedLists];
-                }
-            }
 
+        [SavedList add:@"88" completion:^(SavedList *savedList) {
+            
+            [SavedList getByUser:^(NSArray *savedLists) {
+                DWRightSideBar *right;
+                for(id subview in self.subviews) {
+                    if([subview isMemberOfClass:[DWRightSideBar class]])
+                    {
+                        right = (DWRightSideBar *)subview;
+                        [right populateLists:savedLists];
+                    }
+                }
+
+            }];
         }];
-         */
+         
     }];
     
 }
