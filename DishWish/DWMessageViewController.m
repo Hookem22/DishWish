@@ -382,7 +382,7 @@
     //[self.tableView reloadData];
     
     // Dismiss the address book view controller.
-    [_addressBookController dismissViewControllerAnimated:YES completion:nil];
+    [_addressBookController dismissViewControllerAnimated:NO completion:nil];
     
     NSString *peopleList = @"";
     for(NSDictionary *dict in _arrContactsData)
@@ -410,7 +410,7 @@
 }
 
 -(void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker{
-    [_addressBookController dismissViewControllerAnimated:YES completion:nil];
+    [_addressBookController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

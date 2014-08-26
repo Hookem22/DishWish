@@ -96,7 +96,9 @@
 
 - (IBAction)shareButtonPressed:(UIButton *)sender
 {   
-
+    [self performSegueWithIdentifier:@"MessageSegue" sender:self];
+    
+    /*
     NSArray *yesPlaces = (NSArray *)[Session sessionVariables][@"yesPlaces"];
     if(yesPlaces.count <= 0)
     {
@@ -113,6 +115,7 @@
         [self.mainView.rightSideBar close];
         [self performSegueWithIdentifier:@"MessageSegue" sender:self];
     }
+    */
 }
 
 -(void)menuButtonPressed
