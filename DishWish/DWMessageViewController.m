@@ -11,6 +11,7 @@
 @property (nonatomic, strong) UITextField *fromTextbox;
 @property (nonatomic, strong) UITextField *peopleTextbox;
 @property (nonatomic, strong) UITextView *messageTextbox;
+@property (nonatomic, assign) BOOL isNew;
 @end
 
 @implementation DWMessageViewController
@@ -22,6 +23,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.isNew = true;
+    
+    return;
     
     [self.navigationItem setTitleView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]]];
         
@@ -29,6 +33,20 @@
     [[self navigationItem] setRightBarButtonItem:backButton];
     
     [self addUI];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    if(self.isNew)
+    {
+        self.isNew = false;
+        [self showAddressBook];
+    }
+    else
+    {
+        [self cancel];
+    }
     
 }
 
@@ -268,7 +286,7 @@
 -(void)showAddressBook {
     _addressBookController = [[ABPeoplePickerNavigationController alloc] init];
     [_addressBookController setPeoplePickerDelegate:self];
-    [self presentViewController:_addressBookController animated:YES completion:nil];
+    [self presentViewController:_addressBookController animated:NO completion:nil];
 }
 
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
