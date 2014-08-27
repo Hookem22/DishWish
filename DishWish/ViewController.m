@@ -65,9 +65,15 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
-    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [shareButton setTitle:@"Add Friends to Eat With" forState:UIControlStateNormal];
-    shareButton.frame = CGRectMake(0, 40, (wd * 3)/4, 40);
+    shareButton.frame = CGRectMake(10, 40, (wd * 3)/4 - 40, 40);
+    shareButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+    shareButton.titleLabel.textColor = [UIColor whiteColor];
+    shareButton.layer.backgroundColor =  [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
+    shareButton.layer.cornerRadius = 5.0;
+    shareButton.titleLabel.textAlignment = UIControlContentHorizontalAlignmentLeft;
+    
     [shareButton addTarget:self action:@selector(shareButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
@@ -95,8 +101,11 @@
 }
 
 - (IBAction)shareButtonPressed:(UIButton *)sender
-{   
-    [self performSegueWithIdentifier:@"MessageSegue" sender:self];
+{
+    DWMessageViewController *message = [[DWMessageViewController alloc] init];
+    message.viewController = self;
+    [self presentViewController:message animated:YES completion:nil];
+    //[self performSegueWithIdentifier:@"MessageSegue" sender:self];
     
     /*
     NSArray *yesPlaces = (NSArray *)[Session sessionVariables][@"yesPlaces"];

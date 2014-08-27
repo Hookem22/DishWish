@@ -15,7 +15,9 @@
 @interface DWRightSideBar : UIScrollView
 
 @property (nonatomic, strong) UIButton *shareButton;
+@property (nonatomic, strong) NSMutableArray *people;
 
+-(void)addPerson:(NSDictionary *)person;
 -(void)close;
 
 @end

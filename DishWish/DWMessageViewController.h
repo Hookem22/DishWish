@@ -11,4 +11,6 @@
 
 @interface DWMessageViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UITextFieldDelegate>
 
+@property(nonatomic, assign) ViewController *viewController;
+
 @end
