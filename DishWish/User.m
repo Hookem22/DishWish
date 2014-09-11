@@ -118,7 +118,7 @@
 {
     QSAzureService *service = [QSAzureService defaultService:@"Users"];
     
-    NSString *whereStatement = [NSString stringWithFormat:@"phonenumber = %@", phoneNumber];
+    NSString *whereStatement = [NSString stringWithFormat:@"phonenumber = '%@'", phoneNumber];
     
     [service getByWhere:whereStatement completion:^(NSArray *results)  {
         for(id item in results) {

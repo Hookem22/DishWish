@@ -26,7 +26,7 @@
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion;
 +(void)getByUser:(QSCompletionBlock)completion;
-+(void)add:(NSString *)xrefId completion:(QSCompletionBlock)completion;
++(void)add:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion;
 +(void)updateList:(NSString *)placeId isYes:(BOOL)isYes;
 
 @end

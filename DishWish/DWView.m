@@ -174,7 +174,7 @@
 
     [User login:^(User *user) {
 
-        [SavedList add:@"88" completion:^(SavedList *savedList) {
+        [SavedList add:@"88" userId:@"" completion:^(SavedList *savedList) {
             
             /*
             [SavedList getByUser:^(NSArray *savedLists) {

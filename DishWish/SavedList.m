@@ -148,13 +148,15 @@
 }
 */
 
-+(void)add:(NSString *)xrefId completion:(QSCompletionBlock)completion
++(void)add:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
     
-    User *user = (User *)[Session sessionVariables][@"currentUser"];
-    
-    NSDictionary *savedList = @{@"xrefid": xrefId, @"userid" : user.userId, @"yesplaces" : @"", @"noplaces": @"" };
+    if(userId.length <= 0) {
+        User *user = (User *)[Session sessionVariables][@"currentUser"];
+        userId = user.userId;
+    }
+    NSDictionary *savedList = @{@"xrefid": xrefId, @"userid" : userId, @"yesplaces" : @"", @"noplaces": @"" };
     [service addItem:savedList completion:^(NSDictionary *item)
      {
          SavedList *savedList = [[SavedList alloc] init:item];
