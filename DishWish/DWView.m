@@ -68,16 +68,6 @@
             
             [[Session sessionVariables] setObject:places forKey:@"Places"];
             
-            UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake((wd - 220)/2, 220, 220, 40)];
-            [shareButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
-            NSString *shareTitle = @"Send List to Friends";
-            [shareButton setTitle:shareTitle forState:UIControlStateNormal];
-            [shareButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
-            [shareButton.layer setBorderWidth:1.0];
-            shareButton.layer.cornerRadius = 15;
-            [shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self addSubview:shareButton];
-            
             [self loadDraggableCustomView:places];
             [self placesDidLoad];
         }];
@@ -159,11 +149,20 @@
     navigItem.leftBarButtonItem = menuButton;
     navigItem.rightBarButtonItem = userButton;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
+    
+    for(id subview in self.subviews) {
+        if([subview isMemberOfClass:[UIImageView class]])
+            [self bringSubviewToFront:subview];
+    }
+    for(id subview in self.subviews) {
+        if([subview isMemberOfClass:[DWAddFriendsView class]])
+            [self bringSubviewToFront:subview];
+    }
 }
 
 -(void)placesDidLoad
 {
-    
+    return;
     //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
     //[self addSubview:instructions];
     
@@ -193,55 +192,6 @@
          
     }];
     
-}
-
--(void)shareButtonClick:(id)sender
-{
-/*
-    if(self.savedList != nil)
-    {
-        [MBProgressHUD showHUDAddedTo:self animated:YES];
-
-        User *toUser = [[User alloc] init];
-        toUser.userId = self.savedList.fromUserId;
-        toUser.name = self.savedList.fromUserName;
-        
-        [SavedList add:self.savedList.toUserName toUser:toUser completion:^(SavedList *savedList) {
-            for(id subview in self.subviews) {
-                if([subview isMemberOfClass:[DWRightSideBar class]])
-                {
-                    DWRightSideBar *right = (DWRightSideBar *)subview;
-                    [right addList:savedList];
-                }
-            }
-            
-            NSString *header = [NSString stringWithFormat:@"%@ sent you a list", savedList.fromUserName];
-            NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId];
-            
-            [User get:toUser.userId completion:^(User *user) {
-                
-                [PushMessage push:user.pushDeviceToken header:header message:message];
-            
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Message Sent"
-                                            message:[NSString stringWithFormat:@"Your list was sent to %@", toUser.name]
-                                            delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-                
-                [alert show];
-            
-                [MBProgressHUD hideHUDForView:self animated:YES];
-            }];
-            
-        }];
-    }
-    else
-    {
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        UIButton *button = [[UIButton alloc] init];
-        [appDelegate.viewController shareButtonPressed:button];
-    }
- */
 }
 
 -(void)menuButtonPressed
@@ -363,8 +313,15 @@
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
+    NSUInteger splashIndex = 0;
+    for(id subview in self.subviews)
+    {
+        if([subview isMemberOfClass:[DWAddFriendsView class]])
+            splashIndex = 2;
+    }
+    
     DWDraggableView *prevDraggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[0] async:NO];
-    [self addSubview:prevDraggableView];
+    [self insertSubview:prevDraggableView atIndex:splashIndex];
     
     NSUInteger currentId = places.count - 1 > 3 ? 3 : places.count - 1;
     [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];

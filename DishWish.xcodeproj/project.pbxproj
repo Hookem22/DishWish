@@ -15,6 +15,7 @@
 		BE529A87195212F600BAE803 /* default.gpx in Resources */ = {isa = PBXBuildFile; fileRef = BE529A86195212F600BAE803 /* default.gpx */; };
 		BE529A8B1952355700BAE803 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE529A8A1952355700BAE803 /* MapKit.framework */; };
 		BE529A931954959C00BAE803 /* directions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE529A921954959C00BAE803 /* directions@2x.png */; };
+		BE763A8819C39930005E4385 /* DWAddFriendsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE763A8719C39930005E4385 /* DWAddFriendsView.m */; };
 		BE7E01CB19786D6E0043F7F5 /* SavedList.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7E01CA19786D6E0043F7F5 /* SavedList.m */; };
 		BE9C22D5195C9E2000207A1C /* DWMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9C22D4195C9E2000207A1C /* DWMessageViewController.m */; };
 		BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEEF191D82300087C645 /* Foundation.framework */; };
@@ -84,6 +85,8 @@
 		BE529A86195212F600BAE803 /* default.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.gpx; sourceTree = "<group>"; };
 		BE529A8A1952355700BAE803 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		BE529A921954959C00BAE803 /* directions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions@2x.png"; sourceTree = "<group>"; };
+		BE763A8619C39930005E4385 /* DWAddFriendsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWAddFriendsView.h; sourceTree = "<group>"; };
+		BE763A8719C39930005E4385 /* DWAddFriendsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWAddFriendsView.m; sourceTree = "<group>"; };
 		BE7E01C919786D6E0043F7F5 /* SavedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedList.h; sourceTree = "<group>"; };
 		BE7E01CA19786D6E0043F7F5 /* SavedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedList.m; sourceTree = "<group>"; };
 		BE9C22D3195C9E2000207A1C /* DWMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWMessageViewController.h; sourceTree = "<group>"; };
@@ -223,6 +226,8 @@
 				BEA9CF01191D82300087C645 /* Main.storyboard */,
 				BEA9CF2C191D830E0087C645 /* DWView.h */,
 				BEA9CF2D191D830E0087C645 /* DWView.m */,
+				BE763A8619C39930005E4385 /* DWAddFriendsView.h */,
+				BE763A8719C39930005E4385 /* DWAddFriendsView.m */,
 				BE3B5C07193E76DC002AE5FF /* DWLeftSideBar.h */,
 				BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */,
 				BEB35D661954D6C60081D3FB /* DWRightSideBar.h */,
@@ -466,6 +471,7 @@
 				BEA9CF38191D830E0087C645 /* DWMenu.m in Sources */,
 				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,
+				BE763A8819C39930005E4385 /* DWAddFriendsView.m in Sources */,
 				BEB35D731959D5690081D3FB /* MBProgressHUD.m in Sources */,
 				BE7E01CB19786D6E0043F7F5 /* SavedList.m in Sources */,
 				BEA9CF47192124480087C645 /* QSAzureService.m in Sources */,

@@ -36,6 +36,12 @@
         [self cancel];
     }
     
+    ViewController *vc = (ViewController *)self.viewController;
+    for(id subview in vc.mainView.subviews) {
+        if([subview isMemberOfClass:[UIImageView class]] || [subview isMemberOfClass:[DWAddFriendsView class]])
+            [subview removeFromSuperview];
+    }
+    
 }
 
 -(void)cancel{

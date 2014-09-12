@@ -2,6 +2,7 @@
 #import "DWDraggableView.h"
 #import "DWOverlayView.h"
 #import "Place.h"
+#import "DWAddFriendsView.h"
 #import "DWLeftSideBar.h"
 #import "DWRightSideBar.h"
 #import "InstructionsView.h"
@@ -11,6 +12,7 @@
 
 @interface DWView : UIView
 
+@property (nonatomic, strong) DWAddFriendsView *addFriendsView;
 @property (nonatomic, strong) DWRightSideBar *rightSideBar;
 @property (nonatomic, strong) SavedList *savedList;
 
