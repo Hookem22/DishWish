@@ -273,6 +273,19 @@
                      
                  }];
         }
+        if([subview isMemberOfClass:[DWPreviousSideBar class]]) {
+            [self bringSubviewToFront:subview];
+            DWPreviousSideBar *prev = (DWPreviousSideBar *)subview;
+
+            [UIView animateWithDuration:0.2
+                 animations:^{
+                     prev.frame = CGRectMake(wd, 60, (wd * 3)/4, ht - 60);
+                 }
+                 completion:^(BOOL finished){
+                     
+                 }];
+        }
+        
     }
 }
 

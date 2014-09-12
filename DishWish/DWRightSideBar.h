@@ -11,6 +11,7 @@
 #import "Session.h"
 #import "SavedList.h"
 #import "MBProgressHUD.h"
+#import "DWPreviousSideBar.h"
 
 @interface DWRightSideBar : UIScrollView
 

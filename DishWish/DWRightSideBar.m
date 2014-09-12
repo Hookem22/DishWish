@@ -7,7 +7,6 @@
 //
 
 #import "DWRightSideBar.h"
-#import "DWView.h"
 
 @interface DWRightSideBar ()
 
@@ -27,6 +26,7 @@
         
         self.people = [[NSMutableArray alloc] init];
         
+        NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         wd = (wd * 3) / 4;
         self.peopleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, wd, 40)];
@@ -34,6 +34,13 @@
         self.peopleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
         [self addSubview:self.peopleLabel];
+        
+        UIButton *previousButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [previousButton setTitle:@"Previous Lists" forState:UIControlStateNormal];
+        previousButton.frame = CGRectMake(0, ht - 100, wd, 40);
+        [previousButton addTarget:self action:@selector(previousLists) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:previousButton];
+        
         
 //        NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
 //        wd = (wd * 3) / 4;
@@ -88,6 +95,49 @@
 {
     
 }
+
+-(void)previousLists
+{
+
+    bool exists = false;
+    for(id subview in self.superview.subviews) {
+        if([subview isMemberOfClass:[DWPreviousSideBar class]])
+        {
+            exists = true;
+            DWPreviousSideBar *prev = (DWPreviousSideBar *)subview;
+            [self openPreviousLists:prev];
+        }
+    }
+    if(!exists)
+    {
+        NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+        NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+        
+        DWPreviousSideBar *prev = [[DWPreviousSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
+        [SavedList getByUser:^(NSArray *savedLists) {
+            [prev populateLists:savedLists];
+            [self.superview addSubview:prev];
+            [self openPreviousLists:prev];
+        }];
+    }
+}
+
+-(void)openPreviousLists:(DWPreviousSideBar *)prev
+{
+    NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
+    NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
+    
+    [self.superview bringSubviewToFront:prev];
+    
+    [UIView animateWithDuration:0.2
+         animations:^{
+             prev.frame = CGRectMake(wd /4, 60, (wd * 3)/4, ht - 60);
+         }
+         completion:^(BOOL finished){
+             
+         }];
+}
+
 
 -(void)close {
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
