@@ -62,7 +62,7 @@
 }
 
 -(void)addInviteFriends
-{
+{   
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
@@ -93,7 +93,7 @@
     
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [shareButton setTitle:@"Add Friends to Eat With" forState:UIControlStateNormal];
-    shareButton.frame = CGRectMake(10, 40, (wd * 3)/4 - 40, 40);
+    shareButton.frame = CGRectMake(10, 10, (wd * 3)/4 - 40, 40);
     shareButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
     shareButton.titleLabel.textColor = [UIColor whiteColor];
     shareButton.layer.backgroundColor =  [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
@@ -119,8 +119,10 @@
     
     [[Session sessionVariables] setObject:location forKey:@"location"];
     
-    if(self.mainView.subviews.count > 1) //Bug for loading cards twice
-        return;
+    for(id subview in self.mainView.subviews) { //Bug for loading cards twice
+        if([subview isMemberOfClass:[DWDraggableView class]] || [subview isMemberOfClass:[DWLeftSideBar class]] )
+            return;
+    }
     
     [self.mainView setup];
     

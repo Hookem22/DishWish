@@ -7,6 +7,7 @@
 //
 
 #import "DWAddFriendsView.h"
+#import "DWView.h"
 
 @implementation DWAddFriendsView
 
@@ -17,11 +18,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+        UIImage *splash = [UIImage imageNamed:@"splash"];
+        UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
+        
+        [self addSubview:splashView];
+        
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
         
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closeButton setTitle:@"Not now" forState:UIControlStateNormal];
+        [closeButton setTitle:@"Not yet" forState:UIControlStateNormal];
         closeButton.frame = CGRectMake(100, ht / 3 + 130, wd - 200, 30);
         closeButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         closeButton.titleLabel.textColor = [UIColor whiteColor];
@@ -48,16 +54,11 @@
     
     [UIView animateWithDuration:0.3
          animations:^{
-             for(UIView *subview in self.superview.subviews) {
-                 if([subview isMemberOfClass:[UIImageView class]] || [subview isMemberOfClass:[DWAddFriendsView class]])
-                     subview.alpha = 0.0;
-             }
+            self.alpha = 0.0;
          }
          completion:^(BOOL finished){
-             for(id subview in self.superview.subviews) {
-                 if([subview isMemberOfClass:[UIImageView class]] || [subview isMemberOfClass:[DWAddFriendsView class]])
-                     [subview removeFromSuperview];
-             }
+             [(DWView *)self.superview addNavBar];
+             [self removeFromSuperview];
          }];
 }
 

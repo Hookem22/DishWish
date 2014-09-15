@@ -18,8 +18,9 @@
 
 -(void)setup;
 
+-(void)addNavBar;
 -(void)menuButtonPressed;
 -(void)userButtonPressed;
-- (void)loadDraggableCustomView:(NSArray *)places;
+-(void)loadDraggableCustomView:(NSArray *)places;
 
 @end

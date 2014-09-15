@@ -17,6 +17,9 @@
 
 @property (nonatomic, strong) UIButton *shareButton;
 @property (nonatomic, strong) NSMutableArray *people;
+@property (nonatomic, strong) UIView *topBackground;
+@property (nonatomic, strong) UIView *topBorder;
+
 
 -(void)addPerson:(NSDictionary *)person;
 -(void)close;

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		481981FA193D767C003EE160 /* loading@2x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 481981F9193D767C003EE160 /* loading@2x.gif */; };
+		4882872219C3D62400A0367F /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 4882872119C3D62400A0367F /* Message.m */; };
 		48E404771978D60E00A1AD38 /* PushMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 48E404761978D60E00A1AD38 /* PushMessage.m */; };
 		BE3B5C09193E76DC002AE5FF /* DWLeftSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3B5C08193E76DC002AE5FF /* DWLeftSideBar.m */; };
 		BE3B5C0C1940E802002AE5FF /* nav_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3B5C0A1940E802002AE5FF /* nav_menu@2x.png */; };
@@ -76,6 +77,8 @@
 
 /* Begin PBXFileReference section */
 		481981F9193D767C003EE160 /* loading@2x.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading@2x.gif"; sourceTree = "<group>"; };
+		4882872019C3D62400A0367F /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		4882872119C3D62400A0367F /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		48E404751978D60E00A1AD38 /* PushMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushMessage.h; sourceTree = "<group>"; };
 		48E404761978D60E00A1AD38 /* PushMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushMessage.m; sourceTree = "<group>"; };
 		BE3B5C07193E76DC002AE5FF /* DWLeftSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWLeftSideBar.h; sourceTree = "<group>"; };
@@ -322,6 +325,8 @@
 				BE7E01CA19786D6E0043F7F5 /* SavedList.m */,
 				48E404751978D60E00A1AD38 /* PushMessage.h */,
 				48E404761978D60E00A1AD38 /* PushMessage.m */,
+				4882872019C3D62400A0367F /* Message.h */,
+				4882872119C3D62400A0367F /* Message.m */,
 				BEB35D711959D5690081D3FB /* MBProgressHUD.h */,
 				BEB35D721959D5690081D3FB /* MBProgressHUD.m */,
 			);
@@ -472,6 +477,7 @@
 				BEA9CF39191D830E0087C645 /* DWOverlayView.m in Sources */,
 				BEA9CF00191D82300087C645 /* AppDelegate.m in Sources */,
 				BE763A8819C39930005E4385 /* DWAddFriendsView.m in Sources */,
+				4882872219C3D62400A0367F /* Message.m in Sources */,
 				BEB35D731959D5690081D3FB /* MBProgressHUD.m in Sources */,
 				BE7E01CB19786D6E0043F7F5 /* SavedList.m in Sources */,
 				BEA9CF47192124480087C645 /* QSAzureService.m in Sources */,

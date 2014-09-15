@@ -22,7 +22,7 @@
 	self = [super init];
 	if (self) {
         self.listId = [savedList valueForKey:@"id"];
-        self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longLongValue];
+        self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longValue];
         self.userId = [savedList valueForKey:@"userid"];
         self.userName = [savedList valueForKey:@"username"];
         self.yesPlaceIds = [savedList valueForKey:@"yesplaces"];

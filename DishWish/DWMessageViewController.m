@@ -37,8 +37,16 @@
     }
     
     ViewController *vc = (ViewController *)self.viewController;
+    bool navBar = false;
     for(id subview in vc.mainView.subviews) {
-        if([subview isMemberOfClass:[UIImageView class]] || [subview isMemberOfClass:[DWAddFriendsView class]])
+        if([subview isMemberOfClass:[UINavigationBar class]])
+            navBar = true;
+    }
+    if(!navBar)
+        [vc.mainView addNavBar];
+    
+    for(id subview in vc.mainView.subviews) {
+        if([subview isMemberOfClass:[DWAddFriendsView class]])
             [subview removeFromSuperview];
     }
     

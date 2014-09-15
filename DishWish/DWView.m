@@ -73,6 +73,7 @@
         }];
     }
     
+    /*
     NSUInteger buttonWidth = [savedListId length] > 0 ? wd - 20 : 220;
     
     UIButton *resetButton = [[UIButton alloc] initWithFrame:CGRectMake((wd - buttonWidth)/2, 160, buttonWidth, 40)];
@@ -83,7 +84,8 @@
     resetButton.layer.cornerRadius = 15;
     [resetButton addTarget:self action:@selector(reloadPlaces:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:resetButton];
-    
+    [self sendSubviewToBack:resetButton];
+    */
     
     UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(0, ht-40, wd/2, 40)];
     noButton.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:76.0/255.0 blue:66.0/255.0 alpha:1.0];
@@ -105,10 +107,14 @@
     //DWRightSideBar *right = [[DWRightSideBar alloc] initWithFrame:CGRectMake(wd, 60, (wd * 3)/4, ht - 60)];
     //[self addSubview:right];
     
-    UIImage *splash = [UIImage imageNamed:@"splash"];
-    UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
-    
-    [self addSubview:splashView];
+//    UIImage *splash = [UIImage imageNamed:@"splash"];
+//    UIImageView *splashView = [[UIImageView alloc] initWithImage:splash];
+//    [self addSubview:splashView];
+
+    for(id subview in self.subviews) {
+        if([subview isMemberOfClass:[DWAddFriendsView class]])
+            [self bringSubviewToFront:subview];
+    }
     
 }
 
@@ -127,7 +133,7 @@
     }];
 }
 
--(void)addNavBar:(NSUInteger)width
+-(void)addNavBar
 {
     for(id subview in self.subviews) {
         if([subview isMemberOfClass:[UINavigationBar class]])
@@ -137,7 +143,7 @@
         }
     }
     
-    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, width, 60)];
+    UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 60)];
     [self addSubview:naviBarObj];
     
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)];
@@ -150,14 +156,6 @@
     navigItem.rightBarButtonItem = userButton;
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
     
-    for(id subview in self.subviews) {
-        if([subview isMemberOfClass:[UIImageView class]])
-            [self bringSubviewToFront:subview];
-    }
-    for(id subview in self.subviews) {
-        if([subview isMemberOfClass:[DWAddFriendsView class]])
-            [self bringSubviewToFront:subview];
-    }
 }
 
 -(void)placesDidLoad
@@ -165,12 +163,12 @@
     return;
     //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
     //[self addSubview:instructions];
-    
+    /*
     for(id subview in self.subviews) {
         if([subview isMemberOfClass:[UIImageView class]])
             [subview removeFromSuperview];
     }
-
+    */
     [User login:^(User *user) {
 
         [SavedList add:@"88" userId:@"" completion:^(SavedList *savedList) {
@@ -197,7 +195,7 @@
 -(void)menuButtonPressed
 {
     [self closeRightSideBar];
-    
+        NSArray *a = [NSArray arrayWithArray:self.subviews];
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
@@ -325,16 +323,9 @@
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-    
-    NSUInteger splashIndex = 0;
-    for(id subview in self.subviews)
-    {
-        if([subview isMemberOfClass:[DWAddFriendsView class]])
-            splashIndex = 2;
-    }
-    
+       
     DWDraggableView *prevDraggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[0] async:NO];
-    [self insertSubview:prevDraggableView atIndex:splashIndex];
+    [self insertSubview:prevDraggableView atIndex:1];
     
     NSUInteger currentId = places.count - 1 > 3 ? 3 : places.count - 1;
     [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
@@ -349,7 +340,7 @@
         prevDraggableView = draggableView;
     }
     
-    [self addNavBar:[[UIScreen mainScreen] bounds].size.width];
+    //[self addNavBar];
 }
 
 -(void) voteButtonClick:(id)sender
