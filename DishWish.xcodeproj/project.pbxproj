@@ -17,6 +17,9 @@
 		BE529A8B1952355700BAE803 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE529A8A1952355700BAE803 /* MapKit.framework */; };
 		BE529A931954959C00BAE803 /* directions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE529A921954959C00BAE803 /* directions@2x.png */; };
 		BE763A8819C39930005E4385 /* DWAddFriendsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE763A8719C39930005E4385 /* DWAddFriendsView.m */; };
+		BE763A8C19C75F38005E4385 /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE763A8919C75F38005E4385 /* message@2x.png */; };
+		BE763A8D19C75F38005E4385 /* nav@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE763A8A19C75F38005E4385 /* nav@2x.png */; };
+		BE763A8E19C75F38005E4385 /* newmessage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE763A8B19C75F38005E4385 /* newmessage@2x.png */; };
 		BE7E01CB19786D6E0043F7F5 /* SavedList.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7E01CA19786D6E0043F7F5 /* SavedList.m */; };
 		BE9C22D5195C9E2000207A1C /* DWMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9C22D4195C9E2000207A1C /* DWMessageViewController.m */; };
 		BEA9CEF0191D82300087C645 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA9CEEF191D82300087C645 /* Foundation.framework */; };
@@ -90,6 +93,9 @@
 		BE529A921954959C00BAE803 /* directions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions@2x.png"; sourceTree = "<group>"; };
 		BE763A8619C39930005E4385 /* DWAddFriendsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWAddFriendsView.h; sourceTree = "<group>"; };
 		BE763A8719C39930005E4385 /* DWAddFriendsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWAddFriendsView.m; sourceTree = "<group>"; };
+		BE763A8919C75F38005E4385 /* message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message@2x.png"; sourceTree = "<group>"; };
+		BE763A8A19C75F38005E4385 /* nav@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav@2x.png"; sourceTree = "<group>"; };
+		BE763A8B19C75F38005E4385 /* newmessage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newmessage@2x.png"; sourceTree = "<group>"; };
 		BE7E01C919786D6E0043F7F5 /* SavedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedList.h; sourceTree = "<group>"; };
 		BE7E01CA19786D6E0043F7F5 /* SavedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedList.m; sourceTree = "<group>"; };
 		BE9C22D3195C9E2000207A1C /* DWMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWMessageViewController.h; sourceTree = "<group>"; };
@@ -288,6 +294,9 @@
 		BEA9CF2E191D830E0087C645 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				BE763A8919C75F38005E4385 /* message@2x.png */,
+				BE763A8A19C75F38005E4385 /* nav@2x.png */,
+				BE763A8B19C75F38005E4385 /* newmessage@2x.png */,
 				BEBC1E9E19A7F01D0000F084 /* greencheck@2x.png */,
 				BEEB02A419620D350089E1A4 /* swipeRight@2x.png */,
 				BEEB02A219620D2F0089E1A4 /* icon@2x.png */,
@@ -426,6 +435,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE763A8D19C75F38005E4385 /* nav@2x.png in Resources */,
 				BEA9CF08191D82300087C645 /* Images.xcassets in Resources */,
 				BEA9CF3E191D830E0087C645 /* thumbs_up_300x300@2x.png in Resources */,
 				BE529A931954959C00BAE803 /* directions@2x.png in Resources */,
@@ -446,9 +456,11 @@
 				BEB35D80195B1E1E0081D3FB /* check@2x.png in Resources */,
 				BEB35D7D195B1BE60081D3FB /* letseat@2x.png in Resources */,
 				BEA9CF03191D82300087C645 /* Main.storyboard in Resources */,
+				BE763A8E19C75F38005E4385 /* newmessage@2x.png in Resources */,
 				BEA9CF3D191D830E0087C645 /* thumbs_down@2x.png in Resources */,
 				BEBC1E9F19A7F01D0000F084 /* greencheck@2x.png in Resources */,
 				BE529A87195212F600BAE803 /* default.gpx in Resources */,
+				BE763A8C19C75F38005E4385 /* message@2x.png in Resources */,
 				BEEB02A319620D2F0089E1A4 /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -146,21 +146,29 @@
     UINavigationBar *naviBarObj = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 60)];
     [self addSubview:naviBarObj];
     
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)];
+    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 30)];
+    [menuButton setImage:[UIImage imageNamed:@"nav"] forState:UIControlStateNormal];
+    [menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *userButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_user"] style:UIBarButtonItemStyleBordered target:self action:@selector(userButtonPressed)];
+    UIButton *userButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 30)];
+    [userButton setImage:[UIImage imageNamed:@"newmessage"] forState:UIControlStateNormal];
+    [userButton addTarget:self action:@selector(userButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    //UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonPressed)];
+    
+    //UIBarButtonItem *userButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"newmessage"] style:UIBarButtonItemStylePlain target:self action:@selector(userButtonPressed)];
     
     UINavigationItem *navigItem = [[UINavigationItem alloc] init];
     navigItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"letseat"]];
-    navigItem.leftBarButtonItem = menuButton;
-    navigItem.rightBarButtonItem = userButton;
+    navigItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
+    navigItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:userButton];
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
     
 }
 
 -(void)placesDidLoad
 {
-    return;
+    //return;
     //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
     //[self addSubview:instructions];
     /*
@@ -195,7 +203,7 @@
 -(void)menuButtonPressed
 {
     [self closeRightSideBar];
-        NSArray *a = [NSArray arrayWithArray:self.subviews];
+
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
@@ -282,6 +290,19 @@
                  completion:^(BOOL finished){
                      
                  }];
+        }
+        if([subview isMemberOfClass:[UINavigationBar class]]) {
+            UINavigationBar *nav = (UINavigationBar *)subview;
+            if(nav.items.count > 0 && [nav.items[0] isMemberOfClass:[UINavigationItem class]])
+            {
+                UIButton *userButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 30)];
+                [userButton setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+                [userButton addTarget:self action:@selector(userButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+                
+                UINavigationItem *item = (UINavigationItem *)nav.items[0];
+                item.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:userButton];
+            }
+            
         }
         
     }

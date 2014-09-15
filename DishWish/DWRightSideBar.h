@@ -10,16 +10,13 @@
 #import "Place.h"
 #import "Session.h"
 #import "SavedList.h"
+#import "Message.h"
 #import "MBProgressHUD.h"
 #import "DWPreviousSideBar.h"
 
 @interface DWRightSideBar : UIScrollView
 
 @property (nonatomic, strong) UIButton *shareButton;
-@property (nonatomic, strong) NSMutableArray *people;
-@property (nonatomic, strong) UIView *topBackground;
-@property (nonatomic, strong) UIView *topBorder;
-
 
 -(void)addPerson:(NSDictionary *)person;
 -(void)close;

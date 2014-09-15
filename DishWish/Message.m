@@ -19,7 +19,7 @@
 	self = [super init];
 	if (self) {
         self.messageId = [message valueForKey:@"messageId"];
-        self.xrefId = [[message valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[message valueForKey:@"xrefid"] longValue];
+        self.xrefId = [[message valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[message valueForKey:@"xrefid"] longLongValue];
         self.userId = [message valueForKey:@"userid"];
         self.message = [message valueForKey:@"message"];
     }
@@ -55,6 +55,5 @@
          completion(message);
      }];
 }
-
 
 @end
