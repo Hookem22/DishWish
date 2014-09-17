@@ -176,6 +176,19 @@
     
 }
 
+- (void)getMessages:(NSDictionary *)params completion:(QSCompletionBlock)completion
+{
+    [self.client invokeAPI:@"getmessages" body:params HTTPMethod:@"POST" parameters:nil
+                   headers:nil completion:^(NSArray *results, NSHTTPURLResponse *response, NSError *error) {
+                       [self logErrorIfNotNil:error];
+                       
+                       items = [results mutableCopy];
+                       
+                       completion(results);
+                       
+                   }];
+}
+
 -(void)updateList:(NSDictionary *)params
 {
     [self.client invokeAPI:@"updatelist" body:params HTTPMethod:@"POST" parameters:nil

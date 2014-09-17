@@ -13,7 +13,9 @@
 @synthesize messageId = _messageId;
 @synthesize xrefId = _xrefId;
 @synthesize userId = _userId;
+@synthesize userName = _userName;
 @synthesize message = _message;
+@synthesize date = _date;
 
 - (id)init:(NSDictionary *)message {
 	self = [super init];
@@ -21,11 +23,13 @@
         self.messageId = [message valueForKey:@"messageId"];
         self.xrefId = [[message valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[message valueForKey:@"xrefid"] longLongValue];
         self.userId = [message valueForKey:@"userid"];
+        self.userName = [message valueForKey:@"username"];
         self.message = [message valueForKey:@"message"];
+        self.date = [message objectForKey:@"__createdAt"];
     }
 	return self;
 }
-
+/*
 +(void)get:(NSUInteger)xrefId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"Messages"];
@@ -39,7 +43,28 @@
         completion(messages);
     }];
 }
-
+*/
++(void)get:(NSUInteger)xrefId completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Messages"];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setValue:[NSString stringWithFormat:@"%lu",(unsigned long)xrefId] forKey:@"xrefid"];
+    
+    [service getMessages:params completion:^(NSArray *results)  {
+        if(results.count > 0) {
+            NSMutableArray *messages = [[NSMutableArray alloc] init];
+            for(id message in results) {
+                [messages addObject:[[Message alloc] init:message]];
+            }
+            completion(messages);
+        }
+        else
+        {
+            completion(nil);
+        }
+    }];
+}
 
 +(void)add:(NSString *)message completion:(QSCompletionBlock)completion
 {

@@ -22,7 +22,7 @@
 @property (nonatomic, strong) UIView *bottomBorder;
 
 @property (nonatomic, strong) NSMutableArray *messages;
-@property (nonatomic, strong) UIView *messageView;
+@property (nonatomic, strong) UIScrollView *messageView;
 
 @end
 
@@ -57,7 +57,7 @@
         
         [self bringSubviewToFront:self.shareButton];
         
-        self.messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 200)];
+        self.messageView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, wd, ht - 200)];
         [self addSubview:self.messageView];
         
         self.bottomBackground = [[UIView alloc] initWithFrame:CGRectMake(0, ht - 140, wd, 140)];
@@ -149,7 +149,12 @@
 
 -(void)sendMessage
 {
-    if(self.messageTextField.text.length > 0)
+    if(self.people.count <= 0)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Add friends to message" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+    else if(self.messageTextField.text.length > 0)
     {
 
 //        [Message add:self.messageTextField.text completion:^(Message *newMessage)
@@ -157,12 +162,23 @@
 //
 //         }];
         
-        [self populateMessages:self.messageTextField.text];
+        [self getMessagesFromDb:self.messageTextField.text];
+        //[self populateMessages:self.messageTextField.text];
         [self.messageTextField setText:@""];
         //[self.messages addObject:message];
     }
     
     [self endEditing:YES];
+}
+
+-(void)getMessagesFromDb:(NSString *)newMessage
+{
+    SavedList *currentSavedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
+    [Message get:currentSavedList.xrefId completion:^(NSArray *allMessages)
+     {
+         self.messages = [[NSMutableArray alloc] initWithArray:allMessages];
+         [self populateMessages:newMessage];
+     }];
 }
 
 -(void)populateMessages:(NSString *)message
@@ -173,27 +189,40 @@
     
     [self.messageView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    NSUInteger viewY = 0;
     for(Message *message in self.messages)
     {
-        NSLog(message.message);
+        bool isMe = [currentUser.userId isEqualToString:message.userId];
+        NSString *userName = self.people.count > 1 ? message.userName : @"";
+        UIView *view = [self addTextView:message.message from:userName date:[self dateDiff:message.date] isMe:isMe viewY:viewY];
+        [self.messageView addSubview:view];
+        viewY = viewY + view.frame.size.height;
     }
     
     if(message.length > 0)
     {
-        [self.messageView addSubview:[self addTextView:message from:@"" date:@"Now" isMe:YES]];
+        UIView *view = [self addTextView:message from:@"" date:@"Now" isMe:YES viewY:viewY];
+        viewY = viewY + view.frame.size.height;
+        [self.messageView addSubview:view];
     }
     
     self.messageView.frame = CGRectMake(0, self.topBackground.frame.size.height + 10, wd, ht - 200);
+    self.messageView.contentSize = CGSizeMake(wd, viewY + 50);
+    
+    CGPoint bottomOffset = CGPointMake(0, self.messageView.contentSize.height - self.messageView.bounds.size.height);
+    [self.messageView setContentOffset:bottomOffset animated:NO];
 }
 
--(UIView *)addTextView:(NSString *)message from:(NSString *)from date:(NSString *)date isMe:(BOOL)isMe
+-(UIView *)addTextView:(NSString *)message from:(NSString *)from date:(NSString *)date isMe:(BOOL)isMe viewY:(NSUInteger)viewY
 {
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
     if(isMe)
     {
-        UIView *view = [[UIView alloc] init];
+        CGFloat textHeight = [self heightForText:message width:(wd * 2) / 3 - 5 fontSize:14] + 10;
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, viewY, wd, textHeight + 25)];
 
         UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(wd / 3, 0, (wd * 2) / 3 - 10, 15)];
         dateLabel.font = [UIFont systemFontOfSize:12];
@@ -210,7 +239,7 @@
          [self.view addSubview:wrapView];
          */
 
-        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(wd / 3, 18, (wd * 2) / 3 - 5, [self heightForText:message width:(wd * 2) / 3 - 5 fontSize:14] + 10)];
+        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(wd / 3, 18, (wd * 2) / 3 - 5, textHeight)];
         newTextbox.textColor = [UIColor whiteColor];
         newTextbox.font = [UIFont systemFontOfSize:14];
         newTextbox.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0];
@@ -227,7 +256,9 @@
     else
     {
         
-        UIView *view = [[UIView alloc] init];
+        CGFloat textHeight = [self heightForText:message width:(wd * 2) / 3 - 5 fontSize:14] + 10;
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, viewY + 5, wd, textHeight + 25)];
+        
         if(from.length > 0)
         {
             UILabel *fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, wd - 5, 15)];
@@ -243,7 +274,7 @@
             [view addSubview:dateLabel];
         }
         
-        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(5, 18, (wd * 2) / 3 - 5, [self heightForText:message width:(wd * 2) / 3 - 5 fontSize:14] + 10)];
+        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(5, 18, (wd * 2) / 3 - 5, textHeight)];
         //newTextbox.textColor = [UIColor whiteColor];
         newTextbox.font = [UIFont systemFontOfSize:14];
         //newTextbox.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0];
@@ -257,6 +288,47 @@
         [view addSubview:newTextbox];
         return view;
     }
+}
+
+-(NSString *)dateDiff:(NSDate *)date
+{
+    NSString *dateDiff = @"";
+    if(![date isMemberOfClass:[NSNull class]])
+    {
+        NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:date];
+        if(secondsBetween > 600000)
+        {
+            NSDateFormatter *format = [[NSDateFormatter alloc] init];
+            [format setDateFormat:@"MMM d h:mm a"];
+            
+            return [format stringFromDate:date];
+        }
+        else if(secondsBetween > 86400)
+        {
+            int value = (int)secondsBetween / 86400;
+            if(value == 1)
+                dateDiff = @"1 day ago";
+            else
+                dateDiff = [NSString stringWithFormat:@"%d days ago", value];
+        }
+        else if(secondsBetween > 3600)
+        {
+            int value = (int)secondsBetween / 3600;
+            if(value == 1)
+                dateDiff = @"1 hour ago";
+            else
+                dateDiff = [NSString stringWithFormat:@"%d hours ago", value];
+        }
+        else
+        {
+            int value = ((int)secondsBetween / 60) + 1;
+            if(value == 1)
+                dateDiff = @"1 minute ago";
+            else
+                dateDiff = [NSString stringWithFormat:@"%d minutes ago", value];
+        }
+    }
+    return dateDiff;
 }
 
 -(void)previousLists

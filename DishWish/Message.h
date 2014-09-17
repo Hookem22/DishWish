@@ -17,7 +17,9 @@
 @property (nonatomic, copy) NSString *messageId;
 @property (nonatomic, assign) NSUInteger xrefId;
 @property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *message;
+@property (nonatomic, copy) NSDate *date;
 
 +(void)get:(NSUInteger)xrefId completion:(QSCompletionBlock)completion;
 +(void)add:(NSString *)message completion:(QSCompletionBlock)completion;
