@@ -59,30 +59,6 @@
     }];
 }
 
-/*
-+(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion
-{
-    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
-    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
-    
-    NSString *where = [NSString stringWithFormat:@"xrefid = %@ AND userid != '%@'", xrefId, currentUser.userId];
-    
-    [service getByWhere:where completion:^(NSArray *results)  {
-        if(results.count > 0) {
-            NSMutableArray *savedLists = [[NSMutableArray alloc] init];
-            for(id result in results)
-            {
-                [savedLists addObject:[[SavedList alloc] init:result]];
-            }
-            completion(savedLists);
-        }
-        else
-        {
-            completion(nil);
-        }
-    }];
-}
-*/
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
 {
 
@@ -123,30 +99,6 @@
         completion(listArray);
     }];
 }
-/*
-+(void)add:(NSString *)fromUserName toUser:(User *)toUser completion:(QSCompletionBlock)completion
-{
-    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
-    
-    NSString *places = @"";
-    NSArray *yesPlaces = [NSMutableArray arrayWithArray:[Session sessionVariables][@"yesPlaces"]];
-    for(Place *place in yesPlaces)
-    {
-        places = [NSString stringWithFormat:@"%@,'%@'", places, place.placeId];
-    }
-    
-    places = [places substringFromIndex:1];
-    
-    User *fromUser = (User *)[Session sessionVariables][@"currentUser"];
-    
-    NSDictionary *savedList = @{@"places" : places, @"fromuserid" : fromUser.userId, @"fromusername" : fromUserName, @"touserid": toUser.userId, @"tousername" : toUser.name };
-    [service addItem:savedList completion:^(NSDictionary *item)
-     {
-         SavedList *savedList = [[SavedList alloc] init:item];
-         completion(savedList);
-     }];
-}
-*/
 
 +(void)add:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion
 {

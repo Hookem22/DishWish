@@ -7,6 +7,7 @@
 //
 
 #import "DWRightSideBar.h"
+#import "DWView.h"
 
 @interface DWRightSideBar ()
 
@@ -103,18 +104,24 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
     }
     return self;
 }
 
--(void)addPerson:(NSDictionary *)person
+-(void)setupMessaging
 {
-    [self.people addObject:person];
+    //[SavedList get]
+}
+
+-(void)addPerson:(NSString *)userName
+{
+    [self.people addObject:userName];
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
-    NSString *names = self.peopleLabel.text.length == 0 ? [person valueForKey:@"name"] : [NSString stringWithFormat:@"%@, %@", self.peopleLabel.text, [person valueForKey:@"name"]];
+    NSString *names = self.peopleLabel.text.length == 0 ? userName : [NSString stringWithFormat:@"%@, %@", self.peopleLabel.text, userName];
     
     self.topBackground.frame = CGRectMake(0, 0, wd, [self heightForText:names width:wd - 20 fontSize:16] + 60);
     self.topBackground.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1.0];
@@ -149,6 +156,7 @@
 
 -(void)sendMessage
 {
+    [self getMessagesFromDb];
     if(self.people.count <= 0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Add friends to message" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -156,29 +164,72 @@
     }
     else if(self.messageTextField.text.length > 0)
     {
-
-//        [Message add:self.messageTextField.text completion:^(Message *newMessage)
-//         {
-//
-//         }];
-        
-        [self getMessagesFromDb:self.messageTextField.text];
-        //[self populateMessages:self.messageTextField.text];
+        NSString *message = self.messageTextField.text;
+        [self populateMessages:message];
         [self.messageTextField setText:@""];
-        //[self.messages addObject:message];
+        /*
+        [Message add:message completion:^(Message *newMessage)
+         {
+             
+         }];*/
+        
     }
     
     [self endEditing:YES];
 }
 
--(void)getMessagesFromDb:(NSString *)newMessage
+-(void)getMessagesFromDb
 {
     SavedList *currentSavedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
-    [Message get:currentSavedList.xrefId completion:^(NSArray *allMessages)
-     {
-         self.messages = [[NSMutableArray alloc] initWithArray:allMessages];
-         [self populateMessages:newMessage];
-     }];
+    [SavedList get:[NSString stringWithFormat:@"%lu", (unsigned long)currentSavedList.xrefId] completion:^(NSArray *savedLists) {
+        if(self.people.count <= savedLists.count)
+        {
+            for(SavedList *list in savedLists)
+            {
+                if(![self.people containsObject: list.userName])
+                {
+                    [self addPerson:list.userName];
+                    [self changeIcon:YES];
+                }
+            }
+        }
+        [Message get:currentSavedList.xrefId completion:^(NSArray *allMessages)
+         {
+             if(self.messages.count != allMessages.count)
+             {
+                 self.messages = [[NSMutableArray alloc] initWithArray:allMessages];
+                 [self populateMessages:@""];
+                 [self changeIcon:YES];
+             }
+         }];
+    }];
+}
+
+-(void)changeIcon:(BOOL)newMessages
+{
+    NSString *imageName = newMessages ? @"newmessage" : @"message";
+    for(id subview in self.superview.subviews)
+    {
+        if([subview isMemberOfClass:[UINavigationBar class]]) {
+            UINavigationBar *nav = (UINavigationBar *)subview;
+            if(nav.items.count > 0 && [nav.items[0] isMemberOfClass:[UINavigationItem class]])
+            {
+                UIButton *userButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 30)];
+                [userButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+                [userButton addTarget:self action:@selector(userButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+                
+                UINavigationItem *item = (UINavigationItem *)nav.items[0];
+                item.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:userButton];
+            }
+            
+        }
+    }
+}
+
+-(void)userButtonPressed
+{
+    DWView *view = (DWView *)self.superview;
+    [view userButtonPressed];
 }
 
 -(void)populateMessages:(NSString *)message
@@ -189,7 +240,17 @@
     
     [self.messageView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
+    
     User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    if(message.length > 0)
+    {
+        Message *newMessage = [[Message alloc] init];
+        newMessage.userId = currentUser.userId;
+        newMessage.message = message;
+        newMessage.date = [NSDate date];
+        [self.messages addObject:newMessage];
+    }
+    
     NSUInteger viewY = 0;
     for(Message *message in self.messages)
     {
@@ -199,19 +260,15 @@
         [self.messageView addSubview:view];
         viewY = viewY + view.frame.size.height;
     }
-    
-    if(message.length > 0)
-    {
-        UIView *view = [self addTextView:message from:@"" date:@"Now" isMe:YES viewY:viewY];
-        viewY = viewY + view.frame.size.height;
-        [self.messageView addSubview:view];
-    }
-    
+
     self.messageView.frame = CGRectMake(0, self.topBackground.frame.size.height + 10, wd, ht - 200);
-    self.messageView.contentSize = CGSizeMake(wd, viewY + 50);
-    
-    CGPoint bottomOffset = CGPointMake(0, self.messageView.contentSize.height - self.messageView.bounds.size.height);
-    [self.messageView setContentOffset:bottomOffset animated:NO];
+    self.messageView.contentSize = CGSizeMake(wd, viewY + 55);
+
+    if(self.messageView.contentSize.height - self.messageView.bounds.size.height > 0)
+    {
+        CGPoint bottomOffset = CGPointMake(0, self.messageView.contentSize.height - self.messageView.bounds.size.height);
+        [self.messageView setContentOffset:bottomOffset animated:NO];
+    }
 }
 
 -(UIView *)addTextView:(NSString *)message from:(NSString *)from date:(NSString *)date isMe:(BOOL)isMe viewY:(NSUInteger)viewY
@@ -221,10 +278,10 @@
     
     if(isMe)
     {
-        CGFloat textHeight = [self heightForText:message width:(wd * 2) / 3 - 5 fontSize:14] + 10;
+        CGFloat textHeight = [self heightForText:message width:(wd * 3) / 4 - 5 fontSize:14] + 10;
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, viewY, wd, textHeight + 25)];
 
-        UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(wd / 3, 0, (wd * 2) / 3 - 10, 15)];
+        UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(wd / 4, 0, (wd * 3) / 4 - 10, 15)];
         dateLabel.font = [UIFont systemFontOfSize:12];
         dateLabel.text = date;
         dateLabel.textAlignment = NSTextAlignmentRight;
@@ -239,7 +296,7 @@
          [self.view addSubview:wrapView];
          */
 
-        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(wd / 3, 18, (wd * 2) / 3 - 5, textHeight)];
+        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(wd / 4, 18, (wd * 3) / 4 - 5, textHeight)];
         newTextbox.textColor = [UIColor whiteColor];
         newTextbox.font = [UIFont systemFontOfSize:14];
         newTextbox.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0];
@@ -256,7 +313,7 @@
     else
     {
         
-        CGFloat textHeight = [self heightForText:message width:(wd * 2) / 3 - 5 fontSize:14] + 10;
+        CGFloat textHeight = [self heightForText:message width:(wd * 3) / 4 - 5 fontSize:14] + 10;
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, viewY + 5, wd, textHeight + 25)];
         
         if(from.length > 0)
@@ -274,7 +331,7 @@
             [view addSubview:dateLabel];
         }
         
-        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(5, 18, (wd * 2) / 3 - 5, textHeight)];
+        UITextView *newTextbox = [[UITextView alloc] initWithFrame:CGRectMake(5, 18, (wd * 3) / 4 - 5, textHeight)];
         //newTextbox.textColor = [UIColor whiteColor];
         newTextbox.font = [UIFont systemFontOfSize:14];
         //newTextbox.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0];
@@ -319,14 +376,16 @@
             else
                 dateDiff = [NSString stringWithFormat:@"%d hours ago", value];
         }
-        else
+        else if(secondsBetween > 60)
         {
-            int value = ((int)secondsBetween / 60) + 1;
+            int value = ((int)secondsBetween / 60);
             if(value == 1)
                 dateDiff = @"1 minute ago";
             else
                 dateDiff = [NSString stringWithFormat:@"%d minutes ago", value];
         }
+        else
+            dateDiff = @"Now";
     }
     return dateDiff;
 }

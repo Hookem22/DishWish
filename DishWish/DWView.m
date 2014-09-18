@@ -57,11 +57,11 @@
             if(places.count == 0)
             {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unavailable"
-                                                                message:@"Let's Eat is not currently available in your city. It is currently only available in San Francisco."
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                
+                            message:@"Let's Eat is not currently available in your city. It is currently only available in San Francisco."
+                            delegate:nil
+                            cancelButtonTitle:@"OK"
+                            otherButtonTitles:nil];
+
                 [alert show];
                 return;
             }
@@ -151,7 +151,7 @@
     [menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *userButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 30)];
-    [userButton setImage:[UIImage imageNamed:@"newmessage"] forState:UIControlStateNormal];
+    [userButton setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     [userButton addTarget:self action:@selector(userButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonPressed)];
@@ -171,29 +171,18 @@
     //return;
     //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
     //[self addSubview:instructions];
-    /*
-    for(id subview in self.subviews) {
-        if([subview isMemberOfClass:[UIImageView class]])
-            [subview removeFromSuperview];
-    }
-    */
+
+//    for(id subview in self.subviews) {
+//        if([subview isMemberOfClass:[DWAddFriendsView class]])
+//        {
+//            [self addNavBar];
+//            [subview removeFromSuperview];
+//        }
+//    }
+
     [User login:^(User *user) {
-
-        [SavedList add:@"88" userId:@"" completion:^(SavedList *savedList) {
+        [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
             
-            /*
-            [SavedList getByUser:^(NSArray *savedLists) {
-                DWRightSideBar *right;
-                for(id subview in self.subviews) {
-                    if([subview isMemberOfClass:[DWRightSideBar class]])
-                    {
-                        right = (DWRightSideBar *)subview;
-                        [right populateLists:savedLists];
-                    }
-                }
-
-            }];
-             */
         }];
          
     }];
@@ -265,7 +254,8 @@
         if([subview isMemberOfClass:[DWRightSideBar class]]) {
             [self bringSubviewToFront:subview];
             DWRightSideBar *right = (DWRightSideBar *)subview;
-
+            [right changeIcon:NO];
+            
             BOOL isOpen = right.frame.origin.x < wd;
 
             [UIView animateWithDuration:0.2
@@ -291,19 +281,7 @@
                      
                  }];
         }
-        if([subview isMemberOfClass:[UINavigationBar class]]) {
-            UINavigationBar *nav = (UINavigationBar *)subview;
-            if(nav.items.count > 0 && [nav.items[0] isMemberOfClass:[UINavigationItem class]])
-            {
-                UIButton *userButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 35, 30)];
-                [userButton setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-                [userButton addTarget:self action:@selector(userButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-                
-                UINavigationItem *item = (UINavigationItem *)nav.items[0];
-                item.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:userButton];
-            }
-            
-        }
+
         
     }
 }

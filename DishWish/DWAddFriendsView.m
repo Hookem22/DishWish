@@ -9,6 +9,12 @@
 #import "DWAddFriendsView.h"
 #import "DWView.h"
 
+@interface DWAddFriendsView ()
+
+@property (nonatomic, strong) UIButton *closeButton;
+
+@end
+
 @implementation DWAddFriendsView
 
 @synthesize shareButton = _shareButton;
@@ -26,17 +32,18 @@
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
         
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closeButton setTitle:@"Not yet" forState:UIControlStateNormal];
-        closeButton.frame = CGRectMake(100, ht / 3 + 130, wd - 200, 30);
-        closeButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        closeButton.titleLabel.textColor = [UIColor whiteColor];
-        closeButton.layer.backgroundColor =  [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
-        closeButton.layer.cornerRadius = 5.0;
-        closeButton.titleLabel.textAlignment = UIControlContentHorizontalAlignmentLeft;
+        self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.closeButton setTitle:@"Not yet" forState:UIControlStateNormal];
+        self.closeButton.frame = CGRectMake(100, ht / 3 + 130, wd - 200, 30);
+        self.closeButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+        self.closeButton.titleLabel.textColor = [UIColor whiteColor];
+        self.closeButton.layer.backgroundColor =  [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
+        self.closeButton.layer.cornerRadius = 5.0;
+        self.closeButton.titleLabel.textAlignment = UIControlContentHorizontalAlignmentLeft;
         
-        [closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:closeButton];
+        [self.closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.closeButton];
+        
     }
     return self;
 }
@@ -50,17 +57,30 @@
     }
     
     if(!loaded)
-        return;
-    
-    [UIView animateWithDuration:0.3
-         animations:^{
-            self.alpha = 0.0;
-         }
-         completion:^(BOOL finished){
-             [(DWView *)self.superview addNavBar];
-             [self removeFromSuperview];
-         }];
+    {
+        [UIView animateWithDuration:0.3
+             animations:^{
+                 self.shareButton.alpha = 0.0;
+                 self.closeButton.alpha = 0.0;
+             }
+             completion:^(BOOL finished){
+                 [self close];
+             }];
+    }
+    else
+    {
+        [UIView animateWithDuration:0.3
+             animations:^{
+                self.alpha = 0.0;
+             }
+             completion:^(BOOL finished){
+                 [(DWView *)self.superview addNavBar];
+                 [self removeFromSuperview];
+             }];
+    }
 }
+
+
 
 
 /*

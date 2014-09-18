@@ -163,7 +163,7 @@
          else
          {
              User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
-             NSString *header = [NSString stringWithFormat:@"%@ sent you a list", currentUser.name];
+             NSString *header = [NSString stringWithFormat:@"%@ sent you a message", currentUser.name];
              NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId];
              
              [self sendPushMessage:toUser.pushDeviceToken header:header message:message];

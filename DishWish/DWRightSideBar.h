@@ -18,7 +18,8 @@
 
 @property (nonatomic, strong) UIButton *shareButton;
 
--(void)addPerson:(NSDictionary *)person;
+-(void)addPerson:(NSString *)userName;
+-(void)changeIcon:(BOOL)newMessages;
 -(void)close;
 
 @end

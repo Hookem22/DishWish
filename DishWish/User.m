@@ -52,7 +52,7 @@
 
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSString *pushDeviceToken = appDelegate.deviceToken;
-    
+    //TODO: Get USER NAME HERE
     [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *user) {
         
         if(user != nil || user.deviceId != nil)
