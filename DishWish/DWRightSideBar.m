@@ -114,14 +114,14 @@
     //[SavedList get]
 }
 
--(void)addPerson:(NSString *)userName
+-(void)addPerson:(User *)user
 {
-    [self.people addObject:userName];
+    [self.people addObject:user];
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
-    NSString *names = self.peopleLabel.text.length == 0 ? userName : [NSString stringWithFormat:@"%@, %@", self.peopleLabel.text, userName];
+    NSString *names = self.peopleLabel.text.length == 0 ? user.name : [NSString stringWithFormat:@"%@, %@", self.peopleLabel.text, user.name];
     
     self.topBackground.frame = CGRectMake(0, 0, wd, [self heightForText:names width:wd - 20 fontSize:16] + 60);
     self.topBackground.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1.0];
@@ -156,7 +156,6 @@
 
 -(void)sendMessage
 {
-    [self getMessagesFromDb];
     if(self.people.count <= 0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Add friends to message" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -167,11 +166,33 @@
         NSString *message = self.messageTextField.text;
         [self populateMessages:message];
         [self.messageTextField setText:@""];
-        /*
+        
         [Message add:message completion:^(Message *newMessage)
          {
+             User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+             NSString *header = [NSString stringWithFormat:@"%@ sent you a message", currentUser.name];
              
-         }];*/
+             SavedList *savedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
+             NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId];
+             
+             for(User *user in self.people)
+             {
+                 if(user.pushDeviceToken.length > 0) {
+                     [PushMessage push:user.pushDeviceToken header:header message:message];
+                 }
+                 else
+                 {
+                     [User get:user.userId completion:^(User *newUser) {
+                         if(user.pushDeviceToken.length > 0)
+                         {
+                             user.pushDeviceToken = newUser.pushDeviceToken;
+                             [PushMessage push:newUser.pushDeviceToken header:header message:message];
+                         }
+                     }];
+                 }
+             }
+             
+         }];
         
     }
     
@@ -186,9 +207,21 @@
         {
             for(SavedList *list in savedLists)
             {
-                if(![self.people containsObject: list.userName])
+                bool contains = false;
+                for(User *user in self.people)
                 {
-                    [self addPerson:list.userName];
+                    if(user.userId == list.userId)
+                    {
+                        contains = true;
+                        break;
+                    }
+                }
+                if(!contains)
+                {
+                    User *addUser = [[User alloc] init];
+                    addUser.userId = list.userId;
+                    addUser.name = list.userName;
+                    [self addPerson:addUser];
                     [self changeIcon:YES];
                 }
             }
@@ -227,13 +260,16 @@
 }
 
 -(void)userButtonPressed
-{
+{  
     DWView *view = (DWView *)self.superview;
     [view userButtonPressed];
 }
 
 -(void)populateMessages:(NSString *)message
 {
+    if(self.messages.count <= 0 && message.length <= 0)
+        return;
+    
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;

@@ -11,6 +11,7 @@
 #import "Session.h"
 #import "SavedList.h"
 #import "Message.h"
+#import "PushMessage.h"
 #import "MBProgressHUD.h"
 #import "DWPreviousSideBar.h"
 
@@ -18,8 +19,9 @@
 
 @property (nonatomic, strong) UIButton *shareButton;
 
--(void)addPerson:(NSString *)userName;
+-(void)addPerson:(User *)user;
 -(void)changeIcon:(BOOL)newMessages;
+-(void)populateMessages:(NSString *)message;
 -(void)close;
 
 @end

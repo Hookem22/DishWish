@@ -5,7 +5,6 @@
 @implementation DWView
 
 @synthesize rightSideBar = _rightSideBar;
-@synthesize savedList = _savedList;
 
 - (id)init
 {
@@ -29,7 +28,7 @@
     if([savedListId length] > 0)
     {
         /*
-        [SavedList get:savedListId completion:^(SavedList *savedList) {
+        [SavedList get:savedListId completion:^(SavedList *savedLists) {
             
             self.savedList = savedList;
             [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
@@ -69,7 +68,12 @@
             [[Session sessionVariables] setObject:places forKey:@"Places"];
             
             [self loadDraggableCustomView:places];
-            [self placesDidLoad];
+            
+            [User login:^(User *user) {
+                [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
+                    
+                }];
+            }];
         }];
     }
     
@@ -117,6 +121,121 @@
     }
     
 }
+
+-(void)loadSavedList:(NSUInteger)xrefId
+{
+    [MBProgressHUD showHUDAddedTo:self animated:YES];
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    if(currentUser == nil || currentUser.userId.length <= 0)
+    {
+        [User login:^(User *user) {
+            [self loadSavedListForUser:xrefId user:user];
+        }];
+    }
+    else
+    {
+        [self loadSavedListForUser:xrefId user:currentUser];
+    }
+    /*
+    [User login:^(User *user) {
+        [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
+            
+        }];
+        
+    }];
+    
+    [SavedList get:savedListId completion:^(SavedList *savedLists) {
+        
+        self.savedList = savedList;
+        [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
+        
+        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 220, wd - 20, 40)];
+        [shareButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+        NSString *shareTitle = [NSString stringWithFormat:@"Send list back to %@", savedList.fromUserName];
+        [shareButton setTitle:shareTitle forState:UIControlStateNormal];
+        [shareButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
+        [shareButton.layer setBorderWidth:1.0];
+        shareButton.layer.cornerRadius = 15;
+        [shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:shareButton];
+        
+        [self loadDraggableCustomView:savedList.places];
+        [self placesDidLoad];
+    }];
+     */
+}
+
+-(void)loadSavedListForUser:(NSUInteger)xrefId user:(User *)user
+{
+    [SavedList get:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] completion:^(NSArray *savedLists) {
+        bool hasSavedList = false;
+        for(SavedList *list in savedLists)
+        {
+            if(list.userId == user.userId)
+            {
+                hasSavedList = true;
+                [self loadPlacesForSavedList:list];
+            }
+        }
+        if(!hasSavedList)
+        {
+            [SavedList add:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] userId:user.userId completion:^(SavedList *savedList) {
+                [self loadPlacesForSavedList:savedList];
+            }];
+        }
+    }];
+}
+
+-(void)loadPlacesForSavedList:(SavedList *)savedList
+{
+    /*
+    [Place getAllPlaces:^(NSArray *places) {
+        
+
+        NSMutableArray *newPlaces = [[NSMutableArray alloc] init];
+        NSArray *yeses = [savedList.yesPlaceIds componentsSeparatedByString:@","];
+        NSArray *nos = [savedList.noPlaceIds componentsSeparatedByString:@","];
+        
+        NSUInteger i = 0;
+        for(Place *place in places)
+        {
+            if(!([yeses contains:place.placeId] || [nos containsObject:place.placeId]))
+            {
+                [newPlaces addObject:place];
+            }
+            i++;
+        }
+        
+        
+        NSMutableArray *votedPlaces = [[NSMutableArray alloc] init];
+
+        NSArray *yeses = [savedList.yesPlaceIds componentsSeparatedByString:@","];
+        for(NSString *yes in yeses)
+        {
+            if(![votedPlaces containsObject:yes])
+                [votedPlaces addObject:yes];
+        }
+        NSArray *nos = [savedList.noPlaceIds componentsSeparatedByString:@","];
+        for(NSString *no in nos)
+        {
+            if(![votedPlaces containsObject:no])
+                [votedPlaces addObject:no];
+        }
+
+        
+        [[Session sessionVariables] setObject:places forKey:@"Places"];
+        [[Session sessionVariables] setObject:yesPlaces forKey:@"yesPlaces"];
+        [[Session sessionVariables] setObject:noPlaces forKey:@"noPlaces"];
+        
+        
+        [self loadDraggableCustomView:places];
+        [self placesDidLoad];
+        
+        [MBProgressHUD hideHUDForView:self animated:YES];
+    }];
+     */
+}
+
 
 -(void)reloadPlaces:(id)sender
 {
@@ -180,12 +299,11 @@
 //        }
 //    }
 
-    [User login:^(User *user) {
-        [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
-            
-        }];
-         
-    }];
+//    [User login:^(User *user) {
+//        [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
+//            
+//        }];
+//    }];
     
 }
 
@@ -257,7 +375,9 @@
             [right changeIcon:NO];
             
             BOOL isOpen = right.frame.origin.x < wd;
-
+            if(!isOpen)
+                [right populateMessages:@""];
+            
             [UIView animateWithDuration:0.2
                  animations:^{
                      if(isOpen)

@@ -14,7 +14,6 @@
 
 @property (nonatomic, strong) DWAddFriendsView *addFriendsView;
 @property (nonatomic, strong) DWRightSideBar *rightSideBar;
-@property (nonatomic, strong) SavedList *savedList;
 
 -(void)setup;
 

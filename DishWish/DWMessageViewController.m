@@ -102,9 +102,6 @@
     }
     CFRelease(phonesRef);
     
-    ViewController *vc = (ViewController *)self.viewController;
-    [vc.mainView.rightSideBar addPerson:contactInfoDict];
-    
     [self addInvite:contactInfoDict];
     
     [self cancel];
@@ -123,7 +120,6 @@
         if(toUser == NULL) //|| [toUser.lastSignedIn isMemberOfClass:[NSNull class]])
         {
             //Send SMS
-            NSLog(@"SMS");
             User *newUser = [[User alloc] init];
             newUser.phoneNumber = phoneNumber;
             newUser.name = contactName;
@@ -133,13 +129,11 @@
         }
         else if([toUser.pushDeviceToken length] <= 0)
         {
-            NSLog(@"SMS");
             [self createSavedList:toUser isSms:YES];
         }
         else
         {
             //Send push message
-            NSLog(@"Push");
             [self createSavedList:toUser isSms:NO];
         }
         
@@ -149,6 +143,9 @@
 
 -(void)createSavedList:(User *)toUser isSms:(BOOL)isSms
 {
+    ViewController *vc = (ViewController *)self.viewController;
+    [vc.mainView.rightSideBar addPerson:toUser];
+    
     //CreateXref
     SavedList *savedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
     [SavedList add:[NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId] userId:toUser.userId completion:^(SavedList *savedList)
