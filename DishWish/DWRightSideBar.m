@@ -17,7 +17,6 @@
 @property (nonatomic, strong) UIView *topBackground;
 @property (nonatomic, strong) UIView *topBorder;
 
-@property (nonatomic, retain) UITextField *messageTextField;
 @property (nonatomic, strong) UIButton *sendButton;
 @property (nonatomic, strong) UIView *bottomBackground;
 @property (nonatomic, strong) UIView *bottomBorder;
@@ -30,6 +29,7 @@
 @implementation DWRightSideBar
 
 @synthesize shareButton = _shareButton;
+@synthesize messageTextField = _messageTextField;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -77,7 +77,7 @@
         self.messageTextField.borderStyle = UITextBorderStyleRoundedRect;
         self.messageTextField.font = [UIFont systemFontOfSize:15];
         self.messageTextField.placeholder = @"Message";
-        //self.messageTextField.delegate = self;
+        self.messageTextField.delegate = self;
         [self addSubview:self.messageTextField];
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -103,8 +103,6 @@
         [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
         [self addGestureRecognizer:recognizer];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     }
     return self;
@@ -489,103 +487,43 @@
     
 }
 
--(void)keyboardWillShow:(NSNotification *)notification
-{
-    // I'll try to make my text field 20 pixels above the top of the keyboard
-    // To do this first we need to find out where the keyboard will be.
-    
-    NSValue *keyboardEndFrameValue = [[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardEndFrame = [keyboardEndFrameValue CGRectValue];
-    
-    // When we move the textField up, we want to match the animation duration and curve that
-    // the keyboard displays. So we get those values out now
-    
-    NSNumber *animationDurationNumber = [[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration = [animationDurationNumber doubleValue];
-    
-    NSNumber *animationCurveNumber = [[notification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    UIViewAnimationCurve animationCurve = [animationCurveNumber intValue];
-    
-    // UIView's block-based animation methods anticipate not a UIVieAnimationCurve but a UIViewAnimationOptions.
-    // We shift it according to the docs to get this curve.
-    
-    UIViewAnimationOptions animationOptions = animationCurve << 16;
-    
-    
-    // Now we set up our animation block.
-    [UIView animateWithDuration:animationDuration
-                          delay:0.0
-                        options:animationOptions
-                     animations:^{
-                         CGRect textFieldFrame = self.messageTextField.frame;
-                         textFieldFrame.origin.y = keyboardEndFrame.origin.y - 100;
-                         self.messageTextField.frame = textFieldFrame;
-                         
-                         CGRect sendButtonFrame = self.sendButton.frame;
-                         sendButtonFrame.origin.y = keyboardEndFrame.origin.y - 100;
-                         self.sendButton.frame = sendButtonFrame;
-                         
-                         CGRect bottomBorderFrame = self.bottomBorder.frame;
-                         bottomBorderFrame.origin.y = keyboardEndFrame.origin.y - 110;
-                         self.bottomBorder.frame = bottomBorderFrame;
-                         
-                         CGRect bottomBackgroundFrame = self.bottomBackground.frame;
-                         bottomBackgroundFrame.origin.y = keyboardEndFrame.origin.y - 110;
-                         self.bottomBackground.frame = bottomBackgroundFrame;
-                     }
-                     completion:^(BOOL finished) {}];
-    
-}
-/*
 - (void)textFieldDidBeginEditing:(UITextField *)customValue
 {
-    UIViewAnimationOptions animationOptions = animationCurve << 16;
     
-    
-    // Now we set up our animation block.
-    [UIView animateWithDuration:0.1
-                          delay:0.0
-                        options:animationOptions
+    [UIView animateWithDuration:0.25
+                        delay:0.005
+                        options:0
                      animations:^{
                          CGRect textFieldFrame = self.messageTextField.frame;
-                         textFieldFrame.origin.y = keyboardEndFrame.origin.y - 100;
+                         textFieldFrame.origin.y = textFieldFrame.origin.y - 180;
                          self.messageTextField.frame = textFieldFrame;
                          
                          CGRect sendButtonFrame = self.sendButton.frame;
-                         sendButtonFrame.origin.y = keyboardEndFrame.origin.y - 100;
+                         sendButtonFrame.origin.y = sendButtonFrame.origin.y - 180;
                          self.sendButton.frame = sendButtonFrame;
                          
                          CGRect bottomBorderFrame = self.bottomBorder.frame;
-                         bottomBorderFrame.origin.y = keyboardEndFrame.origin.y - 110;
+                         bottomBorderFrame.origin.y = bottomBorderFrame.origin.y - 180;
                          self.bottomBorder.frame = bottomBorderFrame;
                          
                          CGRect bottomBackgroundFrame = self.bottomBackground.frame;
-                         bottomBackgroundFrame.origin.y = keyboardEndFrame.origin.y - 110;
+                         bottomBackgroundFrame.origin.y = bottomBackgroundFrame.origin.y - 180;
                          self.bottomBackground.frame = bottomBackgroundFrame;
                      }
-                     completion:^(BOOL finished) {}];
+                     completion:^(BOOL finished){
+                         
+                     }];
 }
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    
-}
-*/
--(void)keyboardWillHide:(NSNotification *)notification
 {
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     wd = (wd * 3) / 4;
     
-    NSNumber *animationDurationNumber = [[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration = [animationDurationNumber doubleValue];
+
     
-    NSNumber *animationCurveNumber = [[notification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    UIViewAnimationCurve animationCurve = [animationCurveNumber intValue];
-    UIViewAnimationOptions animationOptions = animationCurve << 16;
-    
-    [UIView animateWithDuration:animationDuration
-                          delay:0.0
-                        options:animationOptions
+    [UIView animateWithDuration:0.25
                      animations:^{
                          self.bottomBackground.frame = CGRectMake(0, ht - 140, wd, 140);
                          self.bottomBorder.frame = CGRectMake(0, ht - 140, wd, 1);
@@ -593,10 +531,7 @@
                          self.sendButton.frame = CGRectMake(wd - 60, ht - 135, 50, 30);
                      }
                      completion:^(BOOL finished) {}];
-    
 }
-
-
 
 
 /*

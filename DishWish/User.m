@@ -51,7 +51,7 @@
     NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSString *pushDeviceToken = appDelegate.deviceToken;
+    NSString *pushDeviceToken = appDelegate.deviceToken == nil ? @"" : appDelegate.deviceToken;
     //TODO: Get USER NAME HERE
     [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *user) {
         

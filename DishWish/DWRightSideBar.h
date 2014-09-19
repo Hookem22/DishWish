@@ -15,9 +15,10 @@
 #import "MBProgressHUD.h"
 #import "DWPreviousSideBar.h"
 
-@interface DWRightSideBar : UIScrollView
+@interface DWRightSideBar : UIScrollView <UITextFieldDelegate>
 
 @property (nonatomic, strong) UIButton *shareButton;
+@property (nonatomic, strong) UITextField *messageTextField;
 
 -(void)addPerson:(User *)user;
 -(void)changeIcon:(BOOL)newMessages;
