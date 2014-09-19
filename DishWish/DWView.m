@@ -27,27 +27,7 @@
     
     if([savedListId length] > 0)
     {
-        /*
-        [SavedList get:savedListId completion:^(SavedList *savedLists) {
-            
-            self.savedList = savedList;
-            [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
-            
-            UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 220, wd - 20, 40)];
-            [shareButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
-            NSString *shareTitle = [NSString stringWithFormat:@"Send list back to %@", savedList.fromUserName];
-            [shareButton setTitle:shareTitle forState:UIControlStateNormal];
-            [shareButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
-            [shareButton.layer setBorderWidth:1.0];
-            shareButton.layer.cornerRadius = 15;
-            [shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            [self addSubview:shareButton];
-            
-            [self loadDraggableCustomView:savedList.places];
-            [self placesDidLoad];
-        }];
-         */
-
+        [self loadSavedList:[savedListId intValue]];
     }
     else
     {
@@ -136,104 +116,96 @@
     {
         [self loadSavedListForUser:xrefId user:currentUser];
     }
-    /*
-    [User login:^(User *user) {
-        [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
-            
-        }];
-        
-    }];
-    
-    [SavedList get:savedListId completion:^(SavedList *savedLists) {
-        
-        self.savedList = savedList;
-        [[Session sessionVariables] setObject:savedList.places forKey:@"Places"];
-        
-        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 220, wd - 20, 40)];
-        [shareButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
-        NSString *shareTitle = [NSString stringWithFormat:@"Send list back to %@", savedList.fromUserName];
-        [shareButton setTitle:shareTitle forState:UIControlStateNormal];
-        [shareButton.layer setBorderColor:[[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
-        [shareButton.layer setBorderWidth:1.0];
-        shareButton.layer.cornerRadius = 15;
-        [shareButton addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:shareButton];
-        
-        [self loadDraggableCustomView:savedList.places];
-        [self placesDidLoad];
-    }];
-     */
+
 }
 
 -(void)loadSavedListForUser:(NSUInteger)xrefId user:(User *)user
 {
-    [SavedList get:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] completion:^(NSArray *savedLists) {
-        bool hasSavedList = false;
-        for(SavedList *list in savedLists)
+    [SavedList getSpecific:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] userId:user.userId completion:^(SavedList *savedList) {
+        if(savedList == nil || savedList.listId.length <= 0)
         {
-            if(list.userId == user.userId)
-            {
-                hasSavedList = true;
-                [self loadPlacesForSavedList:list];
-            }
-        }
-        if(!hasSavedList)
-        {
-            [SavedList add:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] userId:user.userId completion:^(SavedList *savedList) {
-                [self loadPlacesForSavedList:savedList];
+            [SavedList add:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] userId:user.userId completion:^(SavedList *newSavedList) {
+                [[Session sessionVariables] setObject:newSavedList forKey:@"currentSavedList"];
+                [self loadPlacesForSavedList:newSavedList];
             }];
+        }
+        else
+        {
+            [[Session sessionVariables] setObject:savedList forKey:@"currentSavedList"];
+            [self loadPlacesForSavedList:savedList];
         }
     }];
 }
 
 -(void)loadPlacesForSavedList:(SavedList *)savedList
 {
-    /*
     [Place getAllPlaces:^(NSArray *places) {
         
 
         NSMutableArray *newPlaces = [[NSMutableArray alloc] init];
-        NSArray *yeses = [savedList.yesPlaceIds componentsSeparatedByString:@","];
-        NSArray *nos = [savedList.noPlaceIds componentsSeparatedByString:@","];
+        NSMutableArray *yesPlaces = [[NSMutableArray alloc] init];
+        NSMutableArray *noPlaces = [[NSMutableArray alloc] init];
+        
+        NSArray *yeses = [[NSArray alloc] init];
+        if(savedList.yesPlaceIds.length > 0)
+        {
+            if([savedList.yesPlaceIds rangeOfString:@","].location != NSNotFound)
+                yeses = [savedList.yesPlaceIds componentsSeparatedByString:@","];
+            else
+                yeses = [[NSArray alloc] initWithObjects:savedList.yesPlaceIds, nil];
+        }
+        
+        NSArray *nos = [[NSArray alloc] init];
+        if(savedList.noPlaceIds.length > 0)
+        {
+            if([savedList.noPlaceIds rangeOfString:@","].location != NSNotFound)
+                nos = [savedList.noPlaceIds componentsSeparatedByString:@","];
+            else
+                nos = [[NSArray alloc] initWithObjects:savedList.noPlaceIds, nil];
+        }
         
         NSUInteger i = 0;
         for(Place *place in places)
         {
-            if(!([yeses contains:place.placeId] || [nos containsObject:place.placeId]))
+            if([yeses containsObject:place.placeId])
+            {
+                [yesPlaces addObject:place];
+                [newPlaces insertObject:place atIndex:0];
+                i++;
+            }
+            else if([nos containsObject:place.placeId])
+            {
+                [noPlaces addObject:place];
+                [newPlaces insertObject:place atIndex:0];
+                i++;
+            }
+            else
             {
                 [newPlaces addObject:place];
             }
-            i++;
         }
         
         
-        NSMutableArray *votedPlaces = [[NSMutableArray alloc] init];
-
-        NSArray *yeses = [savedList.yesPlaceIds componentsSeparatedByString:@","];
-        for(NSString *yes in yeses)
-        {
-            if(![votedPlaces containsObject:yes])
-                [votedPlaces addObject:yes];
-        }
-        NSArray *nos = [savedList.noPlaceIds componentsSeparatedByString:@","];
-        for(NSString *no in nos)
-        {
-            if(![votedPlaces containsObject:no])
-                [votedPlaces addObject:no];
-        }
-
-        
-        [[Session sessionVariables] setObject:places forKey:@"Places"];
+        [[Session sessionVariables] setObject:newPlaces forKey:@"Places"];
         [[Session sessionVariables] setObject:yesPlaces forKey:@"yesPlaces"];
         [[Session sessionVariables] setObject:noPlaces forKey:@"noPlaces"];
-        
+        [[Session sessionVariables] setObject:[NSNumber numberWithInteger:i] forKey:@"CurrentId"];
         
         [self loadDraggableCustomView:places];
-        [self placesDidLoad];
+        [self addNavBar];
         
+        for(id subview in self.subviews) {
+            if(yeses.count > 0 && [subview isMemberOfClass:[DWLeftSideBar class]]) {
+                DWLeftSideBar *left = (DWLeftSideBar *)subview;
+                [left updateLeftSideBar];
+            }
+            else if([subview isMemberOfClass:[DWRightSideBar class]]) {
+                DWRightSideBar *right = (DWRightSideBar *)subview;
+                [right getMessagesFromDb];
+            }
+        }
         [MBProgressHUD hideHUDForView:self animated:YES];
     }];
-     */
 }
 
 

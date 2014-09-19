@@ -24,6 +24,7 @@
 @property (nonatomic, copy) NSDate *createdAt;
 
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;
++(void)getSpecific:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion;
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion;
 +(void)getByUser:(QSCompletionBlock)completion;
 +(void)add:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion;

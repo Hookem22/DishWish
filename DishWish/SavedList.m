@@ -59,6 +59,21 @@
     }];
 }
 
++(void)getSpecific:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    NSString *whereStatement = [NSString stringWithFormat:@"xrefid = '%@' AND userid = '%@'", xrefId, userId];
+    
+    [service getByWhere:whereStatement completion:^(NSArray *results) {
+        for(id item in results) {
+            SavedList *list = [[SavedList alloc] init:item];
+            completion(list);
+            return;
+        }
+        completion(nil);
+    }];
+}
+
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion
 {
 

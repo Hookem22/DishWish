@@ -17,7 +17,7 @@
 @property (nonatomic, strong) UIView *topBackground;
 @property (nonatomic, strong) UIView *topBorder;
 
-@property (nonatomic, strong) UITextField *messageTextField;
+@property (nonatomic, retain) UITextField *messageTextField;
 @property (nonatomic, strong) UIButton *sendButton;
 @property (nonatomic, strong) UIView *bottomBackground;
 @property (nonatomic, strong) UIView *bottomBorder;
@@ -77,6 +77,7 @@
         self.messageTextField.borderStyle = UITextBorderStyleRoundedRect;
         self.messageTextField.font = [UIFont systemFontOfSize:15];
         self.messageTextField.placeholder = @"Message";
+        //self.messageTextField.delegate = self;
         [self addSubview:self.messageTextField];
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -261,6 +262,8 @@
 
 -(void)userButtonPressed
 {  
+    [self endEditing:YES];
+    
     DWView *view = (DWView *)self.superview;
     [view userButtonPressed];
 }
@@ -470,6 +473,8 @@
 
 
 -(void)close {
+    [self endEditing:YES];
+    
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     
@@ -531,8 +536,40 @@
                      completion:^(BOOL finished) {}];
     
 }
-
-
+/*
+- (void)textFieldDidBeginEditing:(UITextField *)customValue
+{
+    UIViewAnimationOptions animationOptions = animationCurve << 16;
+    
+    
+    // Now we set up our animation block.
+    [UIView animateWithDuration:0.1
+                          delay:0.0
+                        options:animationOptions
+                     animations:^{
+                         CGRect textFieldFrame = self.messageTextField.frame;
+                         textFieldFrame.origin.y = keyboardEndFrame.origin.y - 100;
+                         self.messageTextField.frame = textFieldFrame;
+                         
+                         CGRect sendButtonFrame = self.sendButton.frame;
+                         sendButtonFrame.origin.y = keyboardEndFrame.origin.y - 100;
+                         self.sendButton.frame = sendButtonFrame;
+                         
+                         CGRect bottomBorderFrame = self.bottomBorder.frame;
+                         bottomBorderFrame.origin.y = keyboardEndFrame.origin.y - 110;
+                         self.bottomBorder.frame = bottomBorderFrame;
+                         
+                         CGRect bottomBackgroundFrame = self.bottomBackground.frame;
+                         bottomBackgroundFrame.origin.y = keyboardEndFrame.origin.y - 110;
+                         self.bottomBackground.frame = bottomBackgroundFrame;
+                     }
+                     completion:^(BOOL finished) {}];
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    
+}
+*/
 -(void)keyboardWillHide:(NSNotification *)notification
 {
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;

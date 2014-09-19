@@ -21,6 +21,7 @@
 
 -(void)addPerson:(User *)user;
 -(void)changeIcon:(BOOL)newMessages;
+-(void)getMessagesFromDb;
 -(void)populateMessages:(NSString *)message;
 -(void)close;
 
