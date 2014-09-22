@@ -7,6 +7,7 @@
 //
 
 #import "DWPreviousSideBar.h"
+#import "DWView.h"
 
 @implementation DWPreviousSideBar
 
@@ -142,37 +143,38 @@
 
 -(void)listClicked:(id)sender
 {
-    /*
-     [self close];
+    [self close];
+    NSArray *views = self.superview.subviews;
+    for(id subview in views) {
+        if([subview isMemberOfClass:[DWRightSideBar class]]) {
+            DWRightSideBar *right = (DWRightSideBar *)subview;
+            [right close];
+        }
+    }
+    
+    UIButton *button = (UIButton *)sender;
+    SavedList *savedList = self.savedLists[button.tag];
      
-     [MBProgressHUD showHUDAddedTo:self.superview animated:YES];
-     
-     UIButton *button = (UIButton *)sender;
-     SavedList *savedList = self.savedLists[button.tag];
-     
-     [SavedList getByPlaceIds:savedList.placeIds completion:^(NSArray *places) {
-     
-     
-     DWView *dwView = (DWView *)self.superview;
-     
+    DWView *dwView = (DWView *)self.superview;
+    [dwView loadSavedList:savedList.xrefId];
+         
+     /*
      [[Session sessionVariables] setObject:places forKey:@"Places"];
      [dwView loadDraggableCustomView:places];
-     
-     
+ 
+ 
      [[Session sessionVariables] setObject:places forKey:@"yesPlaces"];
-     
+ 
      NSArray *views = self.superview.subviews;
      for(id subview in views) {
-     if([subview isMemberOfClass:[DWLeftSideBar class]]) {
-     DWLeftSideBar *left = (DWLeftSideBar *)subview;
-     [left updateLeftSideBar];
+         if([subview isMemberOfClass:[DWLeftSideBar class]]) {
+             DWLeftSideBar *left = (DWLeftSideBar *)subview;
+             [left updateLeftSideBar];
+         }
      }
-     }
-     
+ 
      [MBProgressHUD hideHUDForView:self.superview animated:YES];
-     
-     }];
-     */
+      */
     
 }
 

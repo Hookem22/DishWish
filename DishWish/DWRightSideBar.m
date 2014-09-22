@@ -80,6 +80,10 @@
         self.messageTextField.delegate = self;
         [self addSubview:self.messageTextField];
         
+        UISwipeGestureRecognizer *dismissKeyboard = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+        [dismissKeyboard setDirection:(UISwipeGestureRecognizerDirectionDown)];
+        [self.messageTextField addGestureRecognizer:dismissKeyboard];
+
         self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.sendButton setTitle:@"Send" forState:UIControlStateNormal];
         self.sendButton.frame = CGRectMake(wd - 60, ht - 135, 50, 30);
@@ -108,9 +112,9 @@
     return self;
 }
 
--(void)setupMessaging
+-(void)dismissKeyboard
 {
-    //[SavedList get]
+    [self endEditing:YES];
 }
 
 -(void)addPerson:(User *)user

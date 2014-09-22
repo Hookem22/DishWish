@@ -21,5 +21,6 @@
 -(void)menuButtonPressed;
 -(void)userButtonPressed;
 -(void)loadDraggableCustomView:(NSArray *)places;
+-(void)loadSavedList:(NSUInteger)xrefId;
 
 @end

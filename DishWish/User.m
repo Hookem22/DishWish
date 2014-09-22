@@ -54,7 +54,6 @@
     NSString *pushDeviceToken = appDelegate.deviceToken == nil ? @"" : appDelegate.deviceToken;
     //TODO: Get USER NAME HERE
     [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *user) {
-        
         if(user != nil || user.deviceId != nil)
         {
             user.pushDeviceToken = pushDeviceToken;

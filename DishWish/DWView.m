@@ -50,6 +50,11 @@
             [self loadDraggableCustomView:places];
             
             [User login:^(User *user) {
+                if(user.name.length <= 0)
+                {
+                    [self getName];
+                }
+                
                 [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
                     
                 }];
@@ -102,6 +107,24 @@
     
 }
 
+-(void)getName
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Your Name"
+                                          message:@"What's your name?"
+                                          delegate:self
+                                          cancelButtonTitle:@"Ok"
+                                          otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSString *name = [alertView textFieldAtIndex:0].text;
+    User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+    currentUser.name = name;
+    [currentUser update:^(User *user) { }];
+}
+
 -(void)loadSavedList:(NSUInteger)xrefId
 {
     [MBProgressHUD showHUDAddedTo:self animated:YES];
@@ -109,6 +132,10 @@
     if(currentUser == nil || currentUser.userId.length <= 0)
     {
         [User login:^(User *user) {
+            if(user.name.length <= 0)
+            {
+                [self getName];
+            }
             [self loadSavedListForUser:xrefId user:user];
         }];
     }
@@ -164,7 +191,7 @@
                 nos = [[NSArray alloc] initWithObjects:savedList.noPlaceIds, nil];
         }
         
-        NSUInteger i = 0;
+        NSUInteger i = 1;
         for(Place *place in places)
         {
             if([yeses containsObject:place.placeId])
@@ -191,11 +218,11 @@
         [[Session sessionVariables] setObject:noPlaces forKey:@"noPlaces"];
         [[Session sessionVariables] setObject:[NSNumber numberWithInteger:i] forKey:@"CurrentId"];
         
-        [self loadDraggableCustomView:places];
+        [self loadDraggableCustomView:newPlaces];
         [self addNavBar];
         
         for(id subview in self.subviews) {
-            if(yeses.count > 0 && [subview isMemberOfClass:[DWLeftSideBar class]]) {
+            if([subview isMemberOfClass:[DWLeftSideBar class]]) {
                 DWLeftSideBar *left = (DWLeftSideBar *)subview;
                 [left updateLeftSideBar];
             }
@@ -218,7 +245,6 @@
         [[Session sessionVariables] setObject:places forKey:@"Places"];
         
         [self loadDraggableCustomView:places];
-        [self placesDidLoad];
         
         [MBProgressHUD hideHUDForView:self animated:YES];
     }];
@@ -254,28 +280,6 @@
     navigItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
     navigItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:userButton];
     naviBarObj.items = [NSArray arrayWithObjects: navigItem,nil];
-    
-}
-
--(void)placesDidLoad
-{
-    //return;
-    //InstructionsView *instructions = [[InstructionsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
-    //[self addSubview:instructions];
-
-//    for(id subview in self.subviews) {
-//        if([subview isMemberOfClass:[DWAddFriendsView class]])
-//        {
-//            [self addNavBar];
-//            [subview removeFromSuperview];
-//        }
-//    }
-
-//    [User login:^(User *user) {
-//        [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
-//            
-//        }];
-//    }];
     
 }
 
@@ -401,6 +405,21 @@
                      
                  }];
         }
+        if([subview isMemberOfClass:[DWPreviousSideBar class]]) {
+            DWPreviousSideBar *prev = (DWPreviousSideBar *)subview;
+            
+            BOOL isOpen = prev.frame.origin.x < wd;
+            if(!isOpen)
+                return;
+            
+            [UIView animateWithDuration:0.2
+                 animations:^{
+                     prev.frame = CGRectMake(wd, 60, (wd * 3)/4, ht - 60);
+                 }
+                 completion:^(BOOL finished){
+                     
+                 }];
+        }
     }
 }
 
@@ -414,24 +433,24 @@
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
-       
-    DWDraggableView *prevDraggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[0] async:NO];
+    
+    int currentId = [[[Session sessionVariables] objectForKey:@"CurrentId"] intValue];
+    NSUInteger placesToLoad = places.count - 1 > 3 ? 3 : places.count - 1;
+    [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId + placesToLoad] forKey:@"CurrentId"];
+    
+    DWDraggableView *prevDraggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[currentId] async:NO];
     [self insertSubview:prevDraggableView atIndex:1];
     
-    NSUInteger currentId = places.count - 1 > 3 ? 3 : places.count - 1;
-    [[Session sessionVariables] setObject:[NSNumber numberWithInteger:currentId] forKey:@"CurrentId"];
-    
-    for(int i = 1; i <= currentId; i++)
+    for(int i = currentId + 1; i <= currentId + placesToLoad; i++)
     {
         
-        BOOL async = i > 1;
+        BOOL async = i > currentId + 1;
         DWDraggableView *draggableView = [[DWDraggableView alloc] initWithFrame:CGRectMake(0, 0, wd, ht-40) place:places[i] async:async];
 
         [self insertSubview:draggableView belowSubview:prevDraggableView];
         prevDraggableView = draggableView;
     }
-    
-    //[self addNavBar];
+
 }
 
 -(void) voteButtonClick:(id)sender
