@@ -60,9 +60,13 @@
     headerLabel.text = @"Previous Eats";
     [self addSubview:headerLabel];
     
+    SavedList *currentSavedList = (SavedList *)[Session sessionVariables][@"currentSavedList"];
     NSMutableArray *rightLists = [[NSMutableArray alloc] init];
     for(SavedList *list in listArray)
     {
+        if(list.xrefId == currentSavedList.xrefId)
+            continue;
+        
         if(rightLists.count > 0 && ((SavedList *)[rightLists objectAtIndex:rightLists.count - 1]).xrefId == list.xrefId)
         {
             ((SavedList *)[rightLists objectAtIndex:rightLists.count - 1]).userName = [NSString stringWithFormat:@"%@, %@", ((SavedList *)[rightLists objectAtIndex:rightLists.count - 1]).userName, list.userName];

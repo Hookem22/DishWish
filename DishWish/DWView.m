@@ -31,35 +31,49 @@
     }
     else
     {
-        [Place getAllPlaces:^(NSArray *places) {
-                        
-            if(places.count == 0)
-            {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unavailable"
-                            message:@"Let's Eat is not currently available in your city. It is currently only available in San Francisco."
-                            delegate:nil
-                            cancelButtonTitle:@"OK"
-                            otherButtonTitles:nil];
-
-                [alert show];
-                return;
-            }
-            
-            [[Session sessionVariables] setObject:places forKey:@"Places"];
-            
-            [self loadDraggableCustomView:places];
-            
-            [User login:^(User *user) {
-                if(user.name.length <= 0)
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSDate *createdDate = [defaults objectForKey:@"createdDate"];
+        NSDateFormatter *dateComparisonFormatter = [[NSDateFormatter alloc] init];
+        [dateComparisonFormatter setDateFormat:@"yyyy-MM-dd"];
+        bool isRecentList = [[dateComparisonFormatter stringFromDate:createdDate] isEqualToString:[dateComparisonFormatter stringFromDate:[NSDate date]]];
+        [[Session sessionVariables] setValue:[NSNumber numberWithBool:isRecentList] forKey:@"isRecentList"];
+        
+        if(isRecentList) {
+            NSString *xrefId = [defaults objectForKey:@"xrefId"];
+            [self loadSavedList:[xrefId intValue]];
+        }
+        else
+        {
+            [Place getAllPlaces:^(NSArray *places) {
+                            
+                if(places.count == 0)
                 {
-                    [self getName];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unavailable"
+                                message:@"Let's Eat is not currently available in your city. It is currently only available in San Francisco."
+                                delegate:nil
+                                cancelButtonTitle:@"OK"
+                                otherButtonTitles:nil];
+
+                    [alert show];
+                    return;
                 }
                 
-                [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
+                [[Session sessionVariables] setObject:places forKey:@"Places"];
+                
+                [self loadDraggableCustomView:places];
+                
+                [User login:^(User *user) {
+                    if(user.name.length <= 0)
+                    {
+                        [self getName];
+                    }
                     
+                    [SavedList add:@"" userId:user.userId completion:^(SavedList *savedList) {
+                        
+                    }];
                 }];
             }];
-        }];
+        }
     }
     
     /*
@@ -152,7 +166,6 @@
         if(savedList == nil || savedList.listId.length <= 0)
         {
             [SavedList add:[NSString stringWithFormat:@"%lu", (unsigned long)xrefId] userId:user.userId completion:^(SavedList *newSavedList) {
-                [[Session sessionVariables] setObject:newSavedList forKey:@"currentSavedList"];
                 [self loadPlacesForSavedList:newSavedList];
             }];
         }
@@ -229,6 +242,9 @@
             else if([subview isMemberOfClass:[DWRightSideBar class]]) {
                 DWRightSideBar *right = (DWRightSideBar *)subview;
                 [right getMessagesFromDb];
+            }
+            else if([subview isMemberOfClass:[DWAddFriendsView class]]) {
+                [subview removeFromSuperview];
             }
         }
         [MBProgressHUD hideHUDForView:self animated:YES];

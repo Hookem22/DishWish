@@ -32,18 +32,20 @@
         NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;
         NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
         
-        self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.closeButton setTitle:@"Not yet" forState:UIControlStateNormal];
-        self.closeButton.frame = CGRectMake(100, ht / 3 + 130, wd - 200, 30);
-        self.closeButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        self.closeButton.titleLabel.textColor = [UIColor whiteColor];
-        self.closeButton.layer.backgroundColor =  [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
-        self.closeButton.layer.cornerRadius = 5.0;
-        self.closeButton.titleLabel.textAlignment = UIControlContentHorizontalAlignmentLeft;
-        
-        [self.closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.closeButton];
-        
+        if(!(bool)[Session sessionVariables][@"isRecentList"])
+        {
+            self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.closeButton setTitle:@"Not yet" forState:UIControlStateNormal];
+            self.closeButton.frame = CGRectMake(100, ht / 3 + 130, wd - 200, 30);
+            self.closeButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+            self.closeButton.titleLabel.textColor = [UIColor whiteColor];
+            self.closeButton.layer.backgroundColor =  [UIColor colorWithRed:19.0/255.0 green:128.0/255.0 blue:249.0/250.0 alpha:1.0].CGColor;
+            self.closeButton.layer.cornerRadius = 5.0;
+            self.closeButton.titleLabel.textAlignment = UIControlContentHorizontalAlignmentLeft;
+            
+            [self.closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:self.closeButton];
+        }
     }
     return self;
 }

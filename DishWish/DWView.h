@@ -22,5 +22,6 @@
 -(void)userButtonPressed;
 -(void)loadDraggableCustomView:(NSArray *)places;
 -(void)loadSavedList:(NSUInteger)xrefId;
+-(void)loadPlacesForSavedList:(SavedList *)savedList;
 
 @end

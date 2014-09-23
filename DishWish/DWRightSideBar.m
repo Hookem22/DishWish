@@ -65,7 +65,7 @@
         self.bottomBackground.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1.0];
         [self addSubview:self.bottomBackground];
         
-        UIView *bottomBorder1 = [[UIView alloc] initWithFrame:CGRectMake(0, ht - 100, wd, 1)];
+        UIView *bottomBorder1 = [[UIView alloc] initWithFrame:CGRectMake(0, ht - 100, wd, 2)];
         bottomBorder1.backgroundColor = [UIColor colorWithRed:171.0/255.0 green:171.0/255.0 blue:171.0/255.0 alpha:1.0];
         [self addSubview:bottomBorder1];
         
@@ -90,9 +90,15 @@
         [self.sendButton addTarget:self action:@selector(sendMessage) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.sendButton];
         
+        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [addButton setTitle:@"New List" forState:UIControlStateNormal];
+        addButton.frame = CGRectMake(0, ht - 100, wd / 2, 40);
+        [addButton addTarget:self action:@selector(newList) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:addButton];
+        
         UIButton *previousButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [previousButton setTitle:@"Previous Lists" forState:UIControlStateNormal];
-        previousButton.frame = CGRectMake(0, ht - 100, wd, 40);
+        previousButton.frame = CGRectMake(wd / 2, ht - 100, wd / 2, 40);
         [previousButton addTarget:self action:@selector(previousLists) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:previousButton];
         
@@ -208,6 +214,7 @@
     [SavedList get:[NSString stringWithFormat:@"%lu", (unsigned long)currentSavedList.xrefId] completion:^(NSArray *savedLists) {
         if(self.people.count <= savedLists.count)
         {
+            self.peopleLabel.text = @"";
             for(SavedList *list in savedLists)
             {
                 bool contains = false;
@@ -225,7 +232,7 @@
                     addUser.userId = list.userId;
                     addUser.name = list.userName;
                     [self addPerson:addUser];
-                    [self changeIcon:YES];
+                    //[self changeIcon:YES];
                 }
             }
         }
@@ -431,9 +438,35 @@
     return dateDiff;
 }
 
+-(void)newList
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New List" message:@"Start a new list?" delegate:self cancelButtonTitle:@"Yes" otherButtonTitles:@"No", nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0){
+        [self close];
+        
+        self.people = nil;
+        self.messages = nil;
+        [self.messageView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+        
+        User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
+        [SavedList add:@"" userId:currentUser.userId completion:^(SavedList *savedList) {
+            [[Session sessionVariables] setObject:savedList forKey:@"currentSavedList"];
+            DWView *view = (DWView *)self.superview;
+            [view loadPlacesForSavedList:savedList];
+        }];
+    }
+}
+
 -(void)previousLists
 {
-
+    self.people = nil;
+    self.messages = nil;
+    [self.messageView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
     bool exists = false;
     for(id subview in self.superview.subviews) {
         if([subview isMemberOfClass:[DWPreviousSideBar class]])

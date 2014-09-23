@@ -128,6 +128,12 @@
      {
          SavedList *savedList = [[SavedList alloc] init:item];
          [[Session sessionVariables] setObject:savedList forKey:@"currentSavedList"];
+         
+         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+         [defaults setObject:[NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId] forKey:@"xrefId"];
+         [defaults setObject:[NSDate date] forKey:@"createdDate"];
+         [defaults synchronize];
+         
          completion(savedList);
      }];
 }

@@ -84,8 +84,11 @@
     
     DWAddFriendsView *view = [[DWAddFriendsView alloc] initWithFrame:CGRectMake(0, 0, wd, ht)];
     
-    view.shareButton = shareButton;
-    [view addSubview:shareButton];
+    if(!(bool)[Session sessionVariables][@"isRecentList"])
+    {
+        view.shareButton = shareButton;
+        [view addSubview:shareButton];
+    }
     
     self.mainView.addFriendsView = view;
     [self.view addSubview:view];
