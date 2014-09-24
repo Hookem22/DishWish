@@ -153,7 +153,7 @@
         
          if(isSms)
          {
-             NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://getletseat.com?%lu", (unsigned long)savedList.xrefId, (unsigned long)savedList.xrefId];
+             NSString *message = [NSString stringWithFormat:@"Let's Eat! Here's a list of places: letseat://?%lu (if you don't have Let's Eat app get it here http://getletseat.com?%lu", (unsigned long)savedList.referenceId, (unsigned long)savedList.referenceId];
          
              [self sendSMS:toUser.phoneNumber message:message];
          }
@@ -161,7 +161,7 @@
          {
              User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
              NSString *header = [NSString stringWithFormat:@"%@ sent you a message", currentUser.name];
-             NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.xrefId];
+             NSString *message = [NSString stringWithFormat:@"%lu", (unsigned long)savedList.referenceId];
              
              [self sendPushMessage:toUser.pushDeviceToken header:header message:message];
          }

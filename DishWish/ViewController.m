@@ -64,8 +64,8 @@
 -(void)addInviteFriends
 {   
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSString *savedListId = appDelegate.queryValue;    
-    if([savedListId length] > 0)
+    NSString *referenceId = appDelegate.queryValue;
+    if([referenceId length] > 0)
         return;
     
     NSUInteger wd = [[UIScreen mainScreen] bounds].size.width;

@@ -16,6 +16,7 @@
 
 @property (nonatomic, copy) NSString *listId;
 @property (nonatomic, assign) NSUInteger xrefId;
+@property (nonatomic, assign) NSUInteger referenceId;
 @property (nonatomic, copy) NSString *userId;
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *yesPlaceIds;
@@ -25,6 +26,7 @@
 
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion;
 +(void)getSpecific:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion;
++(void)getByReferenceId:(NSString *)referenceId completion:(QSCompletionBlock)completion;
 +(void)getByPlaceIds:(NSString *)placeIds completion:(QSCompletionBlock)completion;
 +(void)getByUser:(QSCompletionBlock)completion;
 +(void)add:(NSString *)xrefId userId:(NSString *)userId completion:(QSCompletionBlock)completion;

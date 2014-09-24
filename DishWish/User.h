@@ -10,6 +10,7 @@
 #import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 #import "QSAzureService.h"
 #import "Session.h"
+#import "SavedList.h"
 #import "AppDelegate.h"
 
 @interface User : NSObject

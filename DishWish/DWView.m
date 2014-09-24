@@ -23,11 +23,13 @@
     NSUInteger ht = [[UIScreen mainScreen] bounds].size.height;
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSString *savedListId = appDelegate.queryValue;
+    NSString *referenceId = appDelegate.queryValue;
     
-    if([savedListId length] > 0)
+    if([referenceId length] > 0)
     {
-        [self loadSavedList:[savedListId intValue]];
+        [SavedList getByReferenceId:referenceId completion:^(SavedList *savedList) {
+            [self loadSavedList:savedList.xrefId];
+        }];
     }
     else
     {

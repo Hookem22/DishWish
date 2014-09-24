@@ -52,29 +52,49 @@
 
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSString *pushDeviceToken = appDelegate.deviceToken == nil ? @"" : appDelegate.deviceToken;
-    //TODO: Get USER NAME HERE
+
     [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *user) {
-        if(user != nil || user.deviceId != nil)
+        if(user != nil && user.deviceId.length > 0)
         {
-            user.pushDeviceToken = pushDeviceToken;
-            NSDate *timeStamp = [NSDate date];
-            user.lastSignedIn = timeStamp;
-            
-            [user update:^(User *newUser) {
-                [[Session sessionVariables] setObject:newUser forKey:@"currentUser"];
-                completion(newUser);
-            }];
+            if(user.pushDeviceToken.length <= 0)
+            {
+                user.pushDeviceToken = pushDeviceToken;
+                
+                [user update:^(User *newUser) {
+                    [[Session sessionVariables] setObject:newUser forKey:@"currentUser"];
+                    completion(newUser);
+                }];
+            }
         }
         else
         {
-            User *newUser = [[User alloc] init];
-            newUser.deviceId = deviceId;
-            newUser.pushDeviceToken = pushDeviceToken;
+            NSString *referenceId = appDelegate.queryValue;
             
-            [newUser add:^(User *addedUser) {
-                [[Session sessionVariables] setObject:addedUser forKey:@"currentUser"];
-                completion(addedUser);
-            }];
+            if([referenceId length] > 0)
+            {
+                [SavedList getByReferenceId:referenceId completion:^(SavedList *savedList) {
+                    User *newUser = [[User alloc] init];
+                    newUser.userId = savedList.userId;
+                    newUser.deviceId = deviceId;
+                    newUser.pushDeviceToken = pushDeviceToken;
+                    
+                    [newUser update:^(User *addedUser) {
+                        [[Session sessionVariables] setObject:addedUser forKey:@"currentUser"];
+                        completion(addedUser);
+                    }];
+                }];
+            }
+            else
+            {
+                User *newUser = [[User alloc] init];
+                newUser.deviceId = deviceId;
+                newUser.pushDeviceToken = pushDeviceToken;
+                
+                [newUser add:^(User *addedUser) {
+                    [[Session sessionVariables] setObject:addedUser forKey:@"currentUser"];
+                    completion(addedUser);
+                }];
+            }
         }
     }];
 }

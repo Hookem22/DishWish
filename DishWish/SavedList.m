@@ -11,6 +11,7 @@
 
 @synthesize listId = _listId;
 @synthesize xrefId = _xrefId;
+@synthesize referenceId = _referenceId;
 @synthesize userId = _userId;
 @synthesize userName = _userName;
 @synthesize yesPlaceIds = _yesPlaceIds;
@@ -23,6 +24,7 @@
 	if (self) {
         self.listId = [savedList valueForKey:@"id"];
         self.xrefId = [[savedList valueForKey:@"xrefid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"xrefid"] longLongValue];
+        self.referenceId = [[savedList valueForKey:@"referenceid"] isMemberOfClass:[NSNull class]] ? 0 : [[savedList valueForKey:@"referenceid"] longLongValue];
         self.userId = [savedList valueForKey:@"userid"];
         self.userName = [savedList valueForKey:@"username"];
         self.yesPlaceIds = [savedList valueForKey:@"yesplaces"];
@@ -63,6 +65,21 @@
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
     NSString *whereStatement = [NSString stringWithFormat:@"xrefid = '%@' AND userid = '%@'", xrefId, userId];
+    
+    [service getByWhere:whereStatement completion:^(NSArray *results) {
+        for(id item in results) {
+            SavedList *list = [[SavedList alloc] init:item];
+            completion(list);
+            return;
+        }
+        completion(nil);
+    }];
+}
+
++(void)getByReferenceId:(NSString *)referenceId completion:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    NSString *whereStatement = [NSString stringWithFormat:@"referenceid = '%@'", referenceId];
     
     [service getByWhere:whereStatement completion:^(NSArray *results) {
         for(id item in results) {
