@@ -63,6 +63,7 @@ typedef void (^QSBusyUpdateBlock) (BOOL busy);
 
 - (void)updateItem:(NSDictionary *)item completion:(QSCompletionBlock)completion;
 
+- (void)deleteItem:(id)itemId completion:(QSCompletionBlock)completion;
 
 - (void)handleRequest:(NSURLRequest *)request
                  next:(MSFilterNextBlock)next

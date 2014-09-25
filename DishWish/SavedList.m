@@ -35,7 +35,6 @@
 	return self;
 }
 
-
 +(void)get:(NSString *)xrefId completion:(QSCompletionBlock)completion
 {
     QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
@@ -151,6 +150,18 @@
          [defaults setObject:[NSDate date] forKey:@"createdDate"];
          [defaults synchronize];
          
+         completion(savedList);
+     }];
+}
+
+-(void)update:(QSCompletionBlock)completion
+{
+    QSAzureService *service = [QSAzureService defaultService:@"SavedList"];
+    
+    NSDictionary *savedList = @{@"id" : self.listId, @"xrefid" : [NSNumber numberWithInteger:self.xrefId], @"referenceid" : [NSNumber numberWithInteger:self.referenceId], @"userid" : self.userId, @"yesplaces" : self.yesPlaceIds, @"noplaces" : self.noPlaceIds };
+    [service updateItem:savedList completion:^(NSDictionary *item)
+     {
+         SavedList *savedList = [[SavedList alloc] init:item];
          completion(savedList);
      }];
 }

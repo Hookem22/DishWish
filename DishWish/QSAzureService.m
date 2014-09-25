@@ -236,6 +236,17 @@
      }];
 }
 
+-(void)deleteItem:(id)itemId completion:(QSCompletionBlock)completion
+{
+    [self.table deleteWithId:itemId completion:^(id itemId, NSError *error)
+     {
+         [self logErrorIfNotNil:error];
+         
+         // Let the caller know that we finished
+         completion(itemId);
+     }];
+}
+
 - (void)busy:(BOOL)busy
 {
     // assumes always executes on UI thread

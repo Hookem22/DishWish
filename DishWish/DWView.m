@@ -144,6 +144,16 @@
 -(void)loadSavedList:(NSUInteger)xrefId
 {
     [MBProgressHUD showHUDAddedTo:self animated:YES];
+    [User login:^(User *user) {
+        if(user.name.length <= 0)
+        {
+            [self getName];
+        }
+        [self loadSavedListForUser:xrefId user:user];
+    }];
+    
+    
+    /*
     User *currentUser = (User *)[Session sessionVariables][@"currentUser"];
     if(currentUser == nil || currentUser.userId.length <= 0)
     {
@@ -159,6 +169,7 @@
     {
         [self loadSavedListForUser:xrefId user:currentUser];
     }
+     */
 
 }
 

@@ -52,7 +52,84 @@
 
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSString *pushDeviceToken = appDelegate.deviceToken == nil ? @"" : appDelegate.deviceToken;
+    NSString *referralId = appDelegate.queryValue;
+    
+    [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *deviceUser) {
+        //0 Users
+        if((deviceUser == nil || deviceUser.deviceId.length <= 0) && [referralId length] <= 0) {
+            User *newUser = [[User alloc] init];
+            newUser.deviceId = deviceId;
+            newUser.pushDeviceToken = pushDeviceToken;
+            
+            [newUser add:^(User *addedUser) {
+                [[Session sessionVariables] setObject:addedUser forKey:@"currentUser"];
+                completion(addedUser);
+            }];
+        }
+        //1 User - device user
+        else if ([referralId length] <= 0)
+        {
+            if(deviceUser.pushDeviceToken.length <= 0)
+            {
+                deviceUser.pushDeviceToken = pushDeviceToken;
+                
+                [deviceUser update:^(User *newUser) {
+                    [[Session sessionVariables] setObject:newUser forKey:@"currentUser"];
+                    completion(newUser);
+                }];
+            }
+            else
+            {
+                [[Session sessionVariables] setObject:deviceUser forKey:@"currentUser"];
+                completion(deviceUser);
+            }
+        }
+        //1 User - referral user
+        else if (deviceUser == nil || deviceUser.deviceId.length <= 0)
+        {
+            [SavedList getByReferenceId:referralId completion:^(SavedList *savedList) {
+                User *referralUser = [[User alloc] init];
+                referralUser.userId = savedList.userId;
+                referralUser.deviceId = deviceId;
+                referralUser.pushDeviceToken = pushDeviceToken;
+                
+                [referralUser update:^(User *newUser) {
+                    [[Session sessionVariables] setObject:newUser forKey:@"currentUser"];
+                    completion(newUser);
+                }];
+            }];
+        }
+        //2 users - consolidate
+        else
+        {
+            [SavedList getByReferenceId:referralId completion:^(SavedList *savedList) {
+                [User get:savedList.userId completion:^(User *referralUser) {
+                    savedList.userId = deviceUser.userId;
+                    [savedList update:^(SavedList *savedList) {
+                    
+                        if(deviceUser.phoneNumber.length <= 0 && referralUser.phoneNumber.length > 0)
+                        {
+                            deviceUser.phoneNumber = referralUser.phoneNumber;
+                            [deviceUser update:^(User *newUser) {
+                                [referralUser delete];
+                                [[Session sessionVariables] setObject:newUser forKey:@"currentUser"];
+                                completion(newUser);
+                            }];
+                        }
+                        else
+                        {
+                            [referralUser delete];
+                            [[Session sessionVariables] setObject:deviceUser forKey:@"currentUser"];
+                            completion(deviceUser);
+                        }
+                    }];
+                }];
+            }];
+        }
 
+    }];
+    
+    /*
     [self get:deviceId pushDeviceToken:pushDeviceToken completion:^(User *user) {
         if(user != nil && user.deviceId.length > 0)
         {
@@ -97,6 +174,7 @@
             }
         }
     }];
+     */
 }
 
 +(void)get:(NSString *)userId completion:(QSCompletionBlock)completion
@@ -173,6 +251,16 @@
      {
          User *user = [[User alloc] init:item];
          completion(user);
+     }];
+}
+
+-(void)delete
+{
+    QSAzureService *service = [QSAzureService defaultService:@"Users"];
+    
+    [service deleteItem:self.userId completion:^(id itemId)
+     {
+
      }];
 }
 
