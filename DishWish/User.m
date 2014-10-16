@@ -142,6 +142,10 @@
                     completion(newUser);
                 }];
             }
+            else
+            {
+                completion(user);
+            }
         }
         else
         {
