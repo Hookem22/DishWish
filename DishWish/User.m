@@ -116,6 +116,11 @@
                                 completion(newUser);
                             }];
                         }
+                        else if([deviceUser.userId isEqualToString:referralUser.userId])
+                        {
+                            [[Session sessionVariables] setObject:deviceUser forKey:@"currentUser"];
+                            completion(deviceUser);
+                        }
                         else
                         {
                             [referralUser delete];
